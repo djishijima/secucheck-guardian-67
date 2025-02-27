@@ -2,7 +2,7 @@
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, AlertTriangle, Database, AlertCircle, FileCode, Lock, Server } from 'lucide-react';
+import { Shield, AlertTriangle, Database, AlertCircle, FileCode, Lock, Server, CheckCircle } from 'lucide-react';
 
 const SecurityEducation: React.FC = () => {
   return (

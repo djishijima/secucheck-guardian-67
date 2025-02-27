@@ -28,6 +28,13 @@ interface ScanResult {
     server?: string;
     tech?: string[];
   };
+  ipInfo?: {
+    ip: string;
+    proxy: boolean;
+    vpn: boolean;
+    tor: boolean;
+    location?: string;
+  };
 }
 
 const SecurityScanner: React.FC = () => {
@@ -40,6 +47,7 @@ const SecurityScanner: React.FC = () => {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [selectedVulnerability, setSelectedVulnerability] = useState<Vulnerability | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [currentAttack, setCurrentAttack] = useState<string | null>(null);
 
   const simulateScan = (inputUrl: string) => {
     // Reset scan state
@@ -48,6 +56,7 @@ const SecurityScanner: React.FC = () => {
     setScanProgress(0);
     setVulnerabilities([]);
     setScanPhase('初期スキャン開始中...');
+    setCurrentAttack(null);
 
     // Validate URL format
     try {
@@ -62,12 +71,16 @@ const SecurityScanner: React.FC = () => {
 
     // Simulate different scan phases
     const phases = [
-      { progress: 10, message: 'ポートスキャン実行中...' },
+      { progress: 5, message: 'IPアドレス追跡中...' },
+      { progress: 10, message: 'プロキシ/VPN検出中...' },
+      { progress: 15, message: 'ポートスキャン実行中...' },
       { progress: 25, message: 'サーバー設定分析中...' },
-      { progress: 40, message: 'エンドポイント列挙中...' },
-      { progress: 60, message: 'XSS脆弱性テスト中...' },
-      { progress: 75, message: 'SQLインジェクションテスト中...' },
-      { progress: 85, message: 'ディレクトリ探索中...' },
+      { progress: 35, message: 'エンドポイント列挙中...' },
+      { progress: 50, message: 'XSS脆弱性テスト中...', attack: 'XSS' },
+      { progress: 65, message: 'SQLインジェクションテスト中...', attack: 'SQLInjection' },
+      { progress: 75, message: 'CSRFテスト中...', attack: 'CSRF' },
+      { progress: 85, message: 'ディレクトリ探索中...', attack: 'DirectoryTraversal' },
+      { progress: 90, message: '辞書攻撃シミュレーション中...', attack: 'WeakCredentials' },
       { progress: 95, message: '脆弱性レポート生成中...' }
     ];
     
@@ -77,6 +90,9 @@ const SecurityScanner: React.FC = () => {
     const progressInterval = setInterval(() => {
       if (phaseIndex < phases.length && scanProgress >= phases[phaseIndex].progress) {
         setScanPhase(phases[phaseIndex].message);
+        if (phases[phaseIndex].attack) {
+          setCurrentAttack(phases[phaseIndex].attack);
+        }
         phaseIndex++;
       }
       
@@ -85,15 +101,16 @@ const SecurityScanner: React.FC = () => {
           clearInterval(progressInterval);
           return 100;
         }
-        return prev + 2;
+        return prev + 1;
       });
-    }, 200);
+    }, 150);
 
     // Simulate scan completion after delay
     setTimeout(() => {
       clearInterval(progressInterval);
       setScanProgress(100);
       setScanPhase('スキャン完了');
+      setCurrentAttack(null);
       
       // Generate mock scan results based on URL
       const mockVulnerabilities: Vulnerability[] = [];
@@ -228,6 +245,15 @@ const SecurityScanner: React.FC = () => {
       const serverTypes = ['Apache/2.4.29', 'nginx/1.18.0', 'Microsoft-IIS/10.0', 'LiteSpeed'];
       const technologies = ['PHP/7.2', 'jQuery/1.8.3', 'WordPress/5.7', 'Bootstrap/4.0', 'React', 'Angular', 'Laravel', 'MySQL', 'MariaDB'];
       
+      // Generate random IP info
+      const ipInfo = {
+        ip: `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
+        proxy: Math.random() > 0.7,
+        vpn: Math.random() > 0.8,
+        tor: Math.random() > 0.9,
+        location: ['東京', '大阪', '愛知県', '福岡県', '北海道'][Math.floor(Math.random() * 5)]
+      };
+      
       // Create final scan result
       const result: ScanResult = {
         url: inputUrl,
@@ -239,7 +265,8 @@ const SecurityScanner: React.FC = () => {
           tech: Array.from({ length: Math.floor(Math.random() * 3) + 1 }, () => 
             technologies[Math.floor(Math.random() * technologies.length)]
           )
-        }
+        },
+        ipInfo: ipInfo
       };
       
       setVulnerabilities(mockVulnerabilities);
@@ -256,7 +283,7 @@ const SecurityScanner: React.FC = () => {
           description: '詳細な結果をご確認ください。',
         });
       }
-    }, 7000);
+    }, 10000);
   };
 
   const handleScan = () => {
@@ -294,8 +321,72 @@ const SecurityScanner: React.FC = () => {
     setShowModal(true);
   };
 
+  // Animation for attack simulation
+  const renderAttackAnimation = () => {
+    if (!currentAttack) return null;
+    
+    let icon;
+    let color;
+    let text;
+    
+    switch (currentAttack) {
+      case 'XSS':
+        icon = <AlertTriangle className="h-8 w-8 text-orange-500" />;
+        color = 'border-orange-500 bg-orange-50';
+        text = "XSSペイロード注入中...";
+        break;
+      case 'SQLInjection':
+        icon = <Database className="h-8 w-8 text-red-500" />;
+        color = 'border-red-500 bg-red-50';
+        text = "SQLインジェクション実行中...";
+        break;
+      case 'CSRF':
+        icon = <AlertCircle className="h-8 w-8 text-yellow-500" />;
+        color = 'border-yellow-500 bg-yellow-50';
+        text = "CSRFリクエスト送信中...";
+        break;
+      case 'DirectoryTraversal':
+        icon = <FileCode className="h-8 w-8 text-purple-500" />;
+        color = 'border-purple-500 bg-purple-50';
+        text = "ディレクトリトラバーサル試行中...";
+        break;
+      case 'WeakCredentials':
+        icon = <Unlock className="h-8 w-8 text-orange-500" />;
+        color = 'border-orange-500 bg-orange-50';
+        text = "辞書攻撃実行中...";
+        break;
+      default:
+        return null;
+    }
+    
+    return (
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg border-2 ${color} z-50 flex flex-col items-center`}
+      >
+        <div className="mb-2">
+          {icon}
+        </div>
+        <p className="text-sm font-medium">{text}</p>
+        <div className="flex items-center gap-2 mt-2">
+          <div className="bg-gray-200 h-1 w-16 rounded-full overflow-hidden">
+            <motion.div
+              className="bg-blue-500 h-full"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ repeat: Infinity, duration: 1 }}
+            />
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
+      {renderAttackAnimation()}
+      
       <Card className="shadow-lg border-0 overflow-hidden bg-white">
         <CardHeader className="pb-4">
           <CardTitle className="text-2xl font-bold">セキュリティスキャナー</CardTitle>
@@ -340,9 +431,10 @@ const SecurityScanner: React.FC = () => {
 
             {scanComplete && scanResult && (
               <Tabs defaultValue={vulnerabilities.length > 0 ? "results" : "summary"} className="mt-6">
-                <TabsList className="w-full grid grid-cols-4">
+                <TabsList className="w-full grid grid-cols-5">
                   <TabsTrigger value="results">脆弱性</TabsTrigger>
                   <TabsTrigger value="endpoints">露出エンドポイント</TabsTrigger>
+                  <TabsTrigger value="ip">IP情報</TabsTrigger>
                   <TabsTrigger value="visualize">視覚化</TabsTrigger>
                   <TabsTrigger value="summary">概要</TabsTrigger>
                 </TabsList>
@@ -457,6 +549,85 @@ const SecurityScanner: React.FC = () => {
                       </div>
                     ) : (
                       <p className="text-center text-gray-500 py-4">露出したエンドポイントは検出されませんでした。</p>
+                    )}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="ip" className="mt-4">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h3 className="text-lg font-medium mb-3">IP情報分析</h3>
+                    
+                    {scanResult.ipInfo && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-white p-4 rounded-lg shadow-sm">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Server className="h-5 w-5 text-blue-500" />
+                            <h4 className="font-medium">サーバーIP情報</h4>
+                          </div>
+                          <div className="flex flex-col space-y-2">
+                            <div className="flex justify-between">
+                              <span className="text-sm text-gray-500">IPアドレス:</span>
+                              <span className="text-sm font-mono">{scanResult.ipInfo.ip}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-sm text-gray-500">地域:</span>
+                              <span className="text-sm">{scanResult.ipInfo.location || '不明'}</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-white p-4 rounded-lg shadow-sm">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Shield className="h-5 w-5 text-blue-500" />
+                            <h4 className="font-medium">セキュリティステータス</h4>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-500">プロキシ検出:</span>
+                              <span className={`text-sm px-2 py-0.5 rounded ${scanResult.ipInfo.proxy ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                {scanResult.ipInfo.proxy ? '検出' : '未検出'}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-500">VPN検出:</span>
+                              <span className={`text-sm px-2 py-0.5 rounded ${scanResult.ipInfo.vpn ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                {scanResult.ipInfo.vpn ? '検出' : '未検出'}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-500">Tor出口ノード:</span>
+                              <span className={`text-sm px-2 py-0.5 rounded ${scanResult.ipInfo.tor ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                {scanResult.ipInfo.tor ? '検出' : '未検出'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-white p-4 rounded-lg shadow-sm col-span-1 md:col-span-2">
+                          <div className="flex items-center gap-2 mb-2">
+                            <AlertCircle className="h-5 w-5 text-yellow-500" />
+                            <h4 className="font-medium">リスク評価</h4>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-600 mb-2">
+                              {scanResult.ipInfo.proxy || scanResult.ipInfo.vpn || scanResult.ipInfo.tor ? 
+                                'IPアドレスの匿名化が検出されました。これは合法的なプライバシー保護のためかもしれませんが、攻撃者が身元を隠すためにも使用される可能性があります。' : 
+                                'IPアドレスの匿名化は検出されませんでした。これは通常のインターネット接続を示唆しています。'}
+                            </p>
+                            
+                            {(scanResult.ipInfo.proxy || scanResult.ipInfo.vpn || scanResult.ipInfo.tor) && (
+                              <div className="bg-yellow-50 border border-yellow-200 rounded p-3 text-sm">
+                                <p className="font-medium text-yellow-800 mb-1">セキュリティ対策推奨:</p>
+                                <ul className="list-disc list-inside text-yellow-700 space-y-1">
+                                  <li>追加の認証措置（多要素認証など）を実装してください</li>
+                                  <li>重要な操作に対する追加の確認ステップを追加してください</li>
+                                  <li>IP制限のあるアクセスポリシーを検討してください</li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </TabsContent>
@@ -623,6 +794,7 @@ const SecurityScanner: React.FC = () => {
                               const highCount = vulnerabilities.filter(v => v.severity === 'High').length;
                               const mediumCount = vulnerabilities.filter(v => v.severity === 'Medium').length;
                               const lowCount = vulnerabilities.filter(v => v.severity === 'Low').length;
+                              const proxyPenalty = scanResult.ipInfo?.proxy || scanResult.ipInfo?.vpn || scanResult.ipInfo?.tor ? 10 : 0;
                               
                               // Calculate score (0-100, higher is better)
                               let score = 100;
@@ -630,6 +802,7 @@ const SecurityScanner: React.FC = () => {
                               score -= highCount * 15;
                               score -= mediumCount * 7;
                               score -= lowCount * 3;
+                              score -= proxyPenalty;
                               score = Math.max(5, score); // Minimum score of 5
                               
                               // Color based on score
