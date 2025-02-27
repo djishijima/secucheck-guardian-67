@@ -30,11 +30,35 @@ const Index = () => {
       url: 'https://example.co.jp/contact.php',
       type: 'SQLインジェクション脆弱性',
       severity: 'high',
-      description: 'コンタクトフォームのパラメータが適切にサニタイズされておらず、SQLインジェクション攻撃が可能です。',
+      description: 'コンタクトフォームのパラメータが適切にサニタイズされておらず、SQLインジェクション攻撃が可能です。発見したペイロード: \' OR 1=1 --',
       recommendation: 'プリペアドステートメントを使用するか、適切なエスケープ処理を実装してください。'
     },
     {
       id: 3,
+      url: 'https://example.co.jp/search.php?q=test',
+      type: 'クロスサイトスクリプティング (XSS)',
+      severity: 'high',
+      description: '検索機能で入力値が適切にサニタイズされておらず、XSS攻撃が可能です。発見したペイロード: <script>alert("XSS")</script>',
+      recommendation: 'HTMLエンティティエンコーディングを実装し、Content-Security-Policyヘッダーを設定してください。'
+    },
+    {
+      id: 4,
+      url: 'https://example.co.jp/admin/',
+      type: '管理画面ディレクトリの発見',
+      severity: 'critical',
+      description: '標準的なディレクトリ名の管理画面が見つかりました。アクセス制限がなく、ブルートフォース攻撃に脆弱です。',
+      recommendation: '管理画面のURLを非標準のものに変更し、IPアドレス制限と多要素認証を実装してください。'
+    },
+    {
+      id: 5,
+      url: 'https://example.co.jp/config.bak',
+      type: 'パスワード情報の漏洩',
+      severity: 'critical',
+      description: 'バックアップファイルにデータベース接続情報が平文で保存されています。発見したパスワード: db_pass123',
+      recommendation: '全てのバックアップファイルをウェブルートから削除し、DB接続情報は環境変数で管理してください。パスワードを直ちに変更してください。'
+    },
+    {
+      id: 6,
       url: 'https://example.co.jp/login',
       type: '脆弱なパスワードポリシー',
       severity: 'medium',
@@ -42,7 +66,7 @@ const Index = () => {
       recommendation: '最低8文字以上、英数字記号混在のパスワードポリシーを実装してください。'
     },
     {
-      id: 4,
+      id: 7,
       url: 'https://example.co.jp',
       type: '古いWordPressバージョン',
       severity: 'medium',
@@ -50,7 +74,7 @@ const Index = () => {
       recommendation: '最新バージョン（6.4.3）へのアップデートを推奨します。'
     },
     {
-      id: 5,
+      id: 8,
       url: 'https://example.co.jp/images/',
       type: 'ディレクトリリスティング有効',
       severity: 'low',
