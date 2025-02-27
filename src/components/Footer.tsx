@@ -16,7 +16,8 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} SecurityGuardian. All rights reserved.</p>
+          <p>日本は現在、様々なサイバー攻撃に直面しています。セキュリティ対策を強化しましょう。</p>
+          <p className="mt-1">&copy; {new Date().getFullYear()} SecurityGuardian. All rights reserved.</p>
         </div>
       </div>
     </footer>
