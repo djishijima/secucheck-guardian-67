@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FileInput, PieChart, BarChart3, LineChart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -27,6 +27,22 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
   goToPreviousStep,
   goToNextStep
 }) => {
+  // Helper function to get the appropriate icon for each step
+  const getStepIcon = (stepId: string) => {
+    switch (stepId) {
+      case 'input':
+        return <FileInput className="h-4 w-4" />;
+      case 'overview':
+        return <PieChart className="h-4 w-4" />;
+      case 'details':
+        return <BarChart3 className="h-4 w-4" />;
+      case 'reduction':
+        return <LineChart className="h-4 w-4" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card className="border-blue-100">
@@ -38,7 +54,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
           <Progress value={((activeStep + 1) / steps.length) * 100} className="h-2 bg-gray-100" />
           
           {/* ステップナビゲーション */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
             {steps.map((step, index) => (
               <button
                 key={step.id}
@@ -46,17 +62,26 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
                 className={`text-left p-3 rounded-lg transition-all ${
                   activeStep === index 
                     ? 'bg-blue-50 border border-blue-200' 
-                    : 'hover:bg-gray-50 border border-transparent'
+                    : index < activeStep 
+                      ? 'bg-gray-50 border border-gray-200'
+                      : 'hover:bg-gray-50 border border-transparent'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                    activeStep === index ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                    activeStep === index 
+                      ? 'bg-blue-600 text-white' 
+                      : index < activeStep
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-200 text-gray-600'
                   }`}>
                     {index + 1}
                   </div>
                   <div>
-                    <div className="font-medium">{step.title}</div>
+                    <div className="font-medium flex items-center gap-1">
+                      {getStepIcon(step.id)}
+                      {step.title}
+                    </div>
                     <div className="text-xs text-gray-500">{step.description}</div>
                   </div>
                 </div>

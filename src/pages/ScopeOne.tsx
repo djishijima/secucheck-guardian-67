@@ -31,8 +31,9 @@ const ScopeOne = () => {
     targetYear: '2023年度'
   });
   
-  // Steps for the Scope 1 emissions data page
+  // Steps for the Scope 1 emissions data page - updated order to match dashboard flow
   const steps = [
+    { id: "input", title: "データ入力", description: "自社データの入力" },
     { id: "overview", title: "データ概要", description: "排出量の全体像を把握" },
     { id: "details", title: "詳細分析", description: "カテゴリ別・期間別の詳細" },
     { id: "reduction", title: "削減計画", description: "目標と削減施策の策定" }
@@ -106,7 +107,9 @@ const ScopeOne = () => {
       duration: 3000,
     });
 
+    // After submitting form, move to overview tab automatically
     setShowForm(false);
+    setActiveStep(1); // Set to the second step (overview) after data entry
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -143,6 +146,17 @@ const ScopeOne = () => {
   // 現在のステップコンテンツをレンダリング
   const renderStepContent = () => {
     switch (steps[activeStep].id) {
+      case "input":
+        return (
+          <ScopeOneDataForm 
+            formData={formData}
+            onFormSubmit={handleFormSubmit}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+            onCancel={() => setActiveStep(1)} // Cancel moves to overview
+            scopeOneData={scopeOneData}
+          />
+        );
       case "overview":
         return (
           <ScopeOneOverviewTab 
@@ -180,58 +194,32 @@ const ScopeOne = () => {
         {/* スコープナビゲーション */}
         <ScopeNavbar 
           currentPath={location.pathname}
-          onShowForm={() => setShowForm(true)}
+          onShowForm={() => {
+            setShowForm(true);
+            setActiveStep(0); // Set to input step when clicking form button
+          }}
         />
 
-        {/* データ入力フォームまたはステップコンテンツを表示 */}
-        {showForm ? (
-          <>
-            {/* フォーム表示時のキャンセルボタン */}
-            <div className="mb-4">
-              <Button 
-                variant="outline"
-                onClick={() => setShowForm(false)}
-                className="border-blue-200 text-blue-800"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                ダッシュボードに戻る
-              </Button>
-            </div>
-            
-            {/* データ入力フォーム */}
-            <ScopeOneDataForm 
-              formData={formData}
-              onFormSubmit={handleFormSubmit}
-              onInputChange={handleInputChange}
-              onSelectChange={handleSelectChange}
-              onCancel={() => setShowForm(false)}
-              scopeOneData={scopeOneData}
-            />
-          </>
-        ) : (
-          <>
-            {/* ステップナビゲーションとコンテンツ */}
-            <StepNavigation
-              steps={steps}
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
-              goToPreviousStep={goToPreviousStep}
-              goToNextStep={goToNextStep}
-            />
-            
-            {/* ステップコンテンツ */}
-            <motion.div 
-              key={steps[activeStep].id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mt-6"
-            >
-              {renderStepContent()}
-            </motion.div>
-          </>
-        )}
+        {/* ステップナビゲーションとコンテンツ */}
+        <StepNavigation
+          steps={steps}
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          goToPreviousStep={goToPreviousStep}
+          goToNextStep={goToNextStep}
+        />
+        
+        {/* ステップコンテンツ */}
+        <motion.div 
+          key={steps[activeStep].id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mt-6"
+        >
+          {renderStepContent()}
+        </motion.div>
       </main>
       
       <Footer />
