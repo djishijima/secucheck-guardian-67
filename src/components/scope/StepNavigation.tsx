@@ -91,7 +91,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
         </CardContent>
       </Card>
 
-      {/* ナビゲーションボタン */}
+      {/* ナビゲーションボタン - ボタンラベルを更新 */}
       <div className="flex justify-between mt-8 pt-4 border-t border-blue-100">
         <Button 
           onClick={goToPreviousStep}
@@ -99,7 +99,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
           disabled={activeStep === 0}
           className="gap-2 border-blue-200 text-blue-800 disabled:opacity-50"
         >
-          <ArrowLeft className="h-4 w-4" /> 前へ
+          <ArrowLeft className="h-4 w-4" /> 前のステップ
         </Button>
         
         <Button 
@@ -107,7 +107,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
           className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 gap-2 disabled:opacity-50"
           disabled={activeStep === steps.length - 1}
         >
-          次へ <ArrowLeft className="h-4 w-4 rotate-180" />
+          次のステップ <ArrowLeft className="h-4 w-4 rotate-180" />
         </Button>
       </div>
     </div>

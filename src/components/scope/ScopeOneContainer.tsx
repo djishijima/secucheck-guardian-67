@@ -13,13 +13,19 @@ import { useLocation } from 'react-router-dom';
 import ScopeOneStepContent from '@/components/scope/ScopeOneStepContent';
 import { Button } from '@/components/ui/button';
 
+// Extended type to include saved result properties
+interface SavedScopeOneData extends ScopeOneDataType {
+  savedAt: string; // Timestamp when result was saved
+  label: string;   // Display label for saved result
+}
+
 const ScopeOneContainer = () => {
   const [activeStep, setActiveStep] = useState(0);
   const { toast } = useToast();
   const [scopeOneData, setScopeOneData] = useState<ScopeOneDataType>(defaultScopeOneData);
   const [showForm, setShowForm] = useState(false);
   const location = useLocation();
-  const [savedResults, setSavedResults] = useState<ScopeOneDataType[]>([]);
+  const [savedResults, setSavedResults] = useState<SavedScopeOneData[]>([]);
   const [showSavedResults, setShowSavedResults] = useState(false);
   
   // Load saved results from localStorage on component mount
@@ -42,7 +48,7 @@ const ScopeOneContainer = () => {
     targetYear: '2023年度'
   });
   
-  // Steps for the Scope 1 emissions data page - updated order to match dashboard flow
+  // Steps for the Scope 1 emissions data page - updated for clearer navigation
   const steps = [
     { id: "input", title: "データ入力", description: "自社データの入力" },
     { id: "overview", title: "データ概要", description: "排出量の全体像を把握" },
@@ -59,8 +65,8 @@ const ScopeOneContainer = () => {
   };
 
   const saveResult = () => {
-    // Add current date to the saved result
-    const resultToSave = {
+    // Add current date and label to the saved result
+    const resultToSave: SavedScopeOneData = {
       ...scopeOneData,
       savedAt: new Date().toISOString(),
       label: `保存 - ${new Date().toLocaleDateString('ja-JP')}`
@@ -80,7 +86,9 @@ const ScopeOneContainer = () => {
   };
 
   const loadSavedResult = (index: number) => {
-    setScopeOneData(savedResults[index]);
+    // Ensure we only set ScopeOneDataType fields to scopeOneData
+    const { savedAt, label, ...scopeOneDataFields } = savedResults[index];
+    setScopeOneData(scopeOneDataFields);
     setShowSavedResults(false);
     
     toast({
@@ -155,11 +163,9 @@ const ScopeOneContainer = () => {
       total,
       categories,
       monthlyTrend: updatedMonthlyTrend,
-      // Update the current year value in yearOverYear
       yearOverYear: prev.yearOverYear.map(item => 
         item.year === '2022年度' ? { ...item, value: total } : item
       ),
-      // Update corresponding target
       reductionTargets: prev.reductionTargets.map(target => 
         target.year === formData.targetYear 
           ? { ...target, target: Math.round(total * 0.9) }
@@ -168,9 +174,9 @@ const ScopeOneContainer = () => {
     }));
 
     toast({
-      title: "データ更新",
-      description: "Scope 1排出量データが更新されました。",
-      duration: 3000,
+      title: "データが更新されました",
+      description: "入力したデータでScope 1排出量が計算されました。次のステップに進んで結果を確認してください。",
+      duration: 5000,
     });
 
     // After submitting form, move to overview tab automatically
@@ -239,7 +245,7 @@ const ScopeOneContainer = () => {
             className="flex items-center gap-1 text-blue-600 border-blue-200 hover:bg-blue-50"
             onClick={() => setShowSavedResults(!showSavedResults)}
           >
-            <Save className="h-4 w-4" /> 保存結果を表示
+            <Save className="h-4 w-4" /> {showSavedResults ? '保存結果を隠す' : '保存結果を表示'}
           </Button>
           {(activeStep > 0) && (
             <Button 

@@ -40,7 +40,7 @@ const ScopeOneReductionTab: React.FC<ScopeOneReductionTabProps> = ({ scopeOneDat
           <CardDescription>施策実施による将来予測</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <ReductionSimulation />
+          <ReductionSimulation scopeOneData={scopeOneData} />
         </CardContent>
       </Card>
     </motion.div>
