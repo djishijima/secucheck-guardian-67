@@ -25,7 +25,7 @@ const HeroSection = () => {
               <Button size="lg" className="bg-white text-indigo-700 hover:bg-gray-100">
                 製品を探す <Search className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20">
+              <Button size="lg" variant="outline" className="border-white text-indigo-100 bg-indigo-900/40 hover:bg-indigo-900/60 hover:text-white">
                 詳細を見る <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
