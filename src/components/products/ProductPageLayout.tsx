@@ -1,3 +1,4 @@
+
 import React, { ReactNode } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -20,6 +21,11 @@ interface ProductPageLayoutProps {
   ctaText?: string;
   ctaLink?: string;
   additionalContent?: ReactNode;
+  categories?: {
+    function?: string;
+    technology?: string;
+    challenge?: string;
+  };
 }
 
 const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
@@ -31,7 +37,8 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
   features,
   ctaText = "今すぐ注文する",
   ctaLink = "/contact",
-  additionalContent
+  additionalContent,
+  categories
 }) => {
   // Check if the image is a placeholder or missing
   const isPlaceholderImage = imageUrl === '/placeholder.svg' || !imageUrl;
@@ -54,6 +61,25 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{title}</h1>
                 <p className="text-xl text-indigo-600 mb-4">{subtitle}</p>
                 <p className="text-gray-600 mb-6">{description}</p>
+                {categories && (
+                  <div className="flex flex-wrap justify-center gap-2 mb-6">
+                    {categories.function && (
+                      <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        {categories.function}
+                      </span>
+                    )}
+                    {categories.technology && (
+                      <span className="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        {categories.technology}
+                      </span>
+                    )}
+                    {categories.challenge && (
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        {categories.challenge}
+                      </span>
+                    )}
+                  </div>
+                )}
                 <Link to={ctaLink}>
                   <Button className="bg-indigo-600 hover:bg-indigo-700">
                     <ShoppingCart className="mr-2 h-4 w-4" />
@@ -72,6 +98,25 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{title}</h1>
                     <p className="text-xl text-indigo-600 mb-4">{subtitle}</p>
                     <p className="text-gray-600 mb-6">{description}</p>
+                    {categories && (
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {categories.function && (
+                          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            {categories.function}
+                          </span>
+                        )}
+                        {categories.technology && (
+                          <span className="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            {categories.technology}
+                          </span>
+                        )}
+                        {categories.challenge && (
+                          <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            {categories.challenge}
+                          </span>
+                        )}
+                      </div>
+                    )}
                     <Link to={ctaLink}>
                       <Button className="bg-indigo-600 hover:bg-indigo-700">
                         <ShoppingCart className="mr-2 h-4 w-4" />
