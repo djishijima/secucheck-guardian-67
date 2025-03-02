@@ -26,10 +26,10 @@ const Index = () => {
             <div className="md:w-2/3 mb-6 md:mb-0">
               <div className="flex items-center mb-2">
                 <Leaf className="h-6 w-6 text-green-600 mr-2" />
-                <h2 className="text-2xl font-bold text-green-800">サステナビリティ診断ツール</h2>
+                <h2 className="text-2xl font-bold text-green-800">サステナビリティ自己診断ツール</h2>
               </div>
               <p className="text-gray-700 mb-4">
-                無料の診断ツールで、貴社のSDGs取り組み状況を可視化。専門家による具体的な改善提案とともに、
+                無料の自己診断ツールで、貴社のSDGs取り組み状況を可視化。専門家による具体的な改善提案とともに、
                 サステナビリティレポート作成のための基礎データを取得できます。
               </p>
               <p className="text-sm text-gray-600 mb-4">

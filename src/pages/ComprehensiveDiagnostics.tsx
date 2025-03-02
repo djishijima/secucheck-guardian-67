@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -22,7 +21,7 @@ const ComprehensiveDiagnostics = () => {
         "診断結果をもとに価値創造プロセスや改善提案が行われます。"
       ],
       icon: <FileText className="h-12 w-12 text-green-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "サステナブルサプライチェーン診断",
@@ -32,7 +31,7 @@ const ComprehensiveDiagnostics = () => {
         "人権、労働環境、環境負荷、地政学リスクなど多角的な視点で評価。"
       ],
       icon: <Users className="h-12 w-12 text-green-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "カーボンニュートラル診断",
@@ -41,7 +40,7 @@ const ComprehensiveDiagnostics = () => {
         "Scope1〜3の排出量算定だけでなく、削減ポテンシャルや再生可能エネルギー導入のシミュレーションも実施。"
       ],
       icon: <Leaf className="h-12 w-12 text-green-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "サーキュラーエコノミー診断",
@@ -50,7 +49,7 @@ const ComprehensiveDiagnostics = () => {
         "製品設計や廃棄物管理の改善提案を含む。"
       ],
       icon: <Recycle className="h-12 w-12 text-green-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "サステナビリティ成熟度診断",
@@ -59,7 +58,7 @@ const ComprehensiveDiagnostics = () => {
         "クイック診断（簡易版）と詳細診断（高度版）の2段階で提供される。"
       ],
       icon: <BarChart4 className="h-12 w-12 text-green-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     }
   ];
 
@@ -72,7 +71,7 @@ const ComprehensiveDiagnostics = () => {
         "デジタル技術導入による競争優位性の強化提案も行われます。"
       ],
       icon: <ChartBar className="h-12 w-12 text-blue-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "データ活用度診断",
@@ -81,7 +80,7 @@ const ComprehensiveDiagnostics = () => {
         "BIツールやAI活用状況も含めた包括的な評価。"
       ],
       icon: <Database className="h-12 w-12 text-blue-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "サイバーセキュリティ診断",
@@ -90,7 +89,7 @@ const ComprehensiveDiagnostics = () => {
         "DX推進に伴う新たなセキュリティリスクにも対応。"
       ],
       icon: <ShieldCheck className="h-12 w-12 text-blue-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     },
     {
       title: "業務プロセス自動化（RPA）適用診断",
@@ -99,7 +98,7 @@ const ComprehensiveDiagnostics = () => {
         "業務効率化とコスト削減のポテンシャル分析。"
       ],
       icon: <BarChart4 className="h-12 w-12 text-blue-600" />,
-      link: "/contact" // Adding link property
+      link: "/contact"
     }
   ];
 
@@ -398,13 +397,13 @@ const ComprehensiveDiagnostics = () => {
               <TooltipTrigger asChild>
                 <Link to="/sustainability-check">
                   <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 gap-2">
-                    無料の簡易診断を試してみる
+                    無料の自己診断ツールを試してみる
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
               </TooltipTrigger>
               <TooltipContent className="bg-green-800 text-white">
-                <p>所要時間約5分の簡易診断を無料でお試しいただけます</p>
+                <p>所要時間約5分の自己診断を無料でお試しいただけます</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

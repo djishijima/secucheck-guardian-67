@@ -268,7 +268,7 @@ ${calculateTotalScore() < 50
               >
                 <h1 className="text-3xl md:text-4xl font-bold mb-4 flex items-center">
                   <Leaf className="mr-3 h-8 w-8" />
-                  サステナビリティ診断ツール
+                  サステナビリティ自己診断ツール
                 </h1>
                 <p className="text-lg opacity-90 mb-4">
                   貴社のSDGs取り組み状況やサステナビリティへの対応レベルを診断し、サステナビリティレポート作成の準備をサポートします。

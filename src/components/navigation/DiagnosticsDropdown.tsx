@@ -34,10 +34,10 @@ const DiagnosticsDropdown: React.FC<DiagnosticsDropdownProps> = ({
           サステナビリティについて
         </Link>
         <Link to="/sustainability-check" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
-          サステナビリティ診断
+          サステナビリティ自己診断ツール
         </Link>
         <Link to="/comprehensive-diagnostics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
-          サステナブルDX診断
+          サステナブルDX診断サービス
         </Link>
         <Link to="/scope-one" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
           Scope 1 排出量
