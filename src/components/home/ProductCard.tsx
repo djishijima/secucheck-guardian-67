@@ -2,9 +2,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  ShoppingCart, 
   ExternalLink, 
-  Printer, 
+  MessageSquare,
   Leaf,
   Languages,
   Truck
@@ -22,7 +21,8 @@ interface ProductCardProps {
     price: number;
     category: string;
     tags: string[];
-    image: string;
+    icon?: React.ReactNode;
+    image?: string;
     link: string;
   };
 }
@@ -31,7 +31,7 @@ interface ProductCardProps {
 const getProductIcon = (productId: number) => {
   switch (productId) {
     case 1:
-      return <Printer className="w-16 h-16 text-green-600" />;
+      return <Leaf className="w-16 h-16 text-green-600" />;
     case 2:
       return <Leaf className="w-16 h-16 text-green-600" />;
     case 3:
@@ -39,7 +39,7 @@ const getProductIcon = (productId: number) => {
     case 4:
       return <Truck className="w-16 h-16 text-green-600" />;
     default:
-      return <Printer className="w-16 h-16 text-gray-600" />;
+      return <Leaf className="w-16 h-16 text-gray-600" />;
   }
 };
 
@@ -53,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 transition-all">
         <div className="w-full h-48 overflow-hidden flex items-center justify-center bg-gray-50">
-          {getProductIcon(product.id)}
+          {product.icon || getProductIcon(product.id)}
         </div>
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
@@ -85,7 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               </Button>
             </Link>
             <Button size="sm">
-              <ShoppingCart className="mr-2 h-4 w-4" /> お問合せ
+              <MessageSquare className="mr-2 h-4 w-4" /> {product.title}お問合せ
             </Button>
           </div>
         </CardFooter>
