@@ -1,5 +1,7 @@
 
 import React from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import ProductPageLayout from '@/components/products/ProductPageLayout';
 import { Truck, Package, BarChart, Map, Clock, Shield } from 'lucide-react';
 
@@ -15,7 +17,7 @@ const EcoLogistics = () => {
       title="環境物流サービス"
       subtitle="持続可能なサプライチェーンとロジスティクスソリューション"
       description="当社の環境物流サービスは、お客様の印刷物の配送過程における環境負荷を最小限に抑えます。低排出ガス車両、最適化された配送ルート、環境に配慮した梱包材料を組み合わせ、効率性を損なうことなく持続可能性を実現します。"
-      imageUrl=""
+      imageUrl="/images/eco-logistics.jpg"
       benefits={[
         "従来の物流と比較して最大45%のCO2排出量削減",
         "生分解性・再利用可能な梱包材料の使用",
