@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ClipboardCheck, RefreshCw, DownloadCloud, Printer, Check, ArrowRight } from 'lucide-react';
@@ -39,6 +40,7 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${companyName}サステナビリティ診断結果`,
+    content: () => printRef.current,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",
@@ -49,9 +51,7 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
   
   // 印刷実行関数
   const executePrint = () => {
-    if (printRef.current) {
-      handlePrint(null, () => printRef.current);
-    }
+    handlePrint();
   };
   
   // PDFダウンロード（この例ではブラウザの印刷→PDFに保存機能を利用）
