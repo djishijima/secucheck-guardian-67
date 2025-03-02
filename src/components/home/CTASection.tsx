@@ -16,14 +16,14 @@ const CTASection = () => {
           <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700">
             お問い合わせ
           </Button>
-          <Button 
-            as={Link} 
-            to="/sustainability-check"
-            size="lg" 
-            className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
-          >
-            <Leaf className="h-5 w-5" /> サステナビリティ診断を試す
-          </Button>
+          <Link to="/sustainability-check">
+            <Button 
+              size="lg" 
+              className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
+            >
+              <Leaf className="h-5 w-5" /> サステナビリティ診断を試す
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
