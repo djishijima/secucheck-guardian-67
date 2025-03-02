@@ -38,7 +38,6 @@ interface ProductCardProps {
   };
 }
 
-// アイコンを製品IDに基づいて選択する関数
 const getProductIcon = (productId: number) => {
   switch (productId) {
     case 1:
@@ -64,7 +63,6 @@ const getProductIcon = (productId: number) => {
   }
 };
 
-// カテゴリバッジの色を取得する関数
 const getCategoryBadgeStyle = (categoryType: string, value: string) => {
   if (categoryType === 'function') {
     return 'bg-blue-100 text-blue-800';
@@ -76,9 +74,25 @@ const getCategoryBadgeStyle = (categoryType: string, value: string) => {
   return 'bg-gray-100 text-gray-800';
 };
 
+const getValidProductLink = (link: string): string => {
+  const validRoutes = [
+    '/eco-printing',
+    '/gx-printing',
+    '/gx-logistics',
+    '/gx-eco-design',
+    '/gx-energy-management',
+    '/gx-sustainable-marketing',
+    '/gx-supply-chain-audit',
+    '/gx-education-platform'
+  ];
+  
+  return validRoutes.includes(link) ? link : '/contact';
+};
+
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  // Check if there's a product image or icon to display
   const hasImageOrIcon = product.image || product.icon;
+  
+  const validLink = getValidProductLink(product.link);
 
   return (
     <motion.div
@@ -100,7 +114,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <CardTitle className="text-xl">{product.title}</CardTitle>
           </div>
           
-          {/* カテゴリバッジ表示 */}
           {product.categories && (
             <div className="flex flex-wrap gap-1 mt-2">
               {Object.entries(product.categories).map(([type, value]) => (
@@ -132,7 +145,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center items-center border-t pt-4 gap-2">
-          <Link to={product.link}>
+          <Link to={validLink}>
             <Button size="sm" variant="outline" className="hover:-translate-y-1 transition-transform">
               <ExternalLink className="mr-2 h-4 w-4" /> 詳細
             </Button>
