@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -17,7 +16,8 @@ const ComprehensiveDiagnostics = () => {
         "簡易セルフチェックから本格的なコンサルティングまで幅広く対応。",
         "診断結果をもとに価値創造プロセスや改善提案が行われます。"
       ],
-      icon: <FileText className="h-12 w-12 text-green-600" />
+      icon: <FileText className="h-12 w-12 text-green-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "サステナブルサプライチェーン診断",
@@ -26,7 +26,8 @@ const ComprehensiveDiagnostics = () => {
         "ISO26000や国際基準に基づき、ベンチマーク分析やギャップ分析を実施。",
         "人権、労働環境、環境負荷、地政学リスクなど多角的な視点で評価。"
       ],
-      icon: <Users className="h-12 w-12 text-green-600" />
+      icon: <Users className="h-12 w-12 text-green-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "カーボンニュートラル診断",
@@ -34,7 +35,8 @@ const ComprehensiveDiagnostics = () => {
       features: [
         "Scope1〜3の排出量算定だけでなく、削減ポテンシャルや再生可能エネルギー導入のシミュレーションも実施。"
       ],
-      icon: <Leaf className="h-12 w-12 text-green-600" />
+      icon: <Leaf className="h-12 w-12 text-green-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "サーキュラーエコノミー診断",
@@ -42,7 +44,8 @@ const ComprehensiveDiagnostics = () => {
       features: [
         "製品設計や廃棄物管理の改善提案を含む。"
       ],
-      icon: <Recycle className="h-12 w-12 text-green-600" />
+      icon: <Recycle className="h-12 w-12 text-green-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "サステナビリティ成熟度診断",
@@ -50,7 +53,8 @@ const ComprehensiveDiagnostics = () => {
       features: [
         "クイック診断（簡易版）と詳細診断（高度版）の2段階で提供される。"
       ],
-      icon: <BarChart4 className="h-12 w-12 text-green-600" />
+      icon: <BarChart4 className="h-12 w-12 text-green-600" />,
+      link: "/contact" // Adding link property
     }
   ];
 
@@ -62,7 +66,8 @@ const ComprehensiveDiagnostics = () => {
         "ITインフラ、業務プロセス、自動化技術、人材スキルなど多方面から分析。",
         "デジタル技術導入による競争優位性の強化提案も行われます。"
       ],
-      icon: <ChartBar className="h-12 w-12 text-blue-600" />
+      icon: <ChartBar className="h-12 w-12 text-blue-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "データ活用度診断",
@@ -70,7 +75,8 @@ const ComprehensiveDiagnostics = () => {
       features: [
         "BIツールやAI活用状況も含めた包括的な評価。"
       ],
-      icon: <Database className="h-12 w-12 text-blue-600" />
+      icon: <Database className="h-12 w-12 text-blue-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "サイバーセキュリティ診断",
@@ -78,7 +84,8 @@ const ComprehensiveDiagnostics = () => {
       features: [
         "DX推進に伴う新たなセキュリティリスクにも対応。"
       ],
-      icon: <ShieldCheck className="h-12 w-12 text-blue-600" />
+      icon: <ShieldCheck className="h-12 w-12 text-blue-600" />,
+      link: "/contact" // Adding link property
     },
     {
       title: "業務プロセス自動化（RPA）適用診断",
@@ -86,7 +93,8 @@ const ComprehensiveDiagnostics = () => {
       features: [
         "業務効率化とコスト削減のポテンシャル分析。"
       ],
-      icon: <BarChart4 className="h-12 w-12 text-blue-600" />
+      icon: <BarChart4 className="h-12 w-12 text-blue-600" />,
+      link: "/contact" // Adding link property
     }
   ];
 
@@ -213,6 +221,7 @@ const ComprehensiveDiagnostics = () => {
                   description={diagnostic.description} 
                   features={diagnostic.features} 
                   icon={diagnostic.icon}
+                  link={diagnostic.link}
                 />
               ))}
             </div>
@@ -233,6 +242,7 @@ const ComprehensiveDiagnostics = () => {
                   description={diagnostic.description} 
                   features={diagnostic.features} 
                   icon={diagnostic.icon}
+                  link={diagnostic.link}
                 />
               ))}
             </div>
