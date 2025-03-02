@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ClipboardCheck, Leaf, Check, Globe, ArrowRight, RefreshCw, DownloadCloud, Info } from 'lucide-react';
@@ -675,4 +676,20 @@ ${calculateTotalScore() < 50
                 <Button
                   variant="outline"
                   className="gap-2 border-green-200 hover:bg-green-50 hover:border-green-300
-                  shadow hover
+                  shadow hover:shadow-md transition-all"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  詳細な診断を依頼する
+                </Button>
+              </motion.div>
+            </motion.section>
+          </>
+        )}
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default SustainabilityCheck;
