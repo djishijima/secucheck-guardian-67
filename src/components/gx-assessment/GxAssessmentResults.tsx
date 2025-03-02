@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useReactToPrint } from 'react-to-print';
+import { useToast } from '@/components/ui/use-toast';
 import { Printer, DownloadCloud, ChartBar, Target, Zap, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { useReactToPrint } from 'react-to-print';
-import { useToast } from '@/components/ui/use-toast';
 
 interface GxAssessmentResultsProps {
   results: {
@@ -51,7 +51,7 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${results.company.name}_GX対応度診断結果`,
-    content: () => printRef.current,
+    getPrintContent: () => printRef.current,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",
@@ -60,14 +60,9 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
     },
   });
   
-  // 印刷実行関数
-  const executePrint = () => {
-    handlePrint();
-  };
-  
   // PDFダウンロード
   const handleDownload = () => {
-    executePrint();
+    handlePrint();
     toast({
       title: "ダウンロードのヒント",
       description: "印刷ダイアログでPDFとして保存を選択してください。",
@@ -89,7 +84,7 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={executePrint}
+            onClick={handlePrint}
             className="flex items-center gap-1"
           >
             <Printer className="h-4 w-4" />
