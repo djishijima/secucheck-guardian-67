@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 const HeroSection = () => {
   return (
     <section className="mb-16">
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 md:p-12 shadow-lg text-white">
+      <div className="bg-gradient-to-r from-indigo-800 to-purple-800 rounded-2xl p-8 md:p-12 shadow-lg">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
               <span className="block">文唱堂印刷の</span>
               <span className="text-yellow-300">GX x AI</span> プロダクトマーケットプレイス
             </h1>
