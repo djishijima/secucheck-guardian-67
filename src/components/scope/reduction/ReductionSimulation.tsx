@@ -1,8 +1,23 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ScopeOneDataType } from '@/data/scopeOneData';
 
-const ReductionSimulation: React.FC = () => {
+interface ReductionSimulationProps {
+  scopeOneData: ScopeOneDataType;
+}
+
+const ReductionSimulation: React.FC<ReductionSimulationProps> = ({ scopeOneData }) => {
+  // Calculate the end point of actual data (represents current emissions)
+  const currentEmissions = scopeOneData.total;
+  
+  // Calculate "business as usual" line - no reduction (slightly increasing trend)
+  const businessAsUsual = Array.from({ length: 5 }).map((_, i) => 
+    Math.round(currentEmissions * (1 + 0.02 * (i + 1))));
+  
+  // Calculate "with measures" line - showing reductions based on targets
+  const withMeasures = scopeOneData.reductionTargets.map(target => target.target);
+  
   return (
     <div>
       <div className="h-64 mb-6">
@@ -14,7 +29,7 @@ const ReductionSimulation: React.FC = () => {
           {/* 実績線 */}
           <svg className="absolute top-0 left-0 w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
             <motion.path 
-              d="M 0,20 L 10,25 L 20,32"
+              d={`M 0,${80 - (scopeOneData.yearOverYear[0].value / 4)} L 10,${80 - (scopeOneData.yearOverYear[1].value / 4)} L 20,${80 - (currentEmissions / 4)}`}
               stroke="#3B82F6"
               strokeWidth="2"
               fill="none"
@@ -22,9 +37,9 @@ const ReductionSimulation: React.FC = () => {
               animate={{ pathLength: 1 }}
               transition={{ duration: 1, delay: 0.2 }}
             />
-            {/* 予測線 (現状予測) */}
+            {/* 予測線 (現状予測) - 増加傾向 */}
             <motion.path 
-              d="M 20,32 L 30,40 L 40,48 L 60,60 L 80,72 L 100,85"
+              d={`M 20,${80 - (currentEmissions / 4)} L 40,${80 - (businessAsUsual[0] / 4)} L 60,${80 - (businessAsUsual[2] / 4)} L 80,${80 - (businessAsUsual[3] / 4)} L 100,${80 - (businessAsUsual[4] / 4)}`}
               stroke="#3B82F6"
               strokeWidth="2"
               strokeDasharray="4 2"
@@ -35,7 +50,7 @@ const ReductionSimulation: React.FC = () => {
             />
             {/* 目標線 (施策実施後 - 改善される) */}
             <motion.path 
-              d="M 20,32 L 30,30 L 40,27 L 60,22 L 80,18 L 100,15"
+              d={`M 20,${80 - (currentEmissions / 4)} L 40,${80 - (withMeasures[0] / 4)} L 60,${80 - (withMeasures[1] / 4)} L 80,${80 - (withMeasures[2] / 4)} L 100,${80 - (withMeasures[3] / 4)}`}
               stroke="#10B981"
               strokeWidth="2"
               fill="none"

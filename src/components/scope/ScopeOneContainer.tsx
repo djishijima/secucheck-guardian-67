@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LineChart } from 'lucide-react';
+import { LineChart, Save } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useToast } from "@/components/ui/use-toast";
@@ -11,6 +11,7 @@ import ScopeNavbar from '@/components/scope/ScopeNavbar';
 import StepNavigation from '@/components/scope/StepNavigation';
 import { useLocation } from 'react-router-dom';
 import ScopeOneStepContent from '@/components/scope/ScopeOneStepContent';
+import { Button } from '@/components/ui/button';
 
 const ScopeOneContainer = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -18,6 +19,20 @@ const ScopeOneContainer = () => {
   const [scopeOneData, setScopeOneData] = useState<ScopeOneDataType>(defaultScopeOneData);
   const [showForm, setShowForm] = useState(false);
   const location = useLocation();
+  const [savedResults, setSavedResults] = useState<ScopeOneDataType[]>([]);
+  const [showSavedResults, setShowSavedResults] = useState(false);
+  
+  // Load saved results from localStorage on component mount
+  useEffect(() => {
+    const savedData = localStorage.getItem('scopeOneSavedResults');
+    if (savedData) {
+      try {
+        setSavedResults(JSON.parse(savedData));
+      } catch (e) {
+        console.error('Failed to parse saved results', e);
+      }
+    }
+  }, []);
   
   const [formData, setFormData] = useState({
     companyVehicles: defaultScopeOneData.categories[0].value,
@@ -39,6 +54,53 @@ const ScopeOneContainer = () => {
     toast({
       title: "レポートのダウンロード",
       description: "Scope 1排出量の詳細レポートがダウンロードされました。",
+      duration: 3000,
+    });
+  };
+
+  const saveResult = () => {
+    // Add current date to the saved result
+    const resultToSave = {
+      ...scopeOneData,
+      savedAt: new Date().toISOString(),
+      label: `保存 - ${new Date().toLocaleDateString('ja-JP')}`
+    };
+    
+    const updatedResults = [...savedResults, resultToSave];
+    setSavedResults(updatedResults);
+    
+    // Save to localStorage
+    localStorage.setItem('scopeOneSavedResults', JSON.stringify(updatedResults));
+    
+    toast({
+      title: "結果を保存しました",
+      description: "Scope 1排出量の分析結果が保存されました。",
+      duration: 3000,
+    });
+  };
+
+  const loadSavedResult = (index: number) => {
+    setScopeOneData(savedResults[index]);
+    setShowSavedResults(false);
+    
+    toast({
+      title: "保存した結果を読み込みました",
+      description: "過去に保存したScope 1分析結果が読み込まれました。",
+      duration: 3000,
+    });
+  };
+
+  const deleteSavedResult = (index: number) => {
+    const updatedResults = [...savedResults];
+    updatedResults.splice(index, 1);
+    setSavedResults(updatedResults);
+    
+    // Update localStorage
+    localStorage.setItem('scopeOneSavedResults', JSON.stringify(updatedResults));
+    
+    toast({
+      title: "保存結果を削除しました",
+      description: "選択した保存結果が削除されました。",
       duration: 3000,
     });
   };
@@ -169,6 +231,72 @@ const ScopeOneContainer = () => {
             setActiveStep(0); // Set to input step when clicking form button
           }}
         />
+
+        {/* 保存と読み込みボタン */}
+        <div className="flex justify-end mb-4 gap-2">
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-1 text-blue-600 border-blue-200 hover:bg-blue-50"
+            onClick={() => setShowSavedResults(!showSavedResults)}
+          >
+            <Save className="h-4 w-4" /> 保存結果を表示
+          </Button>
+          {(activeStep > 0) && (
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-1 text-green-600 border-green-200 hover:bg-green-50"
+              onClick={saveResult}
+            >
+              <Save className="h-4 w-4" /> 現在の結果を保存
+            </Button>
+          )}
+        </div>
+
+        {/* 保存された結果一覧 */}
+        {showSavedResults && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+          >
+            <h3 className="font-medium text-lg mb-3">保存された結果</h3>
+            {savedResults.length === 0 ? (
+              <p className="text-gray-500">保存された結果はありません</p>
+            ) : (
+              <div className="space-y-2">
+                {savedResults.map((result, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                    <div>
+                      <span className="font-medium">{result.label || `結果 ${index + 1}`}</span>
+                      <span className="text-sm text-gray-500 ml-2">
+                        合計: {result.total} {result.unit}
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => loadSavedResult(index)}
+                        className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                      >
+                        読み込み
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => deleteSavedResult(index)}
+                        className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                      >
+                        削除
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* ステップナビゲーションとコンテンツ */}
         <StepNavigation
