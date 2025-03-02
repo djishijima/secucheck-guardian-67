@@ -1,25 +1,64 @@
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Printer, Menu, X, ShoppingCart, BarChart, Leaf, List, FolderCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  
+  // Create refs for each dropdown menu container
+  const productsRef = useRef<HTMLDivElement>(null);
+  const diagnosticsRef = useRef<HTMLDivElement>(null);
+  const othersRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = (dropdown: string) => {
     setActiveDropdown(dropdown);
   };
 
-  const handleMouseLeave = () => {
-    setActiveDropdown(null);
+  const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Check if we're moving from the dropdown to outside the dropdown
+    const dropdownRef = 
+      activeDropdown === 'products' ? productsRef :
+      activeDropdown === 'diagnostics' ? diagnosticsRef :
+      activeDropdown === 'others' ? othersRef : null;
+    
+    // Only close if we're actually leaving the dropdown entirely
+    if (dropdownRef && !dropdownRef.current?.contains(event.relatedTarget as Node)) {
+      setActiveDropdown(null);
+    }
   };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        activeDropdown &&
+        ((activeDropdown === 'products' && productsRef.current && !productsRef.current.contains(event.target as Node)) ||
+        (activeDropdown === 'diagnostics' && diagnosticsRef.current && !diagnosticsRef.current.contains(event.target as Node)) ||
+        (activeDropdown === 'others' && othersRef.current && !othersRef.current.contains(event.target as Node)))
+      ) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [activeDropdown]);
 
   return (
     <header className="bg-white shadow-sm">
@@ -54,8 +93,8 @@ const Header: React.FC = () => {
               {/* 製品・サービスをグループ化（製品とGX×AI製品をまとめる） */}
               <div 
                 className="relative group"
+                ref={productsRef}
                 onMouseEnter={() => handleMouseEnter('products')}
-                onMouseLeave={handleMouseLeave}
               >
                 <span className={`text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${activeDropdown === 'products' ? 'text-indigo-600 after:scale-x-100' : ''}`}>
                   <List className="h-4 w-4 mr-1" />
@@ -112,8 +151,8 @@ const Header: React.FC = () => {
               {/* 診断サービスをグループ化 */}
               <div 
                 className="relative group"
+                ref={diagnosticsRef}
                 onMouseEnter={() => handleMouseEnter('diagnostics')}
-                onMouseLeave={handleMouseLeave}
               >
                 <span className={`text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${activeDropdown === 'diagnostics' ? 'text-indigo-600 after:scale-x-100' : ''}`}>
                   <FolderCheck className="h-4 w-4 mr-1" />
@@ -143,8 +182,8 @@ const Header: React.FC = () => {
               {/* その他 */}
               <div 
                 className="relative group"
+                ref={othersRef}
                 onMouseEnter={() => handleMouseEnter('others')}
-                onMouseLeave={handleMouseLeave}
               >
                 <span className={`text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${activeDropdown === 'others' ? 'text-indigo-600 after:scale-x-100' : ''}`}>
                   その他
@@ -169,25 +208,54 @@ const Header: React.FC = () => {
           {/* アクションボタン */}
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex space-x-3">
-              <Button variant="ghost" size="sm">
-                <ShoppingCart className="h-4 w-4" />
-              </Button>
-              <Link to="/dashboard">
-                <Button 
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 flex items-center" 
-                  size="sm"
-                >
-                  <BarChart className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/sustainability-check">
-                <Button 
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center" 
-                  size="sm"
-                >
-                  <Leaf className="h-4 w-4" />
-                </Button>
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <ShoppingCart className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>カートを表示</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/dashboard">
+                      <Button 
+                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 flex items-center" 
+                        size="sm"
+                      >
+                        <BarChart className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>ダッシュボード</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/sustainability-check">
+                      <Button 
+                        className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center" 
+                        size="sm"
+                      >
+                        <Leaf className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>サステナビリティ診断</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
 
             {/* モバイルメニューボタン */}

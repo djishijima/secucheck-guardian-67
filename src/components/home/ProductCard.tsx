@@ -51,8 +51,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       transition={{ duration: 0.3 }}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
-      <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 transition-all">
-        <div className="w-full h-48 overflow-hidden flex items-center justify-center bg-gray-50">
+      <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 hover:shadow-lg transition-all duration-300">
+        <div className="w-full h-48 overflow-hidden flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
           {product.icon || getProductIcon(product.id)}
         </div>
         <CardHeader className="pb-2">
@@ -80,12 +80,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <p className="font-semibold">¥{product.price.toLocaleString()}</p>
           <div className="flex gap-2">
             <Link to={product.link}>
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" className="hover:-translate-y-1 transition-transform">
                 <ExternalLink className="mr-2 h-4 w-4" /> 詳細
               </Button>
             </Link>
-            <Button size="sm">
-              <MessageSquare className="mr-2 h-4 w-4" /> {product.title}お問合せ
+            <Button size="sm" className="hover:-translate-y-1 transition-transform">
+              <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
             </Button>
           </div>
         </CardFooter>
