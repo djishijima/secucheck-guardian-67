@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Printer, Menu, X, ShoppingCart, Leaf, BarChart } from 'lucide-react';
+import { Printer, Menu, X, ShoppingCart, Leaf, BarChart, List, FolderCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -39,60 +39,62 @@ const Header: React.FC = () => {
                 ホーム
               </Link>
               
-              {/* プロダクト関連をグループ化 */}
+              {/* 製品・サービスをグループ化（製品とGX×AI製品をまとめる） */}
               <div className="relative group">
                 <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  <List className="h-4 w-4 mr-1" />
                   製品・サービス
                 </span>
-                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
-                  <Link to="/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    製品一覧
-                  </Link>
-                  <Link to="/eco-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    環境印刷
-                  </Link>
-                  <Link to="/gx-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    GX印刷
-                  </Link>
-                  <Link to="/eco-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    環境物流
-                  </Link>
-                  <Link to="/gx-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    GX物流
-                  </Link>
-                </div>
-              </div>
-              
-              {/* GX×AI製品をグループ化 */}
-              <div className="relative group">
-                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
-                  GX×AI製品
-                </span>
-                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
-                  <Link to="/gx-ai-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    GX×AI製品一覧
-                  </Link>
-                  <Link to="/gx-eco-design" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    エコデザインAI
-                  </Link>
-                  <Link to="/gx-energy-management" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    エネルギー管理AI
-                  </Link>
-                  <Link to="/gx-sustainable-marketing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    サステナブルマーケティングAI
-                  </Link>
-                  <Link to="/gx-supply-chain-audit" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    サプライチェーン監査AI
-                  </Link>
-                  <Link to="/gx-education-platform" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    教育プラットフォーム
-                  </Link>
+                <div className="absolute left-0 mt-2 w-80 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  {/* 一般製品 */}
+                  <div className="border-b pb-2">
+                    <div className="px-4 py-2 bg-gray-50 font-medium text-sm text-gray-700">一般製品</div>
+                    <Link to="/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      製品一覧
+                    </Link>
+                    <Link to="/eco-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      環境印刷
+                    </Link>
+                    <Link to="/gx-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      GX印刷
+                    </Link>
+                    <Link to="/eco-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      環境物流
+                    </Link>
+                    <Link to="/gx-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      GX物流
+                    </Link>
+                  </div>
+                  
+                  {/* GX×AI製品 */}
+                  <div>
+                    <div className="px-4 py-2 bg-gray-50 font-medium text-sm text-gray-700">GX×AI製品</div>
+                    <Link to="/gx-ai-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      GX×AI製品一覧
+                    </Link>
+                    <Link to="/gx-eco-design" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      エコデザインAI
+                    </Link>
+                    <Link to="/gx-energy-management" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      エネルギー管理AI
+                    </Link>
+                    <Link to="/gx-sustainable-marketing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      サステナブルマーケティングAI
+                    </Link>
+                    <Link to="/gx-supply-chain-audit" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      サプライチェーン監査AI
+                    </Link>
+                    <Link to="/gx-education-platform" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                      教育プラットフォーム
+                    </Link>
+                  </div>
                 </div>
               </div>
               
               {/* 診断サービスをグループ化 */}
               <div className="relative group">
                 <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  <FolderCheck className="h-4 w-4 mr-1" />
                   診断サービス
                 </span>
                 <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
@@ -186,56 +188,65 @@ const Header: React.FC = () => {
               ホーム
             </Link>
             
-            {/* 製品・サービス */}
+            {/* 製品・サービス（モバイル用） */}
             <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1">製品・サービス</span>
-              <div className="pl-4 space-y-1">
-                <Link to="/products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  製品一覧
-                </Link>
-                <Link to="/eco-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  環境印刷
-                </Link>
-                <Link to="/gx-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  GX印刷
-                </Link>
-                <Link to="/eco-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  環境物流
-                </Link>
-                <Link to="/gx-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  GX物流
-                </Link>
+              <span className="block text-base font-medium text-gray-700 mb-1 flex items-center">
+                <List className="h-4 w-4 mr-1" /> 製品・サービス
+              </span>
+              
+              {/* 一般製品 */}
+              <div className="pl-4 mb-2">
+                <div className="text-sm font-medium text-gray-600 py-1">一般製品</div>
+                <div className="pl-2 space-y-1">
+                  <Link to="/products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    製品一覧
+                  </Link>
+                  <Link to="/eco-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    環境印刷
+                  </Link>
+                  <Link to="/gx-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    GX印刷
+                  </Link>
+                  <Link to="/eco-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    環境物流
+                  </Link>
+                  <Link to="/gx-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    GX物流
+                  </Link>
+                </div>
+              </div>
+              
+              {/* GX×AI製品 */}
+              <div className="pl-4">
+                <div className="text-sm font-medium text-gray-600 py-1">GX×AI製品</div>
+                <div className="pl-2 space-y-1">
+                  <Link to="/gx-ai-products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    GX×AI製品一覧
+                  </Link>
+                  <Link to="/gx-eco-design" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    エコデザインAI
+                  </Link>
+                  <Link to="/gx-energy-management" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    エネルギー管理AI
+                  </Link>
+                  <Link to="/gx-sustainable-marketing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    サステナブルマーケティングAI
+                  </Link>
+                  <Link to="/gx-supply-chain-audit" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    サプライチェーン監査AI
+                  </Link>
+                  <Link to="/gx-education-platform" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                    教育プラットフォーム
+                  </Link>
+                </div>
               </div>
             </div>
             
-            {/* GX×AI製品 */}
+            {/* 診断サービス（モバイル用） */}
             <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1">GX×AI製品</span>
-              <div className="pl-4 space-y-1">
-                <Link to="/gx-ai-products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  GX×AI製品一覧
-                </Link>
-                <Link to="/gx-eco-design" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  エコデザインAI
-                </Link>
-                <Link to="/gx-energy-management" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  エネルギー管理AI
-                </Link>
-                <Link to="/gx-sustainable-marketing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナブルマーケティングAI
-                </Link>
-                <Link to="/gx-supply-chain-audit" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サプライチェーン監査AI
-                </Link>
-                <Link to="/gx-education-platform" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  教育プラットフォーム
-                </Link>
-              </div>
-            </div>
-            
-            {/* 診断サービス */}
-            <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1">診断サービス</span>
+              <span className="block text-base font-medium text-gray-700 mb-1 flex items-center">
+                <FolderCheck className="h-4 w-4 mr-1" /> 診断サービス
+              </span>
               <div className="pl-4 space-y-1">
                 <Link to="/about-gx" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
                   サステナビリティについて
@@ -255,7 +266,7 @@ const Header: React.FC = () => {
               </div>
             </div>
             
-            {/* その他 */}
+            {/* その他（モバイル用） */}
             <div className="px-3 py-2">
               <span className="block text-base font-medium text-gray-700 mb-1">その他</span>
               <div className="pl-4 space-y-1">
