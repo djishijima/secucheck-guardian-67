@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Printer, Menu, X, ShoppingCart, Leaf } from 'lucide-react';
+import { Printer, Menu, X, ShoppingCart, Leaf, BarChart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -41,6 +41,28 @@ const Header: React.FC = () => {
               <Link to="/products" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 製品一覧
               </Link>
+              <div className="relative group">
+                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  製品カテゴリ
+                </span>
+                <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  <Link to="/eco-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    環境印刷
+                  </Link>
+                  <Link to="/gx-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    GX印刷
+                  </Link>
+                  <Link to="/eco-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    環境物流
+                  </Link>
+                  <Link to="/gx-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    GX物流
+                  </Link>
+                  <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    ダッシュボード
+                  </Link>
+                </div>
+              </div>
               <Link to="/about-gx" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 サステナビリティ
               </Link>
@@ -56,6 +78,14 @@ const Header: React.FC = () => {
               <Button variant="ghost" size="sm">
                 <ShoppingCart className="h-4 w-4" />
               </Button>
+              <Link to="/dashboard">
+                <Button 
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 flex items-center" 
+                  size="sm"
+                >
+                  <BarChart className="h-4 w-4" />
+                </Button>
+              </Link>
               <Link to="/sustainability-check">
                 <Button 
                   className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center" 
@@ -96,6 +126,26 @@ const Header: React.FC = () => {
             <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               製品一覧
             </Link>
+            <div className="px-3 py-2">
+              <span className="block text-base font-medium text-gray-700 mb-1">製品カテゴリ</span>
+              <div className="pl-4 space-y-1">
+                <Link to="/eco-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  環境印刷
+                </Link>
+                <Link to="/gx-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  GX印刷
+                </Link>
+                <Link to="/eco-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  環境物流
+                </Link>
+                <Link to="/gx-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  GX物流
+                </Link>
+                <Link to="/dashboard" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  ダッシュボード
+                </Link>
+              </div>
+            </div>
             <Link to="/about-gx" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               サステナビリティ
             </Link>
@@ -106,12 +156,20 @@ const Header: React.FC = () => {
               <Button variant="outline" size="sm" className="justify-center">
                 <ShoppingCart className="h-4 w-4" />
               </Button>
+              <Link to="/dashboard" className="w-full">
+                <Button 
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 flex items-center w-full justify-center" 
+                  size="sm"
+                >
+                  <BarChart className="h-4 w-4 mr-2" /> ダッシュボード
+                </Button>
+              </Link>
               <Link to="/sustainability-check" className="w-full">
                 <Button 
                   className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center w-full justify-center" 
                   size="sm"
                 >
-                  <Leaf className="h-4 w-4" />
+                  <Leaf className="h-4 w-4 mr-2" /> サステナビリティ診断
                 </Button>
               </Link>
             </div>

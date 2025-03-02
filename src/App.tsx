@@ -11,6 +11,11 @@ import AboutGX from "./pages/AboutGX";
 import AITechnology from "./pages/AITechnology";
 import Contact from "./pages/Contact";
 import SustainabilityCheck from "./pages/SustainabilityCheck";
+import EcoPrinting from "./pages/EcoPrinting";
+import GXPrinting from "./pages/GXPrinting";
+import EcoLogistics from "./pages/EcoLogistics";
+import GXLogistics from "./pages/GXLogistics";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +32,11 @@ const App = () => (
           <Route path="/ai-technology" element={<AITechnology />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/sustainability-check" element={<SustainabilityCheck />} />
+          <Route path="/eco-printing" element={<EcoPrinting />} />
+          <Route path="/gx-printing" element={<GXPrinting />} />
+          <Route path="/eco-logistics" element={<EcoLogistics />} />
+          <Route path="/gx-logistics" element={<GXLogistics />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
