@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -132,20 +131,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.description}
           </p>
         </CardContent>
-        <CardFooter className="flex justify-between items-center border-t pt-4">
-          <p className="font-semibold">¥{product.price.toLocaleString()}</p>
-          <div className="flex gap-2">
-            <Link to={product.link}>
-              <Button size="sm" variant="outline" className="hover:-translate-y-1 transition-transform">
-                <ExternalLink className="mr-2 h-4 w-4" /> 詳細
-              </Button>
-            </Link>
-            <Link to="/contact">
-              <Button size="sm" className="hover:-translate-y-1 transition-transform">
-                <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
-              </Button>
-            </Link>
-          </div>
+        <CardFooter className="flex justify-center items-center border-t pt-4 gap-2">
+          <Link to={product.link}>
+            <Button size="sm" variant="outline" className="hover:-translate-y-1 transition-transform">
+              <ExternalLink className="mr-2 h-4 w-4" /> 詳細
+            </Button>
+          </Link>
+          <Link to="/contact">
+            <Button size="sm" className="hover:-translate-y-1 transition-transform">
+              <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </motion.div>
