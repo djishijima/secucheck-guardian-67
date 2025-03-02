@@ -7,6 +7,9 @@ import SearchFilterSection from '@/components/home/SearchFilterSection';
 import ProductListSection from '@/components/home/ProductListSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import CTASection from '@/components/home/CTASection';
+import { Leaf, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
@@ -18,6 +21,33 @@ const Index = () => {
         <SearchFilterSection />
         <ProductListSection />
         <FeaturesSection />
+        
+        {/* サステナビリティ診断のプロモーション */}
+        <section className="my-16 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100 shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="md:w-2/3 mb-6 md:mb-0">
+              <div className="flex items-center mb-2">
+                <Leaf className="h-6 w-6 text-green-600 mr-2" />
+                <h2 className="text-2xl font-bold text-green-800">サステナビリティ診断ツール</h2>
+              </div>
+              <p className="text-gray-700 mb-4">
+                無料の診断ツールで、貴社のSDGs取り組み状況を可視化。専門家による具体的な改善提案とともに、
+                サステナビリティレポート作成のための基礎データを取得できます。
+              </p>
+              <p className="text-sm text-gray-600 mb-4">
+                ✓ 約5分で完了 ✓ 業界別ベンチマーク ✓ AIによる分析レポート
+              </p>
+            </div>
+            <div>
+              <Link to="/sustainability-check">
+                <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-md">
+                  今すぐ診断する <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        
         <CTASection />
       </main>
       

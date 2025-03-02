@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Leaf } from 'lucide-react';
+import { Leaf, Sparkles } from 'lucide-react';
 
 const CTASection = () => {
   return (
@@ -19,9 +19,15 @@ const CTASection = () => {
           <Link to="/sustainability-check">
             <Button 
               size="lg" 
-              className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 
+                shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all 
+                duration-200 flex items-center gap-2 animate-pulse"
             >
-              <Leaf className="h-5 w-5" /> サステナビリティ診断を試す
+              <div className="flex items-center">
+                <Sparkles className="h-5 w-5 mr-1 text-yellow-300" /> 
+                <Leaf className="h-5 w-5 mr-1" /> 
+                <span>サステナビリティ診断を試す</span>
+              </div>
             </Button>
           </Link>
         </div>
