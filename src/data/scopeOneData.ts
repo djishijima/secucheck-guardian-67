@@ -30,6 +30,7 @@ export interface ScopeOneDataType {
   monthlyTrend: MonthlyData[];
   yearOverYear: YearlyData[];
   reductionTargets: ReductionTarget[];
+  notes?: string;
 }
 
 // Default Scope 1 emission data
@@ -66,5 +67,6 @@ export const defaultScopeOneData: ScopeOneDataType = {
     { year: '2024年度', target: 200.0, status: '計画中' },
     { year: '2025年度', target: 180.0, status: '計画中' },
     { year: '2030年度', target: 100.0, status: '計画中' },
-  ]
+  ],
+  notes: ''
 };
