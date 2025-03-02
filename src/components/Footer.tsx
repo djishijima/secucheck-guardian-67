@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Printer, Mail, Phone, MapPin, Instagram, Facebook, Twitter, Linkedin, Leaf, Cpu, Building } from 'lucide-react';
+import { Printer, Mail, Phone, MapPin, Instagram, Facebook, Twitter, Linkedin, Leaf, Cpu, Building, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* GX x AIプロダクト */}
           <div>
             <h3 className="font-semibold text-lg mb-4 flex items-center">
@@ -60,6 +60,20 @@ const Footer: React.FC = () => {
               <li className="flex items-center">
                 <span className="text-gray-400 ml-7">FAX：03-3861-1979</span>
               </li>
+            </ul>
+          </div>
+          
+          {/* お問合せ */}
+          <div>
+            <h3 className="font-semibold text-lg mb-4 flex items-center">
+              <MessageSquare className="h-5 w-5 mr-2 text-yellow-500" />
+              お問合せ
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition">お見積り依頼</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition">サンプル請求</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition">製品に関するお問合せ</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition">採用情報</Link></li>
             </ul>
           </div>
         </div>
