@@ -10,6 +10,7 @@ import Products from "./pages/Products";
 import AboutGX from "./pages/AboutGX";
 import AITechnology from "./pages/AITechnology";
 import Contact from "./pages/Contact";
+import SustainabilityCheck from "./pages/SustainabilityCheck";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/about-gx" element={<AboutGX />} />
           <Route path="/ai-technology" element={<AITechnology />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/sustainability-check" element={<SustainabilityCheck />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
