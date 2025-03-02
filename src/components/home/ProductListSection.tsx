@@ -1,12 +1,9 @@
-
 import React, { useState } from 'react';
 import { Leaf, Cpu, BarChart3, Truck, Languages, Palette, Target, ShieldCheck, GraduationCap } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// 既存の製品データを新しいカテゴライズで更新
 const existingProducts = [
   {
     id: 1,
@@ -66,7 +63,6 @@ const existingProducts = [
   }
 ];
 
-// 新しいGX×AI製品データも新しいカテゴライズに更新
 const gxAiProducts = [
   {
     id: 5,
@@ -140,35 +136,24 @@ const gxAiProducts = [
   }
 ];
 
-// 全製品
 const allProducts = [...existingProducts, ...gxAiProducts];
 
 const ProductListSection = () => {
-  const [activeTab, setActiveTab] = useState("all");
   const [activeCategory, setActiveCategory] = useState("all");
   
-  // タブとカテゴリに基づいて表示する製品をフィルタリング
   const filteredProducts = allProducts.filter(product => {
-    // タブによるフィルタリング
-    const matchesTab = activeTab === "all" || 
-      (activeTab === "function" && product.categories && product.categories.function) || 
-      (activeTab === "technology" && product.categories && product.categories.technology) || 
-      (activeTab === "challenge" && product.categories && product.categories.challenge);
-    
-    // カテゴリによるフィルタリング
-    let matchesCategory = true;
-    if (activeCategory !== "all") {
-      // カテゴリフィルタの形式: "type:value" (例: "function:印刷・出版サービス")
-      const [type, value] = activeCategory.split(':');
-      if (product.categories && type && value) {
-        matchesCategory = product.categories[type] === value;
-      }
+    if (activeCategory === "all") {
+      return true;
     }
     
-    return matchesTab && matchesCategory;
+    const [type, value] = activeCategory.split(':');
+    if (product.categories && type && value) {
+      return product.categories[type] === value;
+    }
+    
+    return false;
   });
 
-  // 機能カテゴリの一覧
   const functionCategories = [
     {id: "all", name: "すべて"},
     {id: "function:印刷・出版サービス", name: "印刷・出版サービス"},
@@ -184,28 +169,19 @@ const ProductListSection = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold flex items-center">
           <Leaf className="mr-2 h-6 w-6 text-green-600" />
-          サステナブル製品
+          製品・サービス
         </h2>
         <Link to="/products" className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
           すべての製品を見る →
         </Link>
       </div>
       
-      <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all">すべての製品</TabsTrigger>
-          <TabsTrigger value="function">機能別</TabsTrigger>
-          <TabsTrigger value="technology">技術別</TabsTrigger>
-        </TabsList>
-      </Tabs>
-      
-      {/* 機能カテゴリフィルター */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-8">
         {functionCategories.map(category => (
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === category.id
                 ? 'bg-green-100 text-green-800'
                 : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
@@ -216,26 +192,24 @@ const ProductListSection = () => {
         ))}
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
       
-      {activeTab === "technology" && (
-        <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border border-indigo-100">
-          <h3 className="text-lg font-semibold mb-2 text-indigo-800">GX×AI製品の特徴</h3>
-          <p className="text-gray-700 mb-4">
-            これらの新しいGX×AI製品は、既存の商品ラインアップと組み合わせることで、より包括的なサステナビリティ戦略を提供します。
-            特にサプライチェーンAI監査やエコデザインAIは、企業のSDGsやカーボンニュートラル目標達成に大きく貢献します。
-          </p>
-          <Link to="/gx-ai-products">
-            <Button variant="outline" className="bg-white hover:bg-indigo-50">
-              GX×AI製品の詳細を見る
-            </Button>
-          </Link>
-        </div>
-      )}
+      <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border border-indigo-100">
+        <h3 className="text-lg font-semibold mb-2 text-indigo-800">GX×AI製品の特徴</h3>
+        <p className="text-gray-700 mb-4">
+          これらのGX×AI製品は、印刷・出版サービスと組み合わせることで、より包括的なサステナビリティ戦略を提供します。
+          特にサプライチェーンAI監査やエコデザインAIは、企業のSDGsやカーボンニュートラル目標達成に大きく貢献します。
+        </p>
+        <Link to="/gx-ai-products">
+          <Button variant="outline" className="bg-white hover:bg-indigo-50">
+            GX×AI製品の詳細を見る
+          </Button>
+        </Link>
+      </div>
     </section>
   );
 };

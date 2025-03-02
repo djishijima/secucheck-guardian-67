@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -28,7 +29,7 @@ interface ProductCardProps {
     id: number;
     title: string;
     description: string;
-    price: number;
+    price?: number; // Make price optional
     category?: string;
     categories?: ProductCategories;
     tags: string[];
@@ -100,9 +101,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      className="h-full"
     >
       <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 hover:shadow-lg transition-all duration-300">
-        <div className="w-full h-48 overflow-hidden flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
+        <div className="w-full h-40 overflow-hidden flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
           {product.image ? (
             <img src={product.image} alt={product.title} className="max-h-full max-w-full object-contain" />
           ) : (
