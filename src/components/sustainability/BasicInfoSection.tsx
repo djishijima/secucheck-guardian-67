@@ -1,22 +1,25 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck } from 'lucide-react';
+import { ClipboardCheck, ArrowRight } from 'lucide-react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface BasicInfoSectionProps {
   companyName: string;
   setCompanyName: (value: string) => void;
   industry: string;
   setIndustry: (value: string) => void;
+  onSubmit: () => void;
 }
 
 const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
   companyName,
   setCompanyName,
   industry,
-  setIndustry
+  setIndustry,
+  onSubmit
 }) => (
   <motion.section 
     className="mb-10 bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-green-200 transition-all"
@@ -30,13 +33,13 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       基本情報
     </h2>
     
-    <div className="space-y-4">
+    <div className="space-y-4 mb-6">
       <motion.div
         initial={{ x: -10, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <Label htmlFor="companyName" className="font-medium">企業名</Label>
+        <Label htmlFor="companyName" className="font-medium">企業名 <span className="text-red-500">*</span></Label>
         <Input 
           id="companyName" 
           value={companyName}
@@ -61,6 +64,14 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
         />
       </motion.div>
     </div>
+    
+    <Button 
+      onClick={onSubmit}
+      className="w-full sm:w-auto bg-green-600 hover:bg-green-700 gap-2"
+      disabled={!companyName.trim()}
+    >
+      次へ進む <ArrowRight className="ml-1 h-4 w-4" />
+    </Button>
   </motion.section>
 );
 

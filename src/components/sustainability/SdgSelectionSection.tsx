@@ -1,34 +1,26 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
+import { Globe, ArrowRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import { sdgGoals } from './SdgData';
 
 interface SdgSelectionSectionProps {
   selectedSdgs: number[];
-  setSelectedSdgs: (sdgs: number[]) => void;
+  setSelectedSdgs: React.Dispatch<React.SetStateAction<number[]>>;
+  onSubmit: () => void;
 }
 
-const SdgSelectionSection: React.FC<SdgSelectionSectionProps> = ({ selectedSdgs, setSelectedSdgs }) => {
-  const { toast } = useToast();
-  
-  // SDG選択のトグル処理
+const SdgSelectionSection: React.FC<SdgSelectionSectionProps> = ({
+  selectedSdgs,
+  setSelectedSdgs,
+  onSubmit
+}) => {
   const toggleSdg = (id: number) => {
-    const newSelected = selectedSdgs.includes(id)
-      ? selectedSdgs.filter(sdgId => sdgId !== id)
-      : [...selectedSdgs, id];
-    
-    setSelectedSdgs(newSelected);
-    
-    // 選択時のトースト通知
-    if (!selectedSdgs.includes(id)) {
-      const selectedGoal = sdgGoals.find(goal => goal.id === id);
-      toast({
-        title: `SDG ${id} を選択しました`,
-        description: `「${selectedGoal?.name}」に取り組んでいることを記録しました`,
-        duration: 3000,
-      });
+    if (selectedSdgs.includes(id)) {
+      setSelectedSdgs(prev => prev.filter(sdgId => sdgId !== id));
+    } else {
+      setSelectedSdgs(prev => [...prev, id]);
     }
   };
   
@@ -42,46 +34,45 @@ const SdgSelectionSection: React.FC<SdgSelectionSectionProps> = ({ selectedSdgs,
     >
       <h2 className="text-xl font-bold mb-4 flex items-center text-green-700">
         <Globe className="mr-2 h-5 w-5 text-green-600" />
-        取り組み中のSDGs
+        関連するSDGs
       </h2>
-      <p className="text-gray-600 mb-6">該当するSDGsを選択してください（複数選択可）</p>
+      <p className="text-gray-600 mb-6">あなたの事業に関連するSDGsを選択してください。複数選択可能です。</p>
       
-      <motion.div 
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"
-        variants={{
-          show: {
-            transition: {
-              staggerChildren: 0.05
-            }
-          }
-        }}
-        initial="hidden"
-        animate="show"
-      >
-        {sdgGoals.map((goal) => (
-          <motion.div 
-            key={goal.id}
-            variants={{
-              hidden: { opacity: 0, scale: 0.9 },
-              show: { opacity: 1, scale: 1 }
-            }}
-            onClick={() => toggleSdg(goal.id)}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
+        {sdgGoals.map((sdg) => (
+          <motion.div
+            key={sdg.id}
             className={`
-              flex items-center gap-2 p-2 rounded-md cursor-pointer transition-all
-              ${selectedSdgs.includes(goal.id) 
-                ? 'ring-2 ring-green-600 bg-green-50 shadow-sm transform -translate-y-1' 
-                : 'hover:bg-gray-100 hover:shadow'}
+              cursor-pointer rounded-lg overflow-hidden border-2 
+              ${selectedSdgs.includes(sdg.id) ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200'}
+              transition-all hover:shadow-md
             `}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => toggleSdg(sdg.id)}
           >
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${goal.color}`}>
-              {goal.id}
-            </div>
-            <span className="text-sm">{goal.name}</span>
+            <img 
+              src={sdg.image} 
+              alt={sdg.title} 
+              className="w-full aspect-square object-cover" 
+            />
           </motion.div>
         ))}
-      </motion.div>
+      </div>
+      
+      <div className="flex justify-between">
+        <div className="text-sm text-gray-500">
+          {selectedSdgs.length > 0 ? `${selectedSdgs.length}個のSDGsを選択中` : '選択されていません'}
+        </div>
+        
+        <Button 
+          onClick={onSubmit}
+          className="bg-green-600 hover:bg-green-700 gap-2"
+          disabled={selectedSdgs.length === 0}
+        >
+          次へ進む <ArrowRight className="ml-1 h-4 w-4" />
+        </Button>
+      </div>
     </motion.section>
   );
 };

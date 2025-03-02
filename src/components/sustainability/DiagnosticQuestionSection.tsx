@@ -10,13 +10,13 @@ import QuestionItem from './QuestionItem';
 interface DiagnosticQuestionSectionProps {
   answers: Record<string, boolean>;
   setAnswers: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-  runDiagnostics: () => void;
+  onComplete: () => void;
 }
 
 const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
   answers,
   setAnswers,
-  runDiagnostics
+  onComplete
 }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const { toast } = useToast();
@@ -92,7 +92,7 @@ const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
       return;
     }
     
-    runDiagnostics();
+    onComplete();
   };
   
   // セクションの進捗度を表示する
