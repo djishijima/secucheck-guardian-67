@@ -1,6 +1,4 @@
 
-import React from 'react';
-
 // SDGsの目標（簡略化したリスト）
 export const sdgGoals = [
   { id: 1, name: "貧困をなくそう", color: "bg-red-500" },

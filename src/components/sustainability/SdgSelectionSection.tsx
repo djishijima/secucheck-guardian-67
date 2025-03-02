@@ -43,19 +43,16 @@ const SdgSelectionSection: React.FC<SdgSelectionSectionProps> = ({
           <motion.div
             key={sdg.id}
             className={`
-              cursor-pointer rounded-lg overflow-hidden border-2 
+              cursor-pointer rounded-lg overflow-hidden border-2 flex items-center justify-center
               ${selectedSdgs.includes(sdg.id) ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200'}
-              transition-all hover:shadow-md
+              transition-all hover:shadow-md aspect-square ${sdg.color} text-white font-bold text-lg
             `}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => toggleSdg(sdg.id)}
           >
-            <img 
-              src={sdg.image} 
-              alt={sdg.title} 
-              className="w-full aspect-square object-cover" 
-            />
+            {sdg.id}
+            <span className="sr-only">{sdg.name}</span>
           </motion.div>
         ))}
       </div>

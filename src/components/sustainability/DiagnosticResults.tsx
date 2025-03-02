@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ClipboardCheck, RefreshCw, DownloadCloud, Printer, Check, ArrowRight } from 'lucide-react';
@@ -39,7 +38,6 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
   
   // 印刷機能
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
     documentTitle: `${companyName}サステナビリティ診断結果`,
     onAfterPrint: () => {
       toast({
@@ -49,9 +47,16 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
     },
   });
   
+  // 印刷実行関数
+  const executePrint = () => {
+    if (printRef.current) {
+      handlePrint(null, () => printRef.current);
+    }
+  };
+  
   // PDFダウンロード（この例ではブラウザの印刷→PDFに保存機能を利用）
   const handleDownload = () => {
-    handlePrint();
+    executePrint();
     toast({
       title: "ダウンロードのヒント",
       description: "印刷ダイアログでPDFとして保存を選択してください。",
@@ -82,7 +87,7 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={handlePrint}
+            onClick={executePrint}
             className="gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all"
           >
             <Printer className="h-4 w-4" /> 印刷
@@ -145,13 +150,13 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
               {selectedSdgs.map(sdgId => {
                 const sdg = sdgGoals.find(s => s.id === sdgId);
                 return sdg ? (
-                  <img 
+                  <div 
                     key={sdg.id}
-                    src={sdg.image} 
-                    alt={sdg.title}
-                    className="w-10 h-10 md:w-14 md:h-14 rounded border border-gray-200"
-                    title={sdg.title}
-                  />
+                    className={`w-10 h-10 md:w-14 md:h-14 rounded border border-gray-200 flex items-center justify-center ${sdg.color}`}
+                    title={sdg.name}
+                  >
+                    {sdg.id}
+                  </div>
                 ) : null;
               })}
             </div>
