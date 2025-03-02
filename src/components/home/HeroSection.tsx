@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Search, ArrowRight } from 'lucide-react';
+import { MessageSquare, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -23,12 +24,16 @@ const HeroSection = () => {
               あなたのビジネスのサステナビリティと成長を同時に実現します。
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-white text-indigo-700 hover:bg-gray-100">
-                おすすめ製品を探す <Search className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-indigo-100 bg-indigo-900/40 hover:bg-indigo-900/60 hover:text-white">
-                サービス詳細へ <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link to="/contact">
+                <Button size="lg" className="bg-white text-indigo-700 hover:bg-gray-100">
+                  お問い合わせ <MessageSquare className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button size="lg" variant="outline" className="border-white text-indigo-100 bg-indigo-900/40 hover:bg-indigo-900/60 hover:text-white">
+                  サービス詳細へ <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>

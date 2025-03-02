@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCart, BarChart, Leaf } from 'lucide-react';
+import { BarChart, Leaf } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -13,19 +13,6 @@ import {
 const HeaderActionButtons: React.FC = () => {
   return (
     <div className="hidden md:flex space-x-3">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="sm">
-              <ShoppingCart className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>カートを表示</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
