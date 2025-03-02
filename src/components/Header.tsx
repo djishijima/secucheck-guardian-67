@@ -63,12 +63,66 @@ const Header: React.FC = () => {
                   </Link>
                 </div>
               </div>
-              <Link to="/about-gx" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
-                サステナビリティ
-              </Link>
-              <Link to="/sustainability-check" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
-                サステナビリティ診断
-              </Link>
+              <div className="relative group">
+                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  サステナビリティ
+                </span>
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  <Link to="/about-gx" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナビリティについて
+                  </Link>
+                  <Link to="/sustainability-check" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナビリティ診断
+                  </Link>
+                  <Link to="/comprehensive-diagnostics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナブルDX診断
+                  </Link>
+                  <Link to="/scope-one" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    Scope 1 排出量
+                  </Link>
+                  <Link to="/scope-two" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    Scope 2 排出量
+                  </Link>
+                </div>
+              </div>
+              <div className="relative group">
+                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  GX×AI製品
+                </span>
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  <Link to="/gx-ai-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    GX×AI製品一覧
+                  </Link>
+                  <Link to="/gx-eco-design" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    エコデザインAI
+                  </Link>
+                  <Link to="/gx-energy-management" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    エネルギー管理AI
+                  </Link>
+                  <Link to="/gx-sustainable-marketing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナブルマーケティングAI
+                  </Link>
+                  <Link to="/gx-supply-chain-audit" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サプライチェーン監査AI
+                  </Link>
+                  <Link to="/gx-education-platform" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    教育プラットフォーム
+                  </Link>
+                </div>
+              </div>
+              <div className="relative group">
+                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  その他
+                </span>
+                <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  <Link to="/ai-technology" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    AI技術
+                  </Link>
+                  <Link to="/contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    お問い合わせ
+                  </Link>
+                </div>
+              </div>
             </nav>
           </div>
 
@@ -126,6 +180,8 @@ const Header: React.FC = () => {
             <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               製品一覧
             </Link>
+            
+            {/* 製品カテゴリ */}
             <div className="px-3 py-2">
               <span className="block text-base font-medium text-gray-700 mb-1">製品カテゴリ</span>
               <div className="pl-4 space-y-1">
@@ -146,12 +202,67 @@ const Header: React.FC = () => {
                 </Link>
               </div>
             </div>
-            <Link to="/about-gx" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              サステナビリティ
-            </Link>
-            <Link to="/sustainability-check" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              サステナビリティ診断
-            </Link>
+            
+            {/* サステナビリティ */}
+            <div className="px-3 py-2">
+              <span className="block text-base font-medium text-gray-700 mb-1">サステナビリティ</span>
+              <div className="pl-4 space-y-1">
+                <Link to="/about-gx" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナビリティについて
+                </Link>
+                <Link to="/sustainability-check" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナビリティ診断
+                </Link>
+                <Link to="/comprehensive-diagnostics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナブルDX診断
+                </Link>
+                <Link to="/scope-one" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  Scope 1 排出量
+                </Link>
+                <Link to="/scope-two" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  Scope 2 排出量
+                </Link>
+              </div>
+            </div>
+            
+            {/* GX×AI製品 */}
+            <div className="px-3 py-2">
+              <span className="block text-base font-medium text-gray-700 mb-1">GX×AI製品</span>
+              <div className="pl-4 space-y-1">
+                <Link to="/gx-ai-products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  GX×AI製品一覧
+                </Link>
+                <Link to="/gx-eco-design" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  エコデザインAI
+                </Link>
+                <Link to="/gx-energy-management" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  エネルギー管理AI
+                </Link>
+                <Link to="/gx-sustainable-marketing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナブルマーケティングAI
+                </Link>
+                <Link to="/gx-supply-chain-audit" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サプライチェーン監査AI
+                </Link>
+                <Link to="/gx-education-platform" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  教育プラットフォーム
+                </Link>
+              </div>
+            </div>
+            
+            {/* その他 */}
+            <div className="px-3 py-2">
+              <span className="block text-base font-medium text-gray-700 mb-1">その他</span>
+              <div className="pl-4 space-y-1">
+                <Link to="/ai-technology" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  AI技術
+                </Link>
+                <Link to="/contact" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  お問い合わせ
+                </Link>
+              </div>
+            </div>
+            
             <div className="pt-4 flex flex-col space-y-3">
               <Button variant="outline" size="sm" className="justify-center">
                 <ShoppingCart className="h-4 w-4" />
