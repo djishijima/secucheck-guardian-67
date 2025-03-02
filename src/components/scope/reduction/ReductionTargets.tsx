@@ -10,6 +10,9 @@ interface ReductionTargetsProps {
 }
 
 const ReductionTargets: React.FC<ReductionTargetsProps> = ({ scopeOneData }) => {
+  // Get the base value for comparison from the first year in the historical data
+  const baseYearValue = scopeOneData.yearOverYear[0].value;
+
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-4">
@@ -19,7 +22,7 @@ const ReductionTargets: React.FC<ReductionTargetsProps> = ({ scopeOneData }) => 
       
       <div className="space-y-6">
         {scopeOneData.reductionTargets.map((target, index) => {
-          const progress = Math.min(100, Math.max(0, 100 - (target.target / scopeOneData.yearOverYear[0].value * 100)));
+          const progress = Math.min(100, Math.max(0, 100 - (target.target / baseYearValue * 100)));
           return (
             <motion.div 
               key={index}
@@ -42,7 +45,7 @@ const ReductionTargets: React.FC<ReductionTargetsProps> = ({ scopeOneData }) => 
                       <span>目標: <span className="font-medium">{target.target}</span> {scopeOneData.unit}</span>
                       <span className="flex items-center ml-3 text-green-600 text-sm">
                         <ArrowDownRight className="h-4 w-4 mr-1" />
-                        {((1 - target.target / scopeOneData.yearOverYear[0].value) * 100).toFixed(0)}% 削減
+                        {((1 - target.target / baseYearValue) * 100).toFixed(0)}% 削減
                       </span>
                     </div>
                   </div>
