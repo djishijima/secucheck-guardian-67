@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Printer, Menu, X, BookOpen, HeartHandshake, Users, ShoppingCart } from 'lucide-react';
+import { Printer, Menu, X, HeartHandshake, Users, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -23,30 +24,32 @@ const Header: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="flex items-center"
             >
-              <Printer className="h-8 w-8 text-indigo-600 mr-2" />
-              <div className="text-lg font-semibold">
-                <span className="text-indigo-700">文唱堂印刷</span>
-                <span className="text-sm text-gray-500 block md:inline md:ml-2">GX x AI Marketplace</span>
-              </div>
+              <Link to="/" className="flex items-center">
+                <Printer className="h-8 w-8 text-indigo-600 mr-2" />
+                <div className="text-lg font-semibold">
+                  <span className="text-indigo-700">文唱堂印刷</span>
+                  <span className="text-sm text-gray-500 block md:inline md:ml-2">GX x AI Marketplace</span>
+                </div>
+              </Link>
             </motion.div>
 
             {/* デスクトップナビゲーション */}
             <nav className="hidden md:ml-10 md:flex md:space-x-8">
-              <a href="#" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+              <Link to="/" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 ホーム
-              </a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link to="/products" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 製品一覧
-              </a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link to="/about-gx" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 GXについて
-              </a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link to="/ai-technology" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 AI技術
-              </a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link to="/contact" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 お問い合わせ
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -85,21 +88,21 @@ const Header: React.FC = () => {
           className="md:hidden"
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t">
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
+            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               ホーム
-            </a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
+            </Link>
+            <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               製品一覧
-            </a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
+            </Link>
+            <Link to="/about-gx" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               GXについて
-            </a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
+            </Link>
+            <Link to="/ai-technology" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               AI技術
-            </a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
+            </Link>
+            <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               お問い合わせ
-            </a>
+            </Link>
             <div className="pt-4 flex flex-col space-y-3">
               <Button variant="outline" size="sm" className="justify-center">
                 <ShoppingCart className="h-4 w-4 mr-2" />
