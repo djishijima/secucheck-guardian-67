@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Leaf, Mail } from 'lucide-react';
+import { Leaf, Mail, BarChart3, Truck, Languages } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const products = [
     price: 15000,
     category: "印刷サービス",
     tags: ["環境配慮", "SDGs", "CO2削減"],
-    image: "/images/eco-printing.jpg",
+    icon: <Leaf className="h-12 w-12 text-green-600" />,
     link: "/eco-printing"
   },
   {
@@ -23,7 +23,7 @@ const products = [
     price: 18000,
     category: "印刷サービス",
     tags: ["GX", "環境配慮", "オンデマンド"],
-    image: "/images/gx-printing.jpg",
+    icon: <BarChart3 className="h-12 w-12 text-blue-600" />,
     link: "/gx-printing"
   },
   {
@@ -33,7 +33,7 @@ const products = [
     price: 48000,
     category: "多言語サービス",
     tags: ["AI", "翻訳", "グローバル"],
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    icon: <Languages className="h-12 w-12 text-purple-600" />,
     link: "#"
   },
   {
@@ -43,7 +43,7 @@ const products = [
     price: 22000,
     category: "物流サービス",
     tags: ["GX", "物流", "カーボンニュートラル"],
-    image: "/images/gx-logistics.jpg",
+    icon: <Truck className="h-12 w-12 text-teal-600" />,
     link: "/gx-logistics"
   }
 ];
