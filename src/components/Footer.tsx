@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex items-center mb-4">
               <Printer className="h-6 w-6 mr-2 text-indigo-400" />
-              <span className="font-semibold text-lg">文唱堂印刷</span>
+              <span className="font-semibold text-lg">文唱堂印刷株式会社</span>
             </div>
             <p className="text-gray-400 text-sm mb-4">
               環境に配慮した印刷技術とAIの力で、ビジネスと社会の持続可能な発展に貢献します。
@@ -65,15 +65,18 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-gray-400 shrink-0" />
-                <span className="text-gray-400">〒100-0001 東京都千代田区大手町1-1-1</span>
+                <span className="text-gray-400">〒101-0025 東京都千代田区神田佐久間町3-37</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-gray-400 shrink-0" />
-                <a href="tel:+810312345678" className="text-gray-400 hover:text-white transition">03-1234-5678</a>
+                <a href="tel:+810338510111" className="text-gray-400 hover:text-white transition">03-3851-0111</a>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-gray-400 shrink-0" />
                 <a href="mailto:info@bunshodoh.co.jp" className="text-gray-400 hover:text-white transition">info@bunshodoh.co.jp</a>
+              </li>
+              <li className="flex items-center">
+                <span className="text-gray-400 ml-7">FAX：03-3861-1979</span>
               </li>
             </ul>
           </div>
