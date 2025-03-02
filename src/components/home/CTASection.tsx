@@ -21,7 +21,7 @@ const CTASection = () => {
               size="lg" 
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 
                 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all 
-                duration-200 flex items-center gap-2 animate-pulse"
+                duration-200 flex items-center gap-2"
             >
               <div className="flex items-center">
                 <Sparkles className="h-5 w-5 mr-1 text-yellow-300" /> 
