@@ -52,7 +52,7 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${results.company.name}_GX対応度診断結果`,
-    content: () => printRef.current,
+    contentRef: printRef,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",
@@ -85,7 +85,7 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => handlePrint()}
+            onClick={handlePrint}
             className="flex items-center gap-1"
           >
             <Printer className="h-4 w-4" />

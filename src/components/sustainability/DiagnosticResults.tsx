@@ -46,7 +46,7 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${companyName}サステナビリティ診断結果`,
-    content: () => printRef.current,
+    contentRef: printRef,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",
@@ -87,7 +87,7 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => handlePrint()}
+            onClick={handlePrint}
             className="flex items-center gap-1"
           >
             <Printer className="h-4 w-4" />
