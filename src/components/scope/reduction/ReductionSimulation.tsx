@@ -33,7 +33,7 @@ const ReductionSimulation: React.FC = () => {
               animate={{ pathLength: 1 }}
               transition={{ duration: 1.5, delay: 1 }}
             />
-            {/* 目標線 (施策実施後 - 改善されるように変更) */}
+            {/* 目標線 (施策実施後 - 改善される) */}
             <motion.path 
               d="M 20,32 L 30,30 L 40,27 L 60,22 L 80,18 L 100,15"
               stroke="#10B981"
@@ -74,6 +74,9 @@ const ReductionSimulation: React.FC = () => {
           <div className="w-4 h-1 bg-green-500"></div>
           <span className="text-sm text-gray-600">施策実施後</span>
         </div>
+      </div>
+      <div className="mt-4 text-center text-sm text-gray-600">
+        <p>施策を実施することで、CO2排出量を2030年までに大幅に削減できる見込みです</p>
       </div>
     </div>
   );
