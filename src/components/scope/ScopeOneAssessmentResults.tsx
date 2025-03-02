@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useReactToPrint } from 'react-to-print';
@@ -54,7 +53,7 @@ const ScopeOneAssessmentResults: React.FC<ScopeOneAssessmentResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${companyInfo.name}_Scope1排出量診断結果`,
-    content: () => printRef.current,
+    contentRef: printRef,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",

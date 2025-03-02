@@ -87,7 +87,7 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={handlePrint}
+            onClick={() => handlePrint()}
             className="flex items-center gap-1"
           >
             <Printer className="h-4 w-4" />
