@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Printer, DownloadCloud, ChartBar, Target, Zap, ArrowRight } from 'lucide-react';
@@ -51,7 +52,8 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${results.company.name}_GX対応度診断結果`,
-    content: () => printRef.current,
+    // Fix: properly define the content getter function according to useReactToPrint's API
+    getPrintContent: () => printRef.current,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",

@@ -40,7 +40,8 @@ const DiagnosticResults: React.FC<DiagnosticResultsProps> = ({
   // 印刷機能
   const handlePrint = useReactToPrint({
     documentTitle: `${companyName}サステナビリティ診断結果`,
-    content: () => printRef.current,
+    // Fix: properly define the getPrintContent function according to useReactToPrint's API
+    getPrintContent: () => printRef.current,
     onAfterPrint: () => {
       toast({
         title: "印刷が完了しました",
