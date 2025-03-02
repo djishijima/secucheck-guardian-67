@@ -1,4 +1,3 @@
-
 import React, { ReactNode } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -45,45 +44,43 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
         {/* ヒーローセクション */}
         <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{title}</h1>
-                  <p className="text-xl text-indigo-600 mb-4">{subtitle}</p>
-                  <p className="text-gray-600 mb-6">{description}</p>
-                  <Link to={ctaLink}>
-                    <Button className="bg-indigo-600 hover:bg-indigo-700">
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      {ctaText}
-                    </Button>
-                  </Link>
-                </motion.div>
-              </div>
-              <div className="md:w-1/2">
-                {isPlaceholderImage ? (
+            {isPlaceholderImage ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center max-w-3xl mx-auto"
+              >
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{title}</h1>
+                <p className="text-xl text-indigo-600 mb-4">{subtitle}</p>
+                <p className="text-gray-600 mb-6">{description}</p>
+                <Link to={ctaLink}>
+                  <Button className="bg-indigo-600 hover:bg-indigo-700">
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    {ctaText}
+                  </Button>
+                </Link>
+              </motion.div>
+            ) : (
+              <div className="flex flex-col md:flex-row items-center">
+                <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="rounded-lg p-8 bg-gradient-to-br from-indigo-100 to-blue-100 shadow-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    <div className="text-center">
-                      <h3 className="text-2xl font-bold text-indigo-800 mb-4">持続可能な未来のために</h3>
-                      <p className="text-indigo-600 mb-6">
-                        革新的なテクノロジーで環境負荷を低減し、企業の持続的成長と地球環境の保全を両立させます
-                      </p>
-                      <Link to={ctaLink}>
-                        <Button className="bg-indigo-600 hover:bg-indigo-700">
-                          詳細を見る
-                        </Button>
-                      </Link>
-                    </div>
+                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{title}</h1>
+                    <p className="text-xl text-indigo-600 mb-4">{subtitle}</p>
+                    <p className="text-gray-600 mb-6">{description}</p>
+                    <Link to={ctaLink}>
+                      <Button className="bg-indigo-600 hover:bg-indigo-700">
+                        <ShoppingCart className="mr-2 h-4 w-4" />
+                        {ctaText}
+                      </Button>
+                    </Link>
                   </motion.div>
-                ) : (
+                </div>
+                <div className="md:w-1/2">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -96,9 +93,9 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
                       className="w-full h-auto object-cover"
                     />
                   </motion.div>
-                )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 

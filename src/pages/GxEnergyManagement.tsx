@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Cpu, Bolt, BarChart4, Sun, Wind, ListChecks } from 'lucide-react';
 import ProductPageLayout from '@/components/products/ProductPageLayout';
@@ -35,7 +34,6 @@ const GxEnergyManagement = () => {
     }
   ];
 
-  // Use icon instead of placeholder image
   return (
     <ProductPageLayout
       title="GX AIエネルギーマネジメント"
