@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
@@ -11,8 +13,6 @@ import ScopeOneDetailsTab from '@/components/scope/ScopeOneDetailsTab';
 import ScopeOneReductionTab from '@/components/scope/ScopeOneReductionTab';
 import ScopeOneDataForm from '@/components/scope/ScopeOneDataForm';
 import { defaultScopeOneData, ScopeOneDataType } from '@/data/scopeOneData';
-import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const ScopeOne = () => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
