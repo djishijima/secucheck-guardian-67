@@ -4,6 +4,12 @@ import ProductPageLayout from '@/components/products/ProductPageLayout';
 import { RecycleIcon, Leaf, TreePine, MessageSquare, FileCheck, PaintBucket } from 'lucide-react';
 
 const EcoPrinting = () => {
+  const categories = {
+    function: "印刷・出版サービス",
+    technology: "バイオマテリアル製品",
+    challenge: "ESG対応支援"
+  };
+
   return (
     <ProductPageLayout
       title="環境印刷サービス"
@@ -52,6 +58,7 @@ const EcoPrinting = () => {
       ]}
       ctaText="環境印刷を始める"
       ctaLink="/contact"
+      categories={categories}
     />
   );
 };

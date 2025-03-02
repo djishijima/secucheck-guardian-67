@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Cpu, Bolt, BarChart4, Sun, Wind, ListChecks } from 'lucide-react';
 import ProductPageLayout from '@/components/products/ProductPageLayout';
@@ -34,6 +35,12 @@ const GxEnergyManagement = () => {
     }
   ];
 
+  const categories = {
+    function: "エネルギー管理",
+    technology: "AI活用製品",
+    challenge: "カーボンフットプリント削減"
+  };
+
   return (
     <ProductPageLayout
       title="GX AIエネルギーマネジメント"
@@ -44,6 +51,7 @@ const GxEnergyManagement = () => {
       features={features}
       ctaText="GX AIエネルギーマネジメントに問い合わせる"
       ctaLink="/contact"
+      categories={categories}
     />
   );
 };

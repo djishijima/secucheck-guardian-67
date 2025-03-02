@@ -7,12 +7,22 @@ import {
   Leaf,
   Languages,
   Truck,
-  Image
+  Cpu,
+  Target,
+  ShieldCheck,
+  GraduationCap,
+  PaintBucket
 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from 'react-router-dom';
+
+interface ProductCategories {
+  function?: string;
+  technology?: string;
+  challenge?: string;
+}
 
 interface ProductCardProps {
   product: {
@@ -20,7 +30,8 @@ interface ProductCardProps {
     title: string;
     description: string;
     price: number;
-    category: string;
+    category?: string;
+    categories?: ProductCategories;
     tags: string[];
     icon?: React.ReactNode;
     image?: string;
@@ -39,9 +50,31 @@ const getProductIcon = (productId: number) => {
       return <Languages className="w-16 h-16 text-blue-600" />;
     case 4:
       return <Truck className="w-16 h-16 text-green-600" />;
+    case 5:
+      return <PaintBucket className="w-16 h-16 text-green-600" />;
+    case 6:
+      return <Cpu className="w-16 h-16 text-blue-600" />;
+    case 7:
+      return <Target className="w-16 h-16 text-purple-600" />;
+    case 8:
+      return <ShieldCheck className="w-16 h-16 text-teal-600" />;
+    case 9:
+      return <GraduationCap className="w-16 h-16 text-amber-600" />;
     default:
       return <Leaf className="w-16 h-16 text-gray-600" />;
   }
+};
+
+// カテゴリバッジの色を取得する関数
+const getCategoryBadgeStyle = (categoryType: string, value: string) => {
+  if (categoryType === 'function') {
+    return 'bg-blue-100 text-blue-800';
+  } else if (categoryType === 'technology') {
+    return 'bg-purple-100 text-purple-800';
+  } else if (categoryType === 'challenge') {
+    return 'bg-green-100 text-green-800';
+  }
+  return 'bg-gray-100 text-gray-800';
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -67,6 +100,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className="flex justify-between items-start">
             <CardTitle className="text-xl">{product.title}</CardTitle>
           </div>
+          
+          {/* カテゴリバッジ表示 */}
+          {product.categories && (
+            <div className="flex flex-wrap gap-1 mt-2">
+              {Object.entries(product.categories).map(([type, value]) => (
+                <Badge 
+                  key={`${type}-${value}`} 
+                  className={`text-xs ${getCategoryBadgeStyle(type, value)}`}
+                >
+                  {value}
+                </Badge>
+              ))}
+            </div>
+          )}
+          
           <div className="flex gap-1 mt-2 flex-wrap">
             {product.tags.map((tag, index) => (
               <Badge key={index} variant="secondary" className={`text-xs ${

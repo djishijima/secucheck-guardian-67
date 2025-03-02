@@ -4,6 +4,12 @@ import ProductPageLayout from '@/components/products/ProductPageLayout';
 import { Truck, Package, BarChart, Map, Clock, Shield } from 'lucide-react';
 
 const EcoLogistics = () => {
+  const categories = {
+    function: "物流・配送サービス",
+    technology: "再生可能エネルギー製品",
+    challenge: "カーボンフットプリント削減"
+  };
+
   return (
     <ProductPageLayout
       title="環境物流サービス"
@@ -52,6 +58,7 @@ const EcoLogistics = () => {
       ]}
       ctaText="環境物流を利用する"
       ctaLink="/contact"
+      categories={categories}
     />
   );
 };
