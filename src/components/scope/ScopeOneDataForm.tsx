@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { motion } from 'framer-motion';
 import { ScopeOneDataType } from '@/data/scopeOneData';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ScopeOneDataFormProps {
   formData: {
@@ -37,9 +38,9 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="border-purple-200 shadow-sm">
-        <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-purple-100">
-          <CardTitle className="text-purple-800">自社データの入力</CardTitle>
+      <Card className="border-blue-200 shadow-sm">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+          <CardTitle className="text-blue-800">自社データの入力</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <form onSubmit={onFormSubmit} className="space-y-6">
@@ -54,7 +55,7 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
                     min="0"
                     value={formData.companyVehicles}
                     onChange={(e) => onInputChange('companyVehicles', e.target.value)}
-                    className="border-purple-200 focus-visible:ring-purple-500 mt-1"
+                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
                   />
                 </div>
                 <div>
@@ -66,7 +67,7 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
                     min="0"
                     value={formData.stationaryEquipment}
                     onChange={(e) => onInputChange('stationaryEquipment', e.target.value)}
-                    className="border-purple-200 focus-visible:ring-purple-500 mt-1"
+                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
                   />
                 </div>
               </div>
@@ -80,7 +81,7 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
                     min="0"
                     value={formData.hvacEquipment}
                     onChange={(e) => onInputChange('hvacEquipment', e.target.value)}
-                    className="border-purple-200 focus-visible:ring-purple-500 mt-1"
+                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
                   />
                 </div>
                 <div>
@@ -92,7 +93,7 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
                     min="0"
                     value={formData.other}
                     onChange={(e) => onInputChange('other', e.target.value)}
-                    className="border-purple-200 focus-visible:ring-purple-500 mt-1"
+                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
                   />
                 </div>
               </div>
@@ -100,18 +101,18 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
 
             <div className="pt-2">
               <Label htmlFor="targetYear" className="text-gray-700 font-medium">削減目標年度</Label>
-              <select
-                id="targetYear"
-                value={formData.targetYear}
-                onChange={(e) => onSelectChange(e.target.value)}
-                className="w-full mt-1 rounded-md border border-purple-200 bg-white px-3 py-2 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
-              >
-                {scopeOneData.reductionTargets.map((target) => (
-                  <option key={target.year} value={target.year}>
-                    {target.year}
-                  </option>
-                ))}
-              </select>
+              <Select defaultValue={formData.targetYear} onValueChange={onSelectChange}>
+                <SelectTrigger className="w-full mt-1 border-blue-200">
+                  <SelectValue placeholder="目標年度を選択" />
+                </SelectTrigger>
+                <SelectContent>
+                  {scopeOneData.reductionTargets.map((target) => (
+                    <SelectItem key={target.year} value={target.year}>
+                      {target.year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
@@ -119,13 +120,13 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
                 type="button" 
                 variant="outline" 
                 onClick={onCancel}
-                className="border-purple-200 text-purple-800"
+                className="border-blue-200 text-blue-800"
               >
                 キャンセル
               </Button>
               <Button 
                 type="submit" 
-                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               >
                 データを更新
               </Button>

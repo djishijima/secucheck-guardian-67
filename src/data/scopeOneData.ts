@@ -68,5 +68,5 @@ export const defaultScopeOneData: ScopeOneDataType = {
     { year: '2025年度', target: 180.0, status: '計画中' },
     { year: '2030年度', target: 100.0, status: '計画中' },
   ],
-  notes: ''
+  notes: 'このデータは2022年度末までの測定値に基づいています。削減目標は前年比で約10%の削減を目指しています。'
 };

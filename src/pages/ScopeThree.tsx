@@ -1,13 +1,12 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, LineChart, BarChart3, PieChart, AlertTriangle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import ScopeHeader from '@/components/scope/ScopeHeader';
-import ScopeNavbar from '@/components/scope/ScopeNavbar';
+import { Link } from 'react-router-dom';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -30,25 +29,83 @@ const ScopeThree = () => {
       
       <main className="flex-grow container mx-auto py-8 px-4">
         {/* ページヘッダー */}
-        <ScopeHeader />
-        
-        {/* データ入力ボタン */}
-        <motion.div 
-          className="mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Button 
-            onClick={handleShowForm} 
-            className="bg-amber-600 hover:bg-amber-700 font-semibold"
+        <div className="mb-8">
+          <motion.section
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            自社データを入力する
-          </Button>
-        </motion.div>
-
-        {/* ナビゲーションリンク */}
-        <ScopeNavbar onShowForm={handleShowForm} />
+            <div className="bg-gradient-to-r from-amber-600 to-amber-800 rounded-xl p-8 text-white shadow-xl">
+              <div className="max-w-3xl">
+                <div className="flex items-center gap-2 text-amber-200 mb-2">
+                  <Link to="/sustainability-check" className="hover:text-white flex items-center gap-1">
+                    <ArrowLeft className="h-4 w-4" /> サステナビリティ診断
+                  </Link>
+                  <span>/</span>
+                  <span>排出量データ</span>
+                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <h1 className="text-3xl md:text-4xl font-bold mb-4 flex items-center">
+                    <PieChart className="mr-3 h-8 w-8" />
+                    Scope 3排出量データ
+                  </h1>
+                  <p className="text-lg opacity-90 mb-4 text-white">
+                    バリューチェーン全体で発生する温室効果ガス排出（調達、販売、製品使用など）の包括的なデータ分析と可視化。サプライチェーン全体での排出削減に向けた戦略立案に役立ちます。
+                  </p>
+                </motion.div>
+              </div>
+            </div>
+          </motion.section>
+        </div>
+        
+        {/* スコープナビゲーション */}
+        <div className="mb-8">
+          <Card className="border-amber-100">
+            <CardContent className="p-6">
+              <div className="flex flex-wrap gap-4">
+                <Link to="/scope-one">
+                  <Button 
+                    variant="outline"
+                    className="border-blue-200 text-blue-700 flex items-center gap-2"
+                  >
+                    <LineChart className="h-4 w-4" />
+                    Scope 1
+                  </Button>
+                </Link>
+                <Link to="/scope-two">
+                  <Button 
+                    variant="outline"
+                    className="border-blue-200 text-blue-700 flex items-center gap-2"
+                  >
+                    <BarChart3 className="h-4 w-4" />
+                    Scope 2
+                  </Button>
+                </Link>
+                <Link to="/scope-three">
+                  <Button 
+                    variant="default"
+                    className="bg-amber-600 hover:bg-amber-700 flex items-center gap-2"
+                  >
+                    <PieChart className="h-4 w-4" />
+                    Scope 3
+                  </Button>
+                </Link>
+                <div className="ml-auto">
+                  <Button 
+                    onClick={handleShowForm}
+                    className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800"
+                  >
+                    自社データを入力する
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
         
         {/* コンテンツ */}
         <motion.div
