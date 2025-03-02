@@ -38,14 +38,16 @@ const Header: React.FC = () => {
               <Link to="/" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
                 ホーム
               </Link>
-              <Link to="/products" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
-                製品一覧
-              </Link>
+              
+              {/* プロダクト関連をグループ化 */}
               <div className="relative group">
                 <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
-                  製品カテゴリ
+                  製品・サービス
                 </span>
-                <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  <Link to="/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    製品一覧
+                  </Link>
                   <Link to="/eco-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
                     環境印刷
                   </Link>
@@ -58,33 +60,10 @@ const Header: React.FC = () => {
                   <Link to="/gx-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
                     GX物流
                   </Link>
-                  <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    ダッシュボード
-                  </Link>
                 </div>
               </div>
-              <div className="relative group">
-                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
-                  サステナビリティ
-                </span>
-                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
-                  <Link to="/about-gx" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    サステナビリティについて
-                  </Link>
-                  <Link to="/sustainability-check" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    サステナビリティ診断
-                  </Link>
-                  <Link to="/comprehensive-diagnostics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    サステナブルDX診断
-                  </Link>
-                  <Link to="/scope-one" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    Scope 1 排出量
-                  </Link>
-                  <Link to="/scope-two" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
-                    Scope 2 排出量
-                  </Link>
-                </div>
-              </div>
+              
+              {/* GX×AI製品をグループ化 */}
               <div className="relative group">
                 <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
                   GX×AI製品
@@ -110,6 +89,32 @@ const Header: React.FC = () => {
                   </Link>
                 </div>
               </div>
+              
+              {/* 診断サービスをグループ化 */}
+              <div className="relative group">
+                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+                  診断サービス
+                </span>
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                  <Link to="/about-gx" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナビリティについて
+                  </Link>
+                  <Link to="/sustainability-check" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナビリティ診断
+                  </Link>
+                  <Link to="/comprehensive-diagnostics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    サステナブルDX診断
+                  </Link>
+                  <Link to="/scope-one" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    Scope 1 排出量
+                  </Link>
+                  <Link to="/scope-two" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    Scope 2 排出量
+                  </Link>
+                </div>
+              </div>
+
+              {/* その他 */}
               <div className="relative group">
                 <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
                   その他
@@ -117,6 +122,9 @@ const Header: React.FC = () => {
                 <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
                   <Link to="/ai-technology" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
                     AI技術
+                  </Link>
+                  <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    ダッシュボード
                   </Link>
                   <Link to="/contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
                     お問い合わせ
@@ -177,14 +185,14 @@ const Header: React.FC = () => {
             <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
               ホーム
             </Link>
-            <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              製品一覧
-            </Link>
             
-            {/* 製品カテゴリ */}
+            {/* 製品・サービス */}
             <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1">製品カテゴリ</span>
+              <span className="block text-base font-medium text-gray-700 mb-1">製品・サービス</span>
               <div className="pl-4 space-y-1">
+                <Link to="/products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  製品一覧
+                </Link>
                 <Link to="/eco-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
                   環境印刷
                 </Link>
@@ -196,31 +204,6 @@ const Header: React.FC = () => {
                 </Link>
                 <Link to="/gx-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
                   GX物流
-                </Link>
-                <Link to="/dashboard" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  ダッシュボード
-                </Link>
-              </div>
-            </div>
-            
-            {/* サステナビリティ */}
-            <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1">サステナビリティ</span>
-              <div className="pl-4 space-y-1">
-                <Link to="/about-gx" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナビリティについて
-                </Link>
-                <Link to="/sustainability-check" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナビリティ診断
-                </Link>
-                <Link to="/comprehensive-diagnostics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナブルDX診断
-                </Link>
-                <Link to="/scope-one" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  Scope 1 排出量
-                </Link>
-                <Link to="/scope-two" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  Scope 2 排出量
                 </Link>
               </div>
             </div>
@@ -250,12 +233,37 @@ const Header: React.FC = () => {
               </div>
             </div>
             
+            {/* 診断サービス */}
+            <div className="px-3 py-2">
+              <span className="block text-base font-medium text-gray-700 mb-1">診断サービス</span>
+              <div className="pl-4 space-y-1">
+                <Link to="/about-gx" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナビリティについて
+                </Link>
+                <Link to="/sustainability-check" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナビリティ診断
+                </Link>
+                <Link to="/comprehensive-diagnostics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  サステナブルDX診断
+                </Link>
+                <Link to="/scope-one" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  Scope 1 排出量
+                </Link>
+                <Link to="/scope-two" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  Scope 2 排出量
+                </Link>
+              </div>
+            </div>
+            
             {/* その他 */}
             <div className="px-3 py-2">
               <span className="block text-base font-medium text-gray-700 mb-1">その他</span>
               <div className="pl-4 space-y-1">
                 <Link to="/ai-technology" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
                   AI技術
+                </Link>
+                <Link to="/dashboard" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
+                  ダッシュボード
                 </Link>
                 <Link to="/contact" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
                   お問い合わせ
