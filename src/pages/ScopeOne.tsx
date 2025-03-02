@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import ScopeHeader from '@/components/scope/ScopeHeader';
 import ScopeNavbar from '@/components/scope/ScopeNavbar';
@@ -13,9 +12,10 @@ import ScopeOneReductionTab from '@/components/scope/ScopeOneReductionTab';
 import ScopeOneDataForm from '@/components/scope/ScopeOneDataForm';
 import { defaultScopeOneData, ScopeOneDataType } from '@/data/scopeOneData';
 import { motion } from 'framer-motion';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const ScopeOne = () => {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const { toast } = useToast();
   const [scopeOneData, setScopeOneData] = useState<ScopeOneDataType>(defaultScopeOneData);
   const [showForm, setShowForm] = useState(false);
@@ -26,6 +26,11 @@ const ScopeOne = () => {
     other: defaultScopeOneData.categories[3].value,
     targetYear: '2023年度'
   });
+  
+  // セクションの配列
+  const sections = ["overview", "details", "reduction"];
+  const sectionTitles = ["概要", "詳細分析", "削減計画"];
+  const currentSection = sections[currentSectionIndex];
   
   const downloadReport = () => {
     toast({
@@ -112,6 +117,50 @@ const ScopeOne = () => {
     }));
   };
   
+  // 次のセクションに進む
+  const goToNextSection = () => {
+    if (currentSectionIndex < sections.length - 1) {
+      setCurrentSectionIndex(currentSectionIndex + 1);
+      window.scrollTo(0, 0);
+    }
+  };
+  
+  // 前のセクションに戻る
+  const goToPreviousSection = () => {
+    if (currentSectionIndex > 0) {
+      setCurrentSectionIndex(currentSectionIndex - 1);
+      window.scrollTo(0, 0);
+    }
+  };
+  
+  // セクションの進捗度を表示する
+  const sectionProgress = () => {
+    return `セクション ${currentSectionIndex + 1}/${sections.length}`;
+  };
+  
+  // 現在のセクションコンテンツを取得
+  const renderSectionContent = () => {
+    switch (currentSection) {
+      case "overview":
+        return (
+          <ScopeOneOverviewTab 
+            scopeOneData={scopeOneData} 
+            onDownloadReport={downloadReport} 
+          />
+        );
+      case "details":
+        return (
+          <ScopeOneDetailsTab scopeOneData={scopeOneData} />
+        );
+      case "reduction":
+        return (
+          <ScopeOneReductionTab scopeOneData={scopeOneData} />
+        );
+      default:
+        return null;
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col">
       <Header />
@@ -149,32 +198,43 @@ const ScopeOne = () => {
         {/* ナビゲーションリンク */}
         <ScopeNavbar />
         
-        {/* タブナビゲーション */}
-        <Tabs defaultValue="overview" className="mb-8" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="overview">概要</TabsTrigger>
-            <TabsTrigger value="details">詳細分析</TabsTrigger>
-            <TabsTrigger value="reduction">削減計画</TabsTrigger>
-          </TabsList>
+        {/* セクション進捗バー */}
+        <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
+          <span className="text-sm font-medium text-gray-600">{sectionProgress()}</span>
+          <span className="text-sm font-medium text-green-600">{sectionTitles[currentSectionIndex]}</span>
+        </div>
+        
+        {/* セクションコンテンツ */}
+        <motion.div 
+          key={currentSection}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-8"
+        >
+          {renderSectionContent()}
+        </motion.div>
+        
+        {/* ナビゲーションボタン */}
+        <div className="flex justify-between mt-8 pt-4 border-t">
+          <Button 
+            onClick={goToPreviousSection}
+            variant="outline"
+            disabled={currentSectionIndex === 0}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" /> 前へ
+          </Button>
           
-          {/* 概要タブ */}
-          <TabsContent value="overview">
-            <ScopeOneOverviewTab 
-              scopeOneData={scopeOneData} 
-              onDownloadReport={downloadReport} 
-            />
-          </TabsContent>
-          
-          {/* 詳細分析タブ */}
-          <TabsContent value="details">
-            <ScopeOneDetailsTab scopeOneData={scopeOneData} />
-          </TabsContent>
-          
-          {/* 削減計画タブ */}
-          <TabsContent value="reduction">
-            <ScopeOneReductionTab scopeOneData={scopeOneData} />
-          </TabsContent>
-        </Tabs>
+          <Button 
+            onClick={goToNextSection}
+            className="bg-green-600 hover:bg-green-700 gap-2"
+            disabled={currentSectionIndex === sections.length - 1}
+          >
+            次へ <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
       </main>
       
       <Footer />
