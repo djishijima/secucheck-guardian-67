@@ -18,7 +18,7 @@ const HeroSection = () => {
               <span className="block">文唱堂印刷の</span>
               <span className="text-yellow-300">GX x AI</span> プロダクトマーケットプレイス
             </h1>
-            <p className="text-lg md:text-xl opacity-90 mb-8">
+            <p className="text-lg md:text-xl opacity-90 mb-8 text-white">
               持続可能な未来のために。最先端AIと環境配慮型印刷技術の融合で、ビジネスのサステナビリティを加速します。
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
