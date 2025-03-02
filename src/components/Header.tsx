@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Printer, Menu, X, HeartHandshake, Users, ShoppingCart, Leaf } from 'lucide-react';
+import { Printer, Menu, X, ShoppingCart, Leaf } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -42,13 +42,10 @@ const Header: React.FC = () => {
                 製品一覧
               </Link>
               <Link to="/about-gx" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
-                GXについて
+                サステナビリティ
               </Link>
-              <Link to="/ai-technology" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
-                AI技術
-              </Link>
-              <Link to="/contact" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
-                お問い合わせ
+              <Link to="/sustainability-check" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+                サステナビリティ診断
               </Link>
             </nav>
           </div>
@@ -102,13 +99,10 @@ const Header: React.FC = () => {
               製品一覧
             </Link>
             <Link to="/about-gx" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              GXについて
+              サステナビリティ
             </Link>
-            <Link to="/ai-technology" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              AI技術
-            </Link>
-            <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              お問い合わせ
+            <Link to="/sustainability-check" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
+              サステナビリティ診断
             </Link>
             <div className="pt-4 flex flex-col space-y-3">
               <Button variant="outline" size="sm" className="justify-center">
