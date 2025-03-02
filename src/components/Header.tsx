@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Printer, Menu, X, HeartHandshake, Users, ShoppingCart } from 'lucide-react';
+import { Printer, Menu, X, HeartHandshake, Users, ShoppingCart, Leaf } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -60,8 +60,15 @@ const Header: React.FC = () => {
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 カート
               </Button>
-              <Button variant="outline" size="sm">ログイン</Button>
-              <Button size="sm">会員登録</Button>
+              <Link to="/sustainability-check">
+                <Button 
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center gap-2" 
+                  size="sm"
+                >
+                  <Leaf className="h-4 w-4" />
+                  サステナビリティ診断
+                </Button>
+              </Link>
             </div>
 
             {/* モバイルメニューボタン */}
@@ -108,8 +115,15 @@ const Header: React.FC = () => {
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 カート
               </Button>
-              <Button variant="outline" size="sm" className="justify-center">ログイン</Button>
-              <Button size="sm" className="justify-center">会員登録</Button>
+              <Link to="/sustainability-check" className="w-full">
+                <Button 
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center gap-2 w-full justify-center" 
+                  size="sm"
+                >
+                  <Leaf className="h-4 w-4" />
+                  サステナビリティ診断
+                </Button>
+              </Link>
             </div>
           </div>
         </motion.div>
