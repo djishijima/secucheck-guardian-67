@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BarChart3 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,14 @@ import ScopeTwoDetailsTab from '@/components/scope/ScopeTwoDetailsTab';
 import ScopeTwoReductionTab from '@/components/scope/ScopeTwoReductionTab';
 import ScopeTwoDataForm from '@/components/scope/ScopeTwoDataForm';
 import { defaultScopeTwoData, ScopeTwoDataType } from '@/data/scopeTwoData';
+import { useLocation } from 'react-router-dom';
 
 const ScopeTwo = () => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const { toast } = useToast();
   const [scopeTwoData, setScopeTwoData] = useState<ScopeTwoDataType>(defaultScopeTwoData);
   const [showForm, setShowForm] = useState(false);
+  const location = useLocation();
   const [formData, setFormData] = useState({
     electricity: defaultScopeTwoData.categories[0].value,
     heat: defaultScopeTwoData.categories[1].value,
@@ -161,7 +163,11 @@ const ScopeTwo = () => {
       
       <main className="flex-grow container mx-auto py-8 px-4">
         {/* ページヘッダー */}
-        <ScopeHeader />
+        <ScopeHeader 
+          title="Scope 2排出量データ"
+          description="企業が間接的に排出する温室効果ガス（購入した電力・熱・蒸気等の使用による排出）のデータ分析と可視化。削減目標に対する進捗状況を確認し、効果的な排出削減策を策定するためのインサイトを提供します。"
+          icon={<BarChart3 className="mr-3 h-8 w-8" />}
+        />
         
         {/* データ入力フォーム */}
         {!showForm ? (
@@ -190,7 +196,10 @@ const ScopeTwo = () => {
         )}
 
         {/* ナビゲーションリンク */}
-        <ScopeNavbar onShowForm={() => setShowForm(true)} />
+        <ScopeNavbar 
+          currentPath={location.pathname}
+          onShowForm={() => setShowForm(true)} 
+        />
         
         {/* セクション進捗バー */}
         <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
