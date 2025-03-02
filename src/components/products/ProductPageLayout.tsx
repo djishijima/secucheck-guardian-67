@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Image } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface ProductPageLayoutProps {
@@ -64,24 +64,39 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
                 </motion.div>
               </div>
               <div className="md:w-1/2">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="rounded-lg overflow-hidden shadow-xl bg-white"
-                >
-                  {isPlaceholderImage ? (
-                    <div className="flex items-center justify-center py-20 px-4 bg-gray-100">
-                      <Image className="h-32 w-32 text-gray-400" />
+                {isPlaceholderImage ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="rounded-lg p-8 bg-gradient-to-br from-indigo-100 to-blue-100 shadow-lg"
+                  >
+                    <div className="text-center">
+                      <h3 className="text-2xl font-bold text-indigo-800 mb-4">持続可能な未来のために</h3>
+                      <p className="text-indigo-600 mb-6">
+                        革新的なテクノロジーで環境負荷を低減し、企業の持続的成長と地球環境の保全を両立させます
+                      </p>
+                      <Link to={ctaLink}>
+                        <Button className="bg-indigo-600 hover:bg-indigo-700">
+                          詳細を見る
+                        </Button>
+                      </Link>
                     </div>
-                  ) : (
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="rounded-lg overflow-hidden shadow-xl bg-white"
+                  >
                     <img 
                       src={imageUrl} 
                       alt={title} 
                       className="w-full h-auto object-cover"
                     />
-                  )}
-                </motion.div>
+                  </motion.div>
+                )}
               </div>
             </div>
           </div>

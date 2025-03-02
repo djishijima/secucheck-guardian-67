@@ -40,7 +40,7 @@ const GxEcoDesign = () => {
       title="GXエコデザインAI"
       subtitle="AIが実現する環境配慮型製品デザイン"
       description="製品のライフサイクル全体での環境影響を最小化するため、AIを活用して環境に配慮した製品デザインを最適化するサービスです。素材選定からパッケージデザインまで、サステナビリティと機能性を両立させた製品開発をサポートします。"
-      imageUrl="/placeholder.svg"
+      imageUrl=""
       benefits={benefits}
       features={features}
       ctaText="GXエコデザインAIに問い合わせる"

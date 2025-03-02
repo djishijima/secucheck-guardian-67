@@ -35,7 +35,6 @@ const GxEducationPlatform = () => {
     }
   ];
 
-  // Use icon instead of placeholder image
   return (
     <ProductPageLayout
       title="GX教育・研修AIプラットフォーム"
