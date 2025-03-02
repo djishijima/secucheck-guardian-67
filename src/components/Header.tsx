@@ -1,15 +1,24 @@
 
 import React from 'react';
-import { Printer, Menu, X, ShoppingCart, Leaf, BarChart, List, FolderCheck } from 'lucide-react';
+import { Printer, Menu, X, ShoppingCart, BarChart, Leaf, List, FolderCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleMouseEnter = (dropdown: string) => {
+    setActiveDropdown(dropdown);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveDropdown(null);
   };
 
   return (
@@ -35,33 +44,42 @@ const Header: React.FC = () => {
 
             {/* デスクトップナビゲーション */}
             <nav className="hidden md:ml-10 md:flex md:space-x-8">
-              <Link to="/" className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium">
+              <Link 
+                to="/" 
+                className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
+              >
                 ホーム
               </Link>
               
               {/* 製品・サービスをグループ化（製品とGX×AI製品をまとめる） */}
-              <div className="relative group">
-                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+              <div 
+                className="relative group"
+                onMouseEnter={() => handleMouseEnter('products')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <span className={`text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${activeDropdown === 'products' ? 'text-indigo-600 after:scale-x-100' : ''}`}>
                   <List className="h-4 w-4 mr-1" />
                   製品・サービス
                 </span>
-                <div className="absolute left-0 mt-2 w-80 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
+                <div 
+                  className={`absolute left-0 mt-2 w-80 bg-white shadow-lg rounded-md overflow-hidden z-10 transition-all duration-300 origin-top-left ${activeDropdown === 'products' ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}
+                >
                   {/* 一般製品 */}
                   <div className="border-b pb-2">
                     <div className="px-4 py-2 bg-gray-50 font-medium text-sm text-gray-700">一般製品</div>
-                    <Link to="/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       製品一覧
                     </Link>
-                    <Link to="/eco-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/eco-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       環境印刷
                     </Link>
-                    <Link to="/gx-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-printing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       GX印刷
                     </Link>
-                    <Link to="/eco-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/eco-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       環境物流
                     </Link>
-                    <Link to="/gx-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-logistics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       GX物流
                     </Link>
                   </div>
@@ -69,22 +87,22 @@ const Header: React.FC = () => {
                   {/* GX×AI製品 */}
                   <div>
                     <div className="px-4 py-2 bg-gray-50 font-medium text-sm text-gray-700">GX×AI製品</div>
-                    <Link to="/gx-ai-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-ai-products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       GX×AI製品一覧
                     </Link>
-                    <Link to="/gx-eco-design" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-eco-design" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       エコデザインAI
                     </Link>
-                    <Link to="/gx-energy-management" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-energy-management" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       エネルギー管理AI
                     </Link>
-                    <Link to="/gx-sustainable-marketing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-sustainable-marketing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       サステナブルマーケティングAI
                     </Link>
-                    <Link to="/gx-supply-chain-audit" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-supply-chain-audit" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       サプライチェーン監査AI
                     </Link>
-                    <Link to="/gx-education-platform" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                    <Link to="/gx-education-platform" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                       教育プラットフォーム
                     </Link>
                   </div>
@@ -92,43 +110,55 @@ const Header: React.FC = () => {
               </div>
               
               {/* 診断サービスをグループ化 */}
-              <div className="relative group">
-                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+              <div 
+                className="relative group"
+                onMouseEnter={() => handleMouseEnter('diagnostics')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <span className={`text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${activeDropdown === 'diagnostics' ? 'text-indigo-600 after:scale-x-100' : ''}`}>
                   <FolderCheck className="h-4 w-4 mr-1" />
                   診断サービス
                 </span>
-                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
-                  <Link to="/about-gx" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                <div
+                  className={`absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-10 transition-all duration-300 origin-top-left ${activeDropdown === 'diagnostics' ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}
+                >
+                  <Link to="/about-gx" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     サステナビリティについて
                   </Link>
-                  <Link to="/sustainability-check" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                  <Link to="/sustainability-check" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     サステナビリティ診断
                   </Link>
-                  <Link to="/comprehensive-diagnostics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                  <Link to="/comprehensive-diagnostics" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     サステナブルDX診断
                   </Link>
-                  <Link to="/scope-one" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                  <Link to="/scope-one" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     Scope 1 排出量
                   </Link>
-                  <Link to="/scope-two" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                  <Link to="/scope-two" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     Scope 2 排出量
                   </Link>
                 </div>
               </div>
 
               {/* その他 */}
-              <div className="relative group">
-                <span className="text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center">
+              <div 
+                className="relative group"
+                onMouseEnter={() => handleMouseEnter('others')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <span className={`text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium cursor-pointer flex items-center relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-indigo-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${activeDropdown === 'others' ? 'text-indigo-600 after:scale-x-100' : ''}`}>
                   その他
                 </span>
-                <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 hidden group-hover:block">
-                  <Link to="/ai-technology" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                <div 
+                  className={`absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-10 transition-all duration-300 origin-top-left ${activeDropdown === 'others' ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}
+                >
+                  <Link to="/ai-technology" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     AI技術
                   </Link>
-                  <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                  <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     ダッシュボード
                   </Link>
-                  <Link to="/contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">
+                  <Link to="/contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
                     お問い合わせ
                   </Link>
                 </div>
@@ -190,96 +220,123 @@ const Header: React.FC = () => {
             
             {/* 製品・サービス（モバイル用） */}
             <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1 flex items-center">
-                <List className="h-4 w-4 mr-1" /> 製品・サービス
-              </span>
-              
-              {/* 一般製品 */}
-              <div className="pl-4 mb-2">
-                <div className="text-sm font-medium text-gray-600 py-1">一般製品</div>
-                <div className="pl-2 space-y-1">
-                  <Link to="/products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    製品一覧
-                  </Link>
-                  <Link to="/eco-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    環境印刷
-                  </Link>
-                  <Link to="/gx-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    GX印刷
-                  </Link>
-                  <Link to="/eco-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    環境物流
-                  </Link>
-                  <Link to="/gx-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    GX物流
-                  </Link>
+              <details className="group">
+                <summary className="flex items-center text-base font-medium text-gray-700 cursor-pointer list-none">
+                  <List className="h-4 w-4 mr-1" /> 
+                  <span className="flex-1">製品・サービス</span>
+                  <span className="transform group-open:rotate-180 transition-transform duration-200">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </summary>
+                
+                <div className="pl-4 mt-2 space-y-2">
+                  {/* 一般製品 */}
+                  <div className="pl-2 mb-2">
+                    <div className="text-sm font-medium text-gray-600 py-1">一般製品</div>
+                    <div className="pl-2 space-y-1">
+                      <Link to="/products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        製品一覧
+                      </Link>
+                      <Link to="/eco-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        環境印刷
+                      </Link>
+                      <Link to="/gx-printing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        GX印刷
+                      </Link>
+                      <Link to="/eco-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        環境物流
+                      </Link>
+                      <Link to="/gx-logistics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        GX物流
+                      </Link>
+                    </div>
+                  </div>
+                  
+                  {/* GX×AI製品 */}
+                  <div className="pl-2">
+                    <div className="text-sm font-medium text-gray-600 py-1">GX×AI製品</div>
+                    <div className="pl-2 space-y-1">
+                      <Link to="/gx-ai-products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        GX×AI製品一覧
+                      </Link>
+                      <Link to="/gx-eco-design" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        エコデザインAI
+                      </Link>
+                      <Link to="/gx-energy-management" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        エネルギー管理AI
+                      </Link>
+                      <Link to="/gx-sustainable-marketing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        サステナブルマーケティングAI
+                      </Link>
+                      <Link to="/gx-supply-chain-audit" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        サプライチェーン監査AI
+                      </Link>
+                      <Link to="/gx-education-platform" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                        教育プラットフォーム
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              
-              {/* GX×AI製品 */}
-              <div className="pl-4">
-                <div className="text-sm font-medium text-gray-600 py-1">GX×AI製品</div>
-                <div className="pl-2 space-y-1">
-                  <Link to="/gx-ai-products" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    GX×AI製品一覧
-                  </Link>
-                  <Link to="/gx-eco-design" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    エコデザインAI
-                  </Link>
-                  <Link to="/gx-energy-management" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    エネルギー管理AI
-                  </Link>
-                  <Link to="/gx-sustainable-marketing" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    サステナブルマーケティングAI
-                  </Link>
-                  <Link to="/gx-supply-chain-audit" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    サプライチェーン監査AI
-                  </Link>
-                  <Link to="/gx-education-platform" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                    教育プラットフォーム
-                  </Link>
-                </div>
-              </div>
+              </details>
             </div>
             
             {/* 診断サービス（モバイル用） */}
             <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1 flex items-center">
-                <FolderCheck className="h-4 w-4 mr-1" /> 診断サービス
-              </span>
-              <div className="pl-4 space-y-1">
-                <Link to="/about-gx" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナビリティについて
-                </Link>
-                <Link to="/sustainability-check" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナビリティ診断
-                </Link>
-                <Link to="/comprehensive-diagnostics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  サステナブルDX診断
-                </Link>
-                <Link to="/scope-one" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  Scope 1 排出量
-                </Link>
-                <Link to="/scope-two" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  Scope 2 排出量
-                </Link>
-              </div>
+              <details className="group">
+                <summary className="flex items-center text-base font-medium text-gray-700 cursor-pointer list-none">
+                  <FolderCheck className="h-4 w-4 mr-1" />
+                  <span className="flex-1">診断サービス</span>
+                  <span className="transform group-open:rotate-180 transition-transform duration-200">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="pl-4 mt-2 space-y-1">
+                  <Link to="/about-gx" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    サステナビリティについて
+                  </Link>
+                  <Link to="/sustainability-check" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    サステナビリティ診断
+                  </Link>
+                  <Link to="/comprehensive-diagnostics" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    サステナブルDX診断
+                  </Link>
+                  <Link to="/scope-one" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    Scope 1 排出量
+                  </Link>
+                  <Link to="/scope-two" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    Scope 2 排出量
+                  </Link>
+                </div>
+              </details>
             </div>
             
             {/* その他（モバイル用） */}
             <div className="px-3 py-2">
-              <span className="block text-base font-medium text-gray-700 mb-1">その他</span>
-              <div className="pl-4 space-y-1">
-                <Link to="/ai-technology" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  AI技術
-                </Link>
-                <Link to="/dashboard" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  ダッシュボード
-                </Link>
-                <Link to="/contact" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600">
-                  お問い合わせ
-                </Link>
-              </div>
+              <details className="group">
+                <summary className="flex items-center text-base font-medium text-gray-700 cursor-pointer list-none">
+                  <span className="flex-1">その他</span>
+                  <span className="transform group-open:rotate-180 transition-transform duration-200">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="pl-4 mt-2 space-y-1">
+                  <Link to="/ai-technology" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    AI技術
+                  </Link>
+                  <Link to="/dashboard" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    ダッシュボード
+                  </Link>
+                  <Link to="/contact" className="block px-3 py-1 text-sm text-gray-700 hover:text-indigo-600 rounded-md hover:bg-gray-50">
+                    お問い合わせ
+                  </Link>
+                </div>
+              </details>
             </div>
             
             <div className="pt-4 flex flex-col space-y-3">
