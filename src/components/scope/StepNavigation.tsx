@@ -43,6 +43,17 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
     }
   };
 
+  // Get button text based on the active step
+  const getNextButtonText = () => {
+    if (activeStep === 0) {
+      return "データを更新して次へ";
+    } else if (activeStep === steps.length - 1) {
+      return "完了";
+    } else {
+      return "次のステップへ";
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card className="border-blue-100">
@@ -91,7 +102,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
         </CardContent>
       </Card>
 
-      {/* ナビゲーションボタン - ボタンラベルを更新 */}
+      {/* ナビゲーションボタン - 明確なラベル付き */}
       <div className="flex justify-between mt-8 pt-4 border-t border-blue-100">
         <Button 
           onClick={goToPreviousStep}
@@ -107,7 +118,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
           className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 gap-2 disabled:opacity-50"
           disabled={activeStep === steps.length - 1}
         >
-          次のステップ <ArrowLeft className="h-4 w-4 rotate-180" />
+          {getNextButtonText()} <ArrowLeft className="h-4 w-4 rotate-180" />
         </Button>
       </div>
     </div>
