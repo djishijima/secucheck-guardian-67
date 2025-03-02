@@ -22,7 +22,7 @@ const ReductionSimulation: React.FC = () => {
               animate={{ pathLength: 1 }}
               transition={{ duration: 1, delay: 0.2 }}
             />
-            {/* 予測線 */}
+            {/* 予測線 (現状予測) */}
             <motion.path 
               d="M 20,32 L 30,40 L 40,48 L 60,60 L 80,72 L 100,85"
               stroke="#3B82F6"
@@ -33,9 +33,9 @@ const ReductionSimulation: React.FC = () => {
               animate={{ pathLength: 1 }}
               transition={{ duration: 1.5, delay: 1 }}
             />
-            {/* 目標線 */}
+            {/* 目標線 (施策実施後 - 改善されるように変更) */}
             <motion.path 
-              d="M 20,32 L 30,37 L 40,42 L 60,55 L 80,65 L 100,75"
+              d="M 20,32 L 30,30 L 40,27 L 60,22 L 80,18 L 100,15"
               stroke="#10B981"
               strokeWidth="2"
               fill="none"

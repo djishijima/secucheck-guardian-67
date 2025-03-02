@@ -84,11 +84,19 @@ const ScopeOne = () => {
       }
     ];
 
+    // 月次データも更新（データ入力に応じて調整）
+    const scaleFactor = total / scopeOneData.total;
+    const updatedMonthlyTrend = scopeOneData.monthlyTrend.map(item => ({
+      ...item,
+      value: parseFloat((item.value * scaleFactor).toFixed(1))
+    }));
+
     // Update the data
     setScopeOneData(prev => ({
       ...prev,
       total,
       categories,
+      monthlyTrend: updatedMonthlyTrend,
       // Update the current year value in yearOverYear
       yearOverYear: prev.yearOverYear.map(item => 
         item.year === '2022年度' ? { ...item, value: total } : item
