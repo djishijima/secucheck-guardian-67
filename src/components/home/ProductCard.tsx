@@ -1,7 +1,14 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingCart, ExternalLink } from 'lucide-react';
+import { 
+  ShoppingCart, 
+  ExternalLink, 
+  Printer, 
+  Leaf,
+  Languages,
+  Truck
+} from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +27,22 @@ interface ProductCardProps {
   };
 }
 
+// アイコンを製品IDに基づいて選択する関数
+const getProductIcon = (productId: number) => {
+  switch (productId) {
+    case 1:
+      return <Printer className="w-16 h-16 text-green-600" />;
+    case 2:
+      return <Leaf className="w-16 h-16 text-green-600" />;
+    case 3:
+      return <Languages className="w-16 h-16 text-blue-600" />;
+    case 4:
+      return <Truck className="w-16 h-16 text-green-600" />;
+    default:
+      return <Printer className="w-16 h-16 text-gray-600" />;
+  }
+};
+
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <motion.div
@@ -29,12 +52,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 transition-all">
-        <div className="w-full h-48 overflow-hidden">
-          <img 
-            src={product.image} 
-            alt={product.title} 
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-          />
+        <div className="w-full h-48 overflow-hidden flex items-center justify-center bg-gray-50">
+          {getProductIcon(product.id)}
         </div>
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
@@ -66,7 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               </Button>
             </Link>
             <Button size="sm">
-              <ShoppingCart className="mr-2 h-4 w-4" /> カート
+              <ShoppingCart className="mr-2 h-4 w-4" /> お問合せ
             </Button>
           </div>
         </CardFooter>

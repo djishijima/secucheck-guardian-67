@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Database, Leaf } from 'lucide-react';
+import { Leaf, Mail } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { Link } from 'react-router-dom';
 
