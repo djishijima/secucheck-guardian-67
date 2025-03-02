@@ -25,6 +25,7 @@ import GxSupplyChainAudit from "./pages/GxSupplyChainAudit";
 import GxEducationPlatform from "./pages/GxEducationPlatform";
 import GxAiProducts from "./pages/GxAiProducts";
 import ComprehensiveDiagnostics from "./pages/ComprehensiveDiagnostics";
+import GxAssessment from "./pages/GxAssessment";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,9 @@ const App = () => (
           
           {/* サステナブルDX診断ページの追加 */}
           <Route path="/comprehensive-diagnostics" element={<ComprehensiveDiagnostics />} />
+          
+          {/* GX対応度診断ページの追加 */}
+          <Route path="/gx-assessment" element={<GxAssessment />} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

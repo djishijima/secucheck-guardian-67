@@ -9,7 +9,7 @@ import QuestionItem from './QuestionItem';
 
 interface DiagnosticQuestionSectionProps {
   answers: Record<string, boolean>;
-  setAnswers: (answers: Record<string, boolean>) => void;
+  setAnswers: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   runDiagnostics: () => void;
 }
 
@@ -24,7 +24,10 @@ const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
   
   // 質問への回答を設定
   const handleQuestionChange = (questionId: string, value: boolean) => {
-    setAnswers(prev => ({ ...prev, [questionId]: value }));
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
     
     // チェックを入れた時のみトースト表示
     if (value) {

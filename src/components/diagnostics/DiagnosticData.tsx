@@ -110,7 +110,7 @@ export const existingGxDiagnostics: DiagnosticItem[] = [
       "グリーン投資やESG対応の状況分析"
     ],
     icon: <Leaf className="h-12 w-12 text-emerald-600" />,
-    link: "/sustainability-check"
+    link: "/gx-assessment"
   },
   {
     title: "Scope 1 排出量診断",
