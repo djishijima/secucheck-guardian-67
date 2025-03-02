@@ -35,12 +35,13 @@ const GxSustainableMarketing = () => {
     }
   ];
 
+  // Use icon instead of placeholder image
   return (
     <ProductPageLayout
       title="GXサステナブルマーケティングAI"
       subtitle="サステナビリティを軸とした効果的なマーケティング戦略"
       description="AIを活用してサステナビリティに特化したマーケティング戦略を提供するサービスです。消費者の環境意識データを分析し、ターゲット層に最適な広告キャンペーンを設計するとともに、ESGレポート作成も支援します。"
-      imageUrl="/placeholder.svg"
+      imageUrl=""
       benefits={benefits}
       features={features}
       ctaText="GXサステナブルマーケティングAIに問い合わせる"

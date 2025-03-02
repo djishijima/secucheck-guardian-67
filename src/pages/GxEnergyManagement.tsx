@@ -35,12 +35,13 @@ const GxEnergyManagement = () => {
     }
   ];
 
+  // Use icon instead of placeholder image
   return (
     <ProductPageLayout
       title="GX AIエネルギーマネジメント"
       subtitle="AIが実現するエネルギー使用の最適化"
       description="AIを活用して企業のエネルギー使用状況をリアルタイムで分析し、最適化するシステムです。再生可能エネルギーの利用比率を最大化し、効率的な運用を提案することで、コスト削減とカーボンニュートラル達成を同時に実現します。"
-      imageUrl="/placeholder.svg"
+      imageUrl=""
       benefits={benefits}
       features={features}
       ctaText="GX AIエネルギーマネジメントに問い合わせる"

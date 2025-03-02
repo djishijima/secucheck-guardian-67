@@ -6,7 +6,8 @@ import {
   MessageSquare,
   Leaf,
   Languages,
-  Truck
+  Truck,
+  Image
 } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,9 @@ const getProductIcon = (productId: number) => {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  // Check if there's a product image or icon to display
+  const hasImageOrIcon = product.image || product.icon;
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -53,7 +57,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 hover:shadow-lg transition-all duration-300">
         <div className="w-full h-48 overflow-hidden flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
-          {product.icon || getProductIcon(product.id)}
+          {product.image ? (
+            <img src={product.image} alt={product.title} className="max-h-full max-w-full object-contain" />
+          ) : (
+            product.icon || getProductIcon(product.id)
+          )}
         </div>
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
@@ -84,9 +92,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <ExternalLink className="mr-2 h-4 w-4" /> 詳細
               </Button>
             </Link>
-            <Button size="sm" className="hover:-translate-y-1 transition-transform">
-              <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
-            </Button>
+            <Link to="/contact">
+              <Button size="sm" className="hover:-translate-y-1 transition-transform">
+                <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
+              </Button>
+            </Link>
           </div>
         </CardFooter>
       </Card>

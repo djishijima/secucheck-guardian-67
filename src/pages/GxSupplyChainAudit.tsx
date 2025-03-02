@@ -35,12 +35,13 @@ const GxSupplyChainAudit = () => {
     }
   ];
 
+  // Use icon instead of placeholder image
   return (
     <ProductPageLayout
       title="GXサプライチェーンAI監査"
       subtitle="サプライチェーン全体の環境負荷を最適化"
       description="サプライチェーン全体での環境負荷やCO2排出量をAIが監査し、改善提案を行うサービスです。Scope 1〜3に対応した排出量診断、サプライヤーごとの環境リスク評価、コスト削減と環境負荷軽減を両立する改善プランを提供します。"
-      imageUrl="/placeholder.svg"
+      imageUrl=""
       benefits={benefits}
       features={features}
       ctaText="GXサプライチェーンAI監査に問い合わせる"

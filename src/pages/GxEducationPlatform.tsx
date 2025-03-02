@@ -35,12 +35,13 @@ const GxEducationPlatform = () => {
     }
   ];
 
+  // Use icon instead of placeholder image
   return (
     <ProductPageLayout
       title="GX教育・研修AIプラットフォーム"
       subtitle="サステナビリティを推進する人材を育成"
       description="AIを活用した従業員向けのサステナビリティ教育・研修プラットフォームです。個別学習プランをAIが作成し、従業員ごとの理解度に応じて調整。ESGやGXに関する最新知識と実践的スキルを効率的に習得できます。"
-      imageUrl="/placeholder.svg"
+      imageUrl=""
       benefits={benefits}
       features={features}
       ctaText="GX教育・研修AIプラットフォームに問い合わせる"

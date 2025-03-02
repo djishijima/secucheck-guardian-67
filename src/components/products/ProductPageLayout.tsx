@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Image } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface ProductPageLayoutProps {
@@ -34,6 +34,9 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
   ctaLink = "/contact",
   additionalContent
 }) => {
+  // Check if the image is a placeholder or missing
+  const isPlaceholderImage = imageUrl === '/placeholder.svg' || !imageUrl;
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
@@ -65,13 +68,19 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="rounded-lg overflow-hidden shadow-xl"
+                  className="rounded-lg overflow-hidden shadow-xl bg-white"
                 >
-                  <img 
-                    src={imageUrl} 
-                    alt={title} 
-                    className="w-full h-auto object-cover"
-                  />
+                  {isPlaceholderImage ? (
+                    <div className="flex items-center justify-center py-20 px-4 bg-gray-100">
+                      <Image className="h-32 w-32 text-gray-400" />
+                    </div>
+                  ) : (
+                    <img 
+                      src={imageUrl} 
+                      alt={title} 
+                      className="w-full h-auto object-cover"
+                    />
+                  )}
                 </motion.div>
               </div>
             </div>
