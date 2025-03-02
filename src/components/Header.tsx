@@ -54,16 +54,14 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex space-x-3">
               <Button variant="ghost" size="sm">
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                カート
+                <ShoppingCart className="h-4 w-4" />
               </Button>
               <Link to="/sustainability-check">
                 <Button 
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center gap-2" 
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center" 
                   size="sm"
                 >
                   <Leaf className="h-4 w-4" />
-                  サステナビリティ診断
                 </Button>
               </Link>
             </div>
@@ -106,16 +104,14 @@ const Header: React.FC = () => {
             </Link>
             <div className="pt-4 flex flex-col space-y-3">
               <Button variant="outline" size="sm" className="justify-center">
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                カート
+                <ShoppingCart className="h-4 w-4" />
               </Button>
               <Link to="/sustainability-check" className="w-full">
                 <Button 
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center gap-2 w-full justify-center" 
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 flex items-center w-full justify-center" 
                   size="sm"
                 >
                   <Leaf className="h-4 w-4" />
-                  サステナビリティ診断
                 </Button>
               </Link>
             </div>
