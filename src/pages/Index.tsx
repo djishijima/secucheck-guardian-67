@@ -7,7 +7,7 @@ import SearchFilterSection from '@/components/home/SearchFilterSection';
 import ProductListSection from '@/components/home/ProductListSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import CTASection from '@/components/home/CTASection';
-import { Leaf, ArrowRight } from 'lucide-react';
+import { Leaf, ArrowRight, ChartBar, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -42,6 +42,32 @@ const Index = () => {
               <Link to="/sustainability-check">
                 <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-md">
                   今すぐ診断する <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        
+        {/* サステナブルDX診断のプロモーション */}
+        <section className="my-16 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100 shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="md:w-2/3 mb-6 md:mb-0">
+              <div className="flex items-center mb-2">
+                <ChartBar className="h-6 w-6 text-blue-600 mr-2" />
+                <h2 className="text-2xl font-bold text-blue-800">サステナブルDX診断サービス</h2>
+              </div>
+              <p className="text-gray-700 mb-4">
+                サステナビリティとDXの両面から企業の現状を総合的に診断。GX対応度、データ活用、セキュリティなど
+                多角的視点での評価と改善提案を提供します。
+              </p>
+              <p className="text-sm text-gray-600 mb-4">
+                ✓ 包括的な診断 ✓ 具体的な改善提案 ✓ 専門家による分析
+              </p>
+            </div>
+            <div>
+              <Link to="/comprehensive-diagnostics">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md">
+                  診断サービスを見る <FileText className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>

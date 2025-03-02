@@ -24,6 +24,7 @@ import GxSustainableMarketing from "./pages/GxSustainableMarketing";
 import GxSupplyChainAudit from "./pages/GxSupplyChainAudit";
 import GxEducationPlatform from "./pages/GxEducationPlatform";
 import GxAiProducts from "./pages/GxAiProducts";
+import ComprehensiveDiagnostics from "./pages/ComprehensiveDiagnostics";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,9 @@ const App = () => (
           <Route path="/gx-supply-chain-audit" element={<GxSupplyChainAudit />} />
           <Route path="/gx-education-platform" element={<GxEducationPlatform />} />
           <Route path="/gx-ai-products" element={<GxAiProducts />} />
+          
+          {/* サステナブルDX診断ページの追加 */}
+          <Route path="/comprehensive-diagnostics" element={<ComprehensiveDiagnostics />} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
