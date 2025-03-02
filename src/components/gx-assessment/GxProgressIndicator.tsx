@@ -21,8 +21,10 @@ const GxProgressIndicator: React.FC<GxProgressIndicatorProps> = ({ progress }) =
     <Progress value={progress} className="h-2 bg-gray-100" />
     <p className="text-xs text-gray-500 mt-2">
       {progress < 30 && "企業情報を入力してください"}
-      {progress >= 30 && progress < 90 && "GX対応状況に関する質問に回答してください"}
-      {progress >= 90 && progress < 100 && "もう少しで診断が完了します"}
+      {progress >= 30 && progress < 40 && "最初のセクションの質問に回答してください"}
+      {progress >= 40 && progress < 60 && "引き続き質問に回答してください"}
+      {progress >= 60 && progress < 80 && "もう少しで質問が完了します"}
+      {progress >= 80 && progress < 100 && "最後のセクションに回答してください"}
       {progress === 100 && "診断が完了しました！結果をご確認ください"}
     </p>
   </motion.div>

@@ -25,13 +25,25 @@ const GxAssessment = () => {
 
   const handleCompanyInfoSubmit = (info: any) => {
     setCompanyInfo(info);
-    setProgress(40);
+    setProgress(30);
     setStep('questions');
     window.scrollTo(0, 0);
     toast({
       title: "企業情報を保存しました",
       description: "診断質問に回答してください",
     });
+  };
+
+  const handleAnswersUpdate = (newAnswers: Record<string, boolean>) => {
+    setAnswers(newAnswers);
+    
+    // 回答数に基づいて進捗状況を更新
+    const totalQuestions = Object.keys(gxQuestionData).reduce(
+      (sum, category) => sum + gxQuestionData[category].length, 0
+    );
+    const answeredCount = Object.keys(newAnswers).length;
+    const newProgress = Math.min(30 + Math.round((answeredCount / totalQuestions) * 70), 99);
+    setProgress(newProgress);
   };
 
   const handleAssessmentComplete = () => {
@@ -120,7 +132,7 @@ const GxAssessment = () => {
         {step === 'questions' && (
           <GxAssessmentQuestionSection 
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={handleAnswersUpdate}
             onComplete={handleAssessmentComplete}
           />
         )}

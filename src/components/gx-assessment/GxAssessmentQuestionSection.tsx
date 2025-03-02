@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, ArrowRight } from 'lucide-react';
+import { ClipboardCheck, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,9 +18,12 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
   setAnswers,
   onComplete
 }) => {
-  const [activeCategory, setActiveCategory] = useState<string>(Object.keys(gxQuestionData)[0]);
-  const [animateQuestions, setAnimateQuestions] = useState(true);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const { toast } = useToast();
+  
+  // カテゴリーの配列
+  const categories = Object.keys(gxQuestionData);
+  const currentCategory = categories[currentSectionIndex];
   
   // 質問への回答を設定
   const handleQuestionChange = (questionId: string, value: boolean) => {
@@ -38,25 +41,49 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
     }
   };
   
-  // カテゴリを変更
-  const changeCategory = (category: string) => {
-    setAnimateQuestions(false);
-    setTimeout(() => {
-      setActiveCategory(category);
-      setAnimateQuestions(true);
-    }, 300);
+  // 次のセクションに進む
+  const goToNextSection = () => {
+    // 現在のセクションの回答状況をチェック
+    const currentQuestions = gxQuestionData[currentCategory];
+    const answeredQuestions = currentQuestions.filter(q => answers[q.id] !== undefined);
+    
+    // 少なくとも1つは回答してほしい
+    if (answeredQuestions.length === 0) {
+      toast({
+        title: "回答してください",
+        description: "少なくとも1つの質問に回答してください",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (currentSectionIndex < categories.length - 1) {
+      setCurrentSectionIndex(currentSectionIndex + 1);
+      window.scrollTo(0, 0);
+    } else {
+      // 全セクション完了、診断結果へ
+      checkCompletionAndProceed();
+    }
   };
   
-  // 診断を完了する
-  const completeAssessment = () => {
-    // 回答率をチェック
+  // 前のセクションに戻る
+  const goToPreviousSection = () => {
+    if (currentSectionIndex > 0) {
+      setCurrentSectionIndex(currentSectionIndex - 1);
+      window.scrollTo(0, 0);
+    }
+  };
+  
+  // 診断を完了する前に回答率をチェック
+  const checkCompletionAndProceed = () => {
+    // 全体の回答率をチェック
     const totalQuestions = Object.keys(gxQuestionData).reduce(
       (sum, category) => sum + gxQuestionData[category].length, 0
     );
     const answeredCount = Object.keys(answers).length;
     const answerRate = Math.round((answeredCount / totalQuestions) * 100);
     
-    if (answerRate < 50) {
+    if (answerRate < 30) {
       toast({
         title: "回答率が低いです",
         description: `現在の回答率は${answerRate}%です。より正確な診断のため、できるだけ多くの質問に回答してください。`,
@@ -66,6 +93,11 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
     }
     
     onComplete();
+  };
+  
+  // セクションの進捗度を表示する
+  const sectionProgress = () => {
+    return `セクション ${currentSectionIndex + 1}/${categories.length}`;
   };
   
   return (
@@ -80,34 +112,22 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
         <ClipboardCheck className="mr-2 h-5 w-5 text-green-600" />
         GX対応度チェック
       </h2>
-      <p className="text-gray-600 mb-6">各項目について、該当する取り組みを行っている場合はチェックを入れてください</p>
+      <p className="text-gray-600 mb-2">各項目について、該当する取り組みを行っている場合はチェックを入れてください</p>
       
-      {/* カテゴリ切り替えタブ */}
-      <div className="flex flex-wrap gap-2 mb-6 border-b pb-4 overflow-x-auto">
-        {Object.keys(gxQuestionData).map((category) => (
-          <motion.button
-            key={category}
-            onClick={() => changeCategory(category)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap
-              ${activeCategory === category
-                ? 'bg-green-600 text-white shadow-md' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
-            `}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {category}
-          </motion.button>
-        ))}
+      <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
+        <span className="text-sm font-medium text-gray-600">{sectionProgress()}</span>
+        <span className="text-sm font-medium text-green-600">{currentCategory}</span>
       </div>
       
       <motion.div 
-        className="space-y-4"
+        className="space-y-4 mb-8"
+        key={currentCategory}
         initial={{ opacity: 0 }}
-        animate={{ opacity: animateQuestions ? 1 : 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        {gxQuestionData[activeCategory].map((question, index) => (
+        {gxQuestionData[currentCategory].map((question, index) => (
           <motion.div 
             key={question.id}
             className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-all"
@@ -130,16 +150,29 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
       </motion.div>
       
       <div className="flex justify-between mt-8 pt-4 border-t">
-        <div className="text-sm text-gray-500">
+        <Button 
+          onClick={goToPreviousSection}
+          variant="outline"
+          disabled={currentSectionIndex === 0}
+          className="gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" /> 前へ
+        </Button>
+        
+        <div className="text-sm text-gray-500 self-center">
           現在の回答数: {Object.values(answers).filter(Boolean).length} / 
           {Object.keys(gxQuestionData).reduce((sum, cat) => sum + gxQuestionData[cat].length, 0)}
         </div>
         
         <Button 
-          onClick={completeAssessment}
-          className="bg-green-600 hover:bg-green-700"
+          onClick={goToNextSection}
+          className="bg-green-600 hover:bg-green-700 gap-2"
         >
-          診断を完了する <ArrowRight className="ml-2 h-4 w-4" />
+          {currentSectionIndex < categories.length - 1 ? (
+            <>次へ <ArrowRight className="h-4 w-4" /></>
+          ) : (
+            <>診断を完了する <CheckCircle className="h-4 w-4" /></>
+          )}
         </Button>
       </div>
     </motion.section>
