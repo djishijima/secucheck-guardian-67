@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, ArrowRight } from 'lucide-react';
+import { ClipboardCheck, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { sustainabilityQuestions } from './QuestionData';
@@ -18,9 +18,12 @@ const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
   setAnswers,
   runDiagnostics
 }) => {
-  const [activeCategory, setActiveCategory] = useState<string>(sustainabilityQuestions[0].category);
-  const [animateQuestions, setAnimateQuestions] = useState(true);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const { toast } = useToast();
+  
+  // カテゴリーの配列
+  const categories = sustainabilityQuestions.map(q => q.category);
+  const currentCategory = categories[currentSectionIndex];
   
   // 質問への回答を設定
   const handleQuestionChange = (questionId: string, value: boolean) => {
@@ -38,18 +41,68 @@ const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
     }
   };
   
-  // カテゴリを変更
-  const changeCategory = (category: string) => {
-    setAnimateQuestions(false);
-    setTimeout(() => {
-      setActiveCategory(category);
-      setAnimateQuestions(true);
-    }, 300);
+  // 次のセクションに進む
+  const goToNextSection = () => {
+    // 現在のセクションの回答状況をチェック
+    const currentQuestions = sustainabilityQuestions[currentSectionIndex].questions;
+    const answeredQuestions = currentQuestions.filter(q => answers[q.id] !== undefined);
+    
+    // 少なくとも1つは回答してほしい
+    if (answeredQuestions.length === 0) {
+      toast({
+        title: "回答してください",
+        description: "少なくとも1つの質問に回答してください",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (currentSectionIndex < categories.length - 1) {
+      setCurrentSectionIndex(currentSectionIndex + 1);
+      window.scrollTo(0, 0);
+    } else {
+      // 全セクション完了、診断結果へ
+      checkCompletionAndProceed();
+    }
+  };
+  
+  // 前のセクションに戻る
+  const goToPreviousSection = () => {
+    if (currentSectionIndex > 0) {
+      setCurrentSectionIndex(currentSectionIndex - 1);
+      window.scrollTo(0, 0);
+    }
+  };
+  
+  // 診断を完了する前に回答率をチェック
+  const checkCompletionAndProceed = () => {
+    // 全体の回答率をチェック
+    const totalQuestions = sustainabilityQuestions.reduce(
+      (sum, category) => sum + category.questions.length, 0
+    );
+    const answeredCount = Object.keys(answers).length;
+    const answerRate = Math.round((answeredCount / totalQuestions) * 100);
+    
+    if (answerRate < 30) {
+      toast({
+        title: "回答率が低いです",
+        description: `現在の回答率は${answerRate}%です。より正確な診断のため、できるだけ多くの質問に回答してください。`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    runDiagnostics();
+  };
+  
+  // セクションの進捗度を表示する
+  const sectionProgress = () => {
+    return `セクション ${currentSectionIndex + 1}/${categories.length}`;
   };
   
   // 現在のカテゴリの質問を取得
   const getCurrentCategoryQuestions = () => {
-    return sustainabilityQuestions.find(category => category.category === activeCategory)?.questions || [];
+    return sustainabilityQuestions[currentSectionIndex].questions || [];
   };
   
   return (
@@ -66,29 +119,17 @@ const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
       </h2>
       <p className="text-gray-600 mb-6">各質問に対して、該当する場合はチェックを入れてください</p>
       
-      {/* カテゴリ切り替えタブ */}
-      <div className="flex flex-wrap gap-2 mb-6 border-b pb-4">
-        {sustainabilityQuestions.map((category) => (
-          <motion.button
-            key={category.category}
-            onClick={() => changeCategory(category.category)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all
-              ${activeCategory === category.category
-                ? 'bg-green-600 text-white shadow-md' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
-            `}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {category.category}
-          </motion.button>
-        ))}
+      <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
+        <span className="text-sm font-medium text-gray-600">{sectionProgress()}</span>
+        <span className="text-sm font-medium text-green-600">{currentCategory}</span>
       </div>
       
       <motion.div 
-        className="space-y-4"
+        className="space-y-4 mb-8"
+        key={currentCategory}
         initial={{ opacity: 0 }}
-        animate={{ opacity: animateQuestions ? 1 : 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
         {getCurrentCategoryQuestions().map((question, index) => (
@@ -97,27 +138,39 @@ const DiagnosticQuestionSection: React.FC<DiagnosticQuestionSectionProps> = ({
             id={question.id}
             text={question.text}
             isChecked={answers[question.id] || false}
-            categoryName={activeCategory}
+            categoryName={currentCategory}
             index={index}
             onCheckedChange={handleQuestionChange}
           />
         ))}
       </motion.div>
       
-      <motion.div 
-        className="mt-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-      >
+      <div className="flex justify-between mt-8 pt-4 border-t">
         <Button 
-          onClick={runDiagnostics}
-          className="w-full sm:w-auto bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1"
-          size="lg"
+          onClick={goToPreviousSection}
+          variant="outline"
+          disabled={currentSectionIndex === 0}
+          className="gap-2"
         >
-          診断を実行 <ArrowRight className="ml-2 h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" /> 前へ
         </Button>
-      </motion.div>
+        
+        <div className="text-sm text-gray-500 self-center">
+          現在の回答数: {Object.values(answers).filter(Boolean).length} / 
+          {sustainabilityQuestions.reduce((sum, cat) => sum + cat.questions.length, 0)}
+        </div>
+        
+        <Button 
+          onClick={goToNextSection}
+          className="bg-green-600 hover:bg-green-700 gap-2"
+        >
+          {currentSectionIndex < categories.length - 1 ? (
+            <>次へ <ArrowRight className="h-4 w-4" /></>
+          ) : (
+            <>診断を完了する <CheckCircle className="h-4 w-4" /></>
+          )}
+        </Button>
+      </div>
     </motion.section>
   );
 };
