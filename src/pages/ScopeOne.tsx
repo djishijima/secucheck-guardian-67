@@ -56,25 +56,25 @@ const ScopeOne = () => {
         name: '社有車',
         value: formData.companyVehicles,
         percentage: parseFloat(((formData.companyVehicles / total) * 100).toFixed(1)),
-        color: 'bg-blue-500'
+        color: 'bg-purple-500'
       },
       {
         name: '定置燃焼機器',
         value: formData.stationaryEquipment,
         percentage: parseFloat(((formData.stationaryEquipment / total) * 100).toFixed(1)),
-        color: 'bg-green-500'
+        color: 'bg-indigo-500'
       },
       {
         name: '空調設備',
         value: formData.hvacEquipment,
         percentage: parseFloat(((formData.hvacEquipment / total) * 100).toFixed(1)),
-        color: 'bg-amber-500'
+        color: 'bg-sky-500'
       },
       {
         name: 'その他',
         value: formData.other,
         percentage: parseFloat(((formData.other / total) * 100).toFixed(1)),
-        color: 'bg-red-400'
+        color: 'bg-teal-500'
       }
     ];
 
@@ -176,7 +176,7 @@ const ScopeOne = () => {
           {!showForm && (
             <Button 
               onClick={() => setShowForm(true)} 
-              className="bg-blue-600 hover:bg-blue-700 font-semibold"
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 font-semibold shadow-sm"
             >
               自社データを入力する
             </Button>
@@ -186,6 +186,7 @@ const ScopeOne = () => {
             <Button 
               variant="outline"
               onClick={() => setShowForm(false)}
+              className="border-indigo-200 text-indigo-800"
             >
               ダッシュボードに戻る
             </Button>
@@ -211,9 +212,9 @@ const ScopeOne = () => {
             <ScopeNavbar onShowForm={() => setShowForm(true)} />
             
             {/* セクション進捗バー */}
-            <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
+            <div className="bg-white px-4 py-2 rounded-lg mb-6 flex justify-between items-center shadow-sm border border-indigo-100">
               <span className="text-sm font-medium text-gray-600">{sectionProgress()}</span>
-              <span className="text-sm font-medium text-blue-600">{sectionTitles[currentSectionIndex]}</span>
+              <span className="text-sm font-medium text-indigo-600">{sectionTitles[currentSectionIndex]}</span>
             </div>
             
             {/* セクションコンテンツ */}
@@ -229,19 +230,19 @@ const ScopeOne = () => {
             </motion.div>
             
             {/* ナビゲーションボタン */}
-            <div className="flex justify-between mt-8 pt-4 border-t">
+            <div className="flex justify-between mt-8 pt-4 border-t border-indigo-100">
               <Button 
                 onClick={goToPreviousSection}
                 variant="outline"
                 disabled={currentSectionIndex === 0}
-                className="gap-2"
+                className="gap-2 border-indigo-200 text-indigo-800 disabled:opacity-50"
               >
                 <ArrowLeft className="h-4 w-4" /> 前へ
               </Button>
               
               <Button 
                 onClick={goToNextSection}
-                className="bg-blue-600 hover:bg-blue-700 gap-2"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 gap-2 disabled:opacity-50"
                 disabled={currentSectionIndex === sections.length - 1}
               >
                 次へ <ArrowRight className="h-4 w-4" />

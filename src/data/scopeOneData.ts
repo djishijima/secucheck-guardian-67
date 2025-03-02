@@ -38,10 +38,10 @@ export const defaultScopeOneData: ScopeOneDataType = {
   total: 245.8,
   unit: 'tCO2e',
   categories: [
-    { name: '社有車', value: 68.2, percentage: 27.7, color: 'bg-blue-500' },
-    { name: '定置燃焼機器', value: 125.4, percentage: 51.0, color: 'bg-green-500' },
-    { name: '空調設備', value: 42.3, percentage: 17.2, color: 'bg-amber-500' },
-    { name: 'その他', value: 9.9, percentage: 4.1, color: 'bg-red-400' },
+    { name: '社有車', value: 68.2, percentage: 27.7, color: 'bg-purple-500' },
+    { name: '定置燃焼機器', value: 125.4, percentage: 51.0, color: 'bg-indigo-500' },
+    { name: '空調設備', value: 42.3, percentage: 17.2, color: 'bg-sky-500' },
+    { name: 'その他', value: 9.9, percentage: 4.1, color: 'bg-teal-500' },
   ],
   monthlyTrend: [
     { month: '4月', value: 22.3 },

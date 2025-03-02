@@ -25,15 +25,15 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
       className="space-y-6"
     >
       {/* 総排出量カード */}
-      <Card className="overflow-hidden border-blue-100 hover:border-blue-300 transition-all shadow-sm hover:shadow-md">
-        <CardHeader className="bg-blue-50 border-b border-blue-100">
-          <CardTitle className="text-blue-800">Scope 1 総排出量</CardTitle>
+      <Card className="overflow-hidden border-indigo-100 hover:border-indigo-200 transition-all shadow-sm hover:shadow">
+        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100">
+          <CardTitle className="text-indigo-800">Scope 1 総排出量</CardTitle>
           <CardDescription>2022年度実績</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-center md:text-left mb-4 md:mb-0">
-              <span className="text-5xl font-bold text-blue-700">{scopeOneData.total}</span>
+              <span className="text-5xl font-bold text-indigo-700">{scopeOneData.total}</span>
               <span className="text-xl ml-2 text-gray-500">{scopeOneData.unit}</span>
               <p className="text-gray-600 mt-2">前年度比 {((1 - scopeOneData.total / scopeOneData.yearOverYear[1].value) * 100).toFixed(1)}% 削減</p>
             </div>
@@ -43,7 +43,7 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
                 レポート
               </Button>
               <Link to={`/scope-one?tab=details`}>
-                <Button className="flex gap-2 bg-blue-600 hover:bg-blue-700">
+                <Button className="flex gap-2 bg-indigo-600 hover:bg-indigo-700">
                   詳細を見る
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -54,9 +54,9 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
       </Card>
       
       {/* カテゴリ別排出量 */}
-      <Card className="border-blue-100 hover:border-blue-300 transition-all shadow-sm hover:shadow-md">
-        <CardHeader className="bg-blue-50 border-b border-blue-100">
-          <CardTitle className="text-blue-800">カテゴリ別排出量</CardTitle>
+      <Card className="border-indigo-100 hover:border-indigo-200 transition-all shadow-sm hover:shadow">
+        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100">
+          <CardTitle className="text-indigo-800">カテゴリ別排出量</CardTitle>
           <CardDescription>排出源ごとの内訳</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
@@ -78,8 +78,8 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
             </div>
             
             <div className="flex justify-center items-center">
-              <div className="relative w-48 h-48 flex items-center justify-center">
-                {/* 円グラフの簡易表現 */}
+              <div className="relative w-52 h-52 flex items-center justify-center">
+                {/* 円グラフの表現 */}
                 <svg className="w-full h-full" viewBox="0 0 100 100">
                   {scopeOneData.categories.map((category, index) => {
                     const previousPercentages = scopeOneData.categories
@@ -104,12 +104,15 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
                       `A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY}`,
                       `Z`
                     ].join(' ');
+
+                    // Get the color class without the bg- prefix for fill
+                    const colorClass = category.color.replace('bg-', '');
                     
                     return (
                       <path
                         key={index}
                         d={pathData}
-                        fill={category.color.replace('bg-', 'fill-').replace('-500', '-400')}
+                        className={`fill-${colorClass}`}
                         stroke="#fff"
                         strokeWidth="1"
                       />
@@ -118,7 +121,7 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
                   <circle cx="50" cy="50" r="25" fill="white" />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <PieChart className="h-6 w-6 text-blue-500 mb-1" />
+                  <PieChart className="h-6 w-6 text-indigo-500 mb-1" />
                   <span className="text-sm font-medium">カテゴリ別</span>
                   <span className="text-xs text-gray-500">排出割合</span>
                 </div>
@@ -129,9 +132,9 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
       </Card>
       
       {/* 月次推移 */}
-      <Card className="border-blue-100 hover:border-blue-300 transition-all shadow-sm hover:shadow-md overflow-hidden">
-        <CardHeader className="bg-blue-50 border-b border-blue-100">
-          <CardTitle className="text-blue-800">月次排出量推移</CardTitle>
+      <Card className="border-indigo-100 hover:border-indigo-200 transition-all shadow-sm hover:shadow">
+        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100">
+          <CardTitle className="text-indigo-800">月次排出量推移</CardTitle>
           <CardDescription>2022年度</CardDescription>
         </CardHeader>
         <CardContent className="pt-6 overflow-x-auto">
@@ -148,9 +151,8 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
                     transition={{ duration: 0.5, delay: index * 0.05 }}
                   >
                     <div className="relative w-10">
-                      <div className="absolute bottom-0 w-full bg-blue-500 hover:bg-blue-600 transition-all rounded-t"></div>
                       <motion.div 
-                        className="absolute bottom-0 w-full bg-blue-500 hover:bg-blue-600 transition-all rounded-t"
+                        className="absolute bottom-0 w-full bg-gradient-to-t from-indigo-600 to-purple-500 hover:from-indigo-700 hover:to-purple-600 transition-all rounded-t"
                         initial={{ height: 0 }}
                         animate={{ height: `${heightPercentage}%` }}
                         transition={{ duration: 0.5, delay: index * 0.05 }}
