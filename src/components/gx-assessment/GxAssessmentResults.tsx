@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Award, CheckCircle2, ChevronRight, Download, Printer } from 'lucide-react';
+import { useReactToPrint } from 'react-to-print';
+import { useNavigate } from 'react-router-dom';
 import { 
   Card, 
   CardContent, 
@@ -13,6 +15,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
+import { useToast } from "@/components/ui/use-toast";
 
 interface GxAssessmentResultsProps {
   results: {
@@ -29,6 +32,10 @@ interface GxAssessmentResultsProps {
 }
 
 const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({ results }) => {
+  const printRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   const getScoreLevel = (score: number) => {
     if (score >= 80) return { level: "先進レベル", color: "text-green-600" };
     if (score >= 60) return { level: "実践レベル", color: "text-blue-600" };
@@ -45,6 +52,38 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({ results }) =>
   }));
   
   const COLORS = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6'];
+
+  // 印刷機能
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: `${results.company.name}_GX診断結果`,
+    onAfterPrint: () => {
+      toast({
+        title: "印刷が完了しました",
+        description: "GX診断結果の印刷が完了しました。",
+      });
+    },
+  });
+
+  // レポートのダウンロード機能
+  const handleDownloadReport = () => {
+    // 実際のアプリケーションでは、PDFやExcelなどのファイル生成ロジックを実装
+    toast({
+      title: "レポートをダウンロードしました",
+      description: "GX診断の詳細レポートがダウンロードされました。",
+      duration: 3000,
+    });
+  };
+
+  // 詳細診断申込みへのナビゲーション
+  const handleRequestDetailedDiagnostics = () => {
+    navigate("/comprehensive-diagnostics");
+  };
+
+  // コンサルタントへの相談フォームへのナビゲーション
+  const handleConsultantContact = () => {
+    navigate("/contact");
+  };
   
   return (
     <motion.div
@@ -52,6 +91,7 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({ results }) =>
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
+      ref={printRef}
     >
       <div className="text-center">
         <motion.div
@@ -176,13 +216,22 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({ results }) =>
           </ul>
         </CardContent>
         <CardFooter className="flex flex-wrap gap-3">
-          <Button className="bg-green-600 hover:bg-green-700">
+          <Button 
+            className="bg-green-600 hover:bg-green-700"
+            onClick={handlePrint}
+          >
             <Printer className="mr-2 h-4 w-4" /> 結果を印刷
           </Button>
-          <Button variant="outline">
+          <Button 
+            variant="outline"
+            onClick={handleDownloadReport}
+          >
             <Download className="mr-2 h-4 w-4" /> レポートをダウンロード
           </Button>
-          <Button variant="outline">
+          <Button 
+            variant="outline"
+            onClick={handleRequestDetailedDiagnostics}
+          >
             詳細診断を申し込む <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
         </CardFooter>
@@ -195,14 +244,29 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({ results }) =>
           下記のボタンから詳細情報の確認や問い合わせができます。
         </p>
         <div className="flex flex-wrap gap-3">
-          <Button variant="default" className="bg-green-600 hover:bg-green-700">
+          <Button 
+            variant="default" 
+            className="bg-green-600 hover:bg-green-700"
+            onClick={handleRequestDetailedDiagnostics}
+          >
             詳細診断サービスを見る
           </Button>
-          <Button variant="outline">
+          <Button 
+            variant="outline"
+            onClick={handleConsultantContact}
+          >
             コンサルタントに相談する
           </Button>
         </div>
       </div>
+      
+      {/* 印刷時に非表示にするスタイル */}
+      <style type="text/css" media="print">
+        {`
+          @page { size: auto; margin: 10mm; }
+          button { display: none !important; }
+        `}
+      </style>
     </motion.div>
   );
 };

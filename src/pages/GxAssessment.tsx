@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import GxAssessmentHeader from '@/components/gx-assessment/GxAssessmentHeader';
@@ -22,6 +23,7 @@ const GxAssessment = () => {
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [assessmentResults, setAssessmentResults] = useState<any>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleCompanyInfoSubmit = (info: any) => {
     setCompanyInfo(info);
@@ -70,6 +72,18 @@ const GxAssessment = () => {
       title: "診断が完了しました",
       description: "結果をご確認ください",
     });
+  };
+
+  // 詳細診断ページへの移動関数（GxAssessmentResults から呼び出されるため）
+  const handleDetailedDiagnostics = () => {
+    navigate("/comprehensive-diagnostics", { 
+      state: { fromGxAssessment: true } 
+    });
+  };
+  
+  // コンサルタントへの相談フォームへの移動関数
+  const handleConsultantContact = () => {
+    navigate("/contact");
   };
 
   // カテゴリごとのスコア計算
