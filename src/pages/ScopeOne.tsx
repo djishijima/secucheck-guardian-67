@@ -196,7 +196,7 @@ const ScopeOne = () => {
         )}
 
         {/* ナビゲーションリンク */}
-        <ScopeNavbar />
+        <ScopeNavbar onShowForm={() => setShowForm(true)} />
         
         {/* セクション進捗バー */}
         <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
