@@ -10,9 +10,12 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from 'react-router-dom';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Scope 1 emission data example (direct emissions)
-const scopeOneData = {
+const defaultScopeOneData = {
   total: 245.8,
   unit: 'tCO2e',
   categories: [
@@ -51,6 +54,15 @@ const scopeOneData = {
 const ScopeOne = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const { toast } = useToast();
+  const [scopeOneData, setScopeOneData] = useState(defaultScopeOneData);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    companyVehicles: defaultScopeOneData.categories[0].value,
+    stationaryEquipment: defaultScopeOneData.categories[1].value,
+    hvacEquipment: defaultScopeOneData.categories[2].value,
+    other: defaultScopeOneData.categories[3].value,
+    targetYear: '2023年度'
+  });
   
   const downloadReport = () => {
     toast({
@@ -58,6 +70,83 @@ const ScopeOne = () => {
       description: "Scope 1排出量の詳細レポートがダウンロードされました。",
       duration: 3000,
     });
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Calculate new total
+    const total = Object.values(formData)
+      .filter((value): value is number => typeof value === 'number')
+      .reduce((sum, value) => sum + value, 0);
+
+    // Calculate new percentages
+    const categories = [
+      {
+        name: '社有車',
+        value: formData.companyVehicles,
+        percentage: parseFloat(((formData.companyVehicles / total) * 100).toFixed(1)),
+        color: 'bg-blue-500'
+      },
+      {
+        name: '定置燃焼機器',
+        value: formData.stationaryEquipment,
+        percentage: parseFloat(((formData.stationaryEquipment / total) * 100).toFixed(1)),
+        color: 'bg-green-500'
+      },
+      {
+        name: '空調設備',
+        value: formData.hvacEquipment,
+        percentage: parseFloat(((formData.hvacEquipment / total) * 100).toFixed(1)),
+        color: 'bg-amber-500'
+      },
+      {
+        name: 'その他',
+        value: formData.other,
+        percentage: parseFloat(((formData.other / total) * 100).toFixed(1)),
+        color: 'bg-red-400'
+      }
+    ];
+
+    // Update the data
+    setScopeOneData(prev => ({
+      ...prev,
+      total,
+      categories,
+      // Update the current year value in yearOverYear
+      yearOverYear: prev.yearOverYear.map(item => 
+        item.year === '2022年度' ? { ...item, value: total } : item
+      ),
+      // Update corresponding target
+      reductionTargets: prev.reductionTargets.map(target => 
+        target.year === formData.targetYear 
+          ? { ...target, target: Math.round(total * 0.9) }
+          : target
+      )
+    }));
+
+    toast({
+      title: "データ更新",
+      description: "Scope 1排出量データが更新されました。",
+      duration: 3000,
+    });
+
+    setShowForm(false);
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    setFormData(prev => ({
+      ...prev,
+      [field]: numValue
+    }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      targetYear: value
+    }));
   };
   
   return (
@@ -97,6 +186,121 @@ const ScopeOne = () => {
             </div>
           </div>
         </motion.section>
+
+        {/* データ入力フォーム */}
+        {!showForm ? (
+          <motion.div 
+            className="mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Button 
+              onClick={() => setShowForm(true)} 
+              className="bg-green-600 hover:bg-green-700 font-semibold"
+            >
+              自社データを入力する
+            </Button>
+          </motion.div>
+        ) : (
+          <motion.div 
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Card className="border-green-100 shadow-md overflow-hidden">
+              <CardHeader className="bg-green-50 border-b border-green-100">
+                <CardTitle className="text-green-800">Scope 1排出量データ入力</CardTitle>
+                <CardDescription>自社の直接排出データを入力してください</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="companyVehicles">社有車 (tCO2e)</Label>
+                        <Input 
+                          id="companyVehicles" 
+                          type="number" 
+                          step="0.1"
+                          value={formData.companyVehicles.toString()} 
+                          onChange={(e) => handleInputChange('companyVehicles', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="stationaryEquipment">定置燃焼機器 (tCO2e)</Label>
+                        <Input 
+                          id="stationaryEquipment" 
+                          type="number" 
+                          step="0.1"
+                          value={formData.stationaryEquipment.toString()} 
+                          onChange={(e) => handleInputChange('stationaryEquipment', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="hvacEquipment">空調設備 (tCO2e)</Label>
+                        <Input 
+                          id="hvacEquipment" 
+                          type="number" 
+                          step="0.1"
+                          value={formData.hvacEquipment.toString()} 
+                          onChange={(e) => handleInputChange('hvacEquipment', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="other">その他 (tCO2e)</Label>
+                        <Input 
+                          id="other" 
+                          type="number" 
+                          step="0.1"
+                          value={formData.other.toString()} 
+                          onChange={(e) => handleInputChange('other', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <Label htmlFor="targetYear">削減目標年度</Label>
+                    <Select value={formData.targetYear} onValueChange={handleSelectChange}>
+                      <SelectTrigger className="w-full md:w-[200px] mt-1">
+                        <SelectValue placeholder="年度を選択" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {scopeOneData.reductionTargets.map((target, index) => (
+                          <SelectItem key={index} value={target.year}>
+                            {target.year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex justify-end gap-2 pt-4">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setShowForm(false)}
+                    >
+                      キャンセル
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      データを更新
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* ナビゲーションリンク */}
         <div className="flex flex-wrap gap-3 mb-6">
