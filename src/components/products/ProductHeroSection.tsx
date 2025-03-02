@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,7 @@ const ProductHeroSection: React.FC<ProductHeroSectionProps> = ({
   const isPlaceholderImage = imageUrl === '/placeholder.svg' || !imageUrl;
 
   return (
-    <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
+    <section id="product-hero" className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
       <div className="container mx-auto px-4">
         {isPlaceholderImage ? (
           <motion.div

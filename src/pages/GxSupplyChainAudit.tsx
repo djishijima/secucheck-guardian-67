@@ -35,7 +35,12 @@ const GxSupplyChainAudit = () => {
     }
   ];
 
-  // Use icon instead of placeholder image
+  const categories = {
+    function: "監査・分析",
+    technology: "AI活用製品",
+    challenge: "ESG対応支援"
+  };
+
   return (
     <ProductPageLayout
       title="GXサプライチェーンAI監査"
@@ -46,6 +51,7 @@ const GxSupplyChainAudit = () => {
       features={features}
       ctaText="GXサプライチェーンAI監査に問い合わせる"
       ctaLink="/contact"
+      categories={categories}
     />
   );
 };

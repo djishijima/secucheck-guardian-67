@@ -84,7 +84,8 @@ const getValidProductLink = (link: string): string => {
     '/gx-energy-management',
     '/gx-sustainable-marketing',
     '/gx-supply-chain-audit',
-    '/gx-education-platform'
+    '/gx-education-platform',
+    '/comprehensive-diagnostics'
   ];
   
   return validRoutes.includes(link) ? link : '/contact';
@@ -94,7 +95,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const hasImageOrIcon = product.image || product.icon;
   
   const validLink = getValidProductLink(product.link);
-
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}

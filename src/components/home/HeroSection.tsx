@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="mb-16">
+    <section className="mb-16" id="hero">
       <div className="bg-gradient-to-r from-green-800 to-indigo-800 rounded-2xl p-8 md:p-12 shadow-lg">
         <div className="max-w-3xl mx-auto">
           <motion.div
