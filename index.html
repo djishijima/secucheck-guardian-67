@@ -9,6 +9,22 @@
     <meta name="description" content="Lovable Generated Project" />
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="/og-image.png" />
+    <script>
+      // GitHub Pages用のリダイレクト処理
+      (function() {
+        // ローカルストレージから保存されたパスを取得
+        var redirectPath = localStorage.getItem('spa_redirect_path');
+        if (redirectPath && redirectPath !== '/') {
+          // パスが保存されていれば、ローカルストレージをクリアして
+          localStorage.removeItem('spa_redirect_path');
+          // 現在のURLのパスと異なる場合のみリダイレクト
+          if (window.location.pathname === '/') {
+            // 必要に応じてhistory APIを使用
+            window.history.replaceState(null, null, redirectPath);
+          }
+        }
+      })();
+    </script>
   </head>
 
   <body>
