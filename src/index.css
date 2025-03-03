@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,4 +99,95 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* モバイル向けの改善スタイル */
+@layer utilities {
+  .mobile-container {
+    @apply px-4 sm:px-6 md:px-8;
+  }
+  
+  .responsive-card {
+    @apply border-0 sm:border shadow-none sm:shadow-sm hover:shadow-none sm:hover:shadow-md;
+  }
+  
+  .fluid-section {
+    @apply max-w-full overflow-hidden;
+  }
+}
+
+/* カードのボックス感を調整 */
+.card, section, .bg-gradient-to-r {
+  @apply rounded-none sm:rounded-xl border-0 sm:border;
+}
+
+/* ヒーローセクションと背景グラデーションの調整 */
+@media (max-width: 640px) {
+  .bg-gradient-to-r {
+    background: none !important;
+    --tw-gradient-stops: none !important;
+  }
+  
+  main > section {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* App.cssからの既存スタイルを維持 */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  #root {
+    padding: 1rem 0.5rem;
+  }
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }
