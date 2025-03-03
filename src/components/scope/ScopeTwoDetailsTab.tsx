@@ -47,7 +47,7 @@ const ScopeTwoDetailsTab: React.FC<ScopeTwoDetailsTabProps> = ({ scopeTwoData })
     >
       {/* 年次推移 */}
       <YearlyTrendCard 
-        yearOverYear={scopeTwoData.yearOverYear} 
+        yearlyTrend={scopeTwoData.yearOverYear} 
         unit={scopeTwoData.unit} 
       />
       
