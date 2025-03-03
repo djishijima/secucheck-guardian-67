@@ -20,10 +20,9 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // 以下の設定を追加して、ビルド時に/_redirectsファイルが正しく処理されるようにします
   build: {
     assetsInlineLimit: 0,
     sourcemap: true,
+    copyPublicDir: true, // 明示的にpublicディレクトリのコピーを有効化
   },
 }));
-
