@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Printer, Mail, Phone, MapPin, Leaf, Cpu, Building, MessageSquare } from 'lucide-react';
+import { Printer, Mail, Phone, MapPin, Leaf, Cpu, Building, MessageSquare, BarChart, Info, Users, FileText, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* 製品・サービス */}
           <div>
             <h3 className="font-semibold text-lg mb-4 flex items-center">
@@ -17,11 +17,14 @@ const Footer: React.FC = () => {
               製品・サービス
             </h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/products" className="text-gray-400 hover:text-white transition">すべて</Link></li>
-              <li><Link to="/products?category=printing" className="text-gray-400 hover:text-white transition">印刷・出版サービス</Link></li>
-              <li><Link to="/products?category=logistics" className="text-gray-400 hover:text-white transition">物流・配送サービス</Link></li>
-              <li><Link to="/products?category=energy" className="text-gray-400 hover:text-white transition">エネルギー管理</Link></li>
-              <li><Link to="/gx-ai-products" className="text-gray-400 hover:text-white transition font-medium">GX×AI製品特集</Link></li>
+              <li><Link to="/products" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />すべて</Link></li>
+              <li><Link to="/products?category=printing" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />印刷・出版サービス</Link></li>
+              <li><Link to="/products?category=logistics" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />物流・配送サービス</Link></li>
+              <li><Link to="/products?category=energy" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />エネルギー管理</Link></li>
+              <li><Link to="/products?category=design" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />デザイン・マーケティング</Link></li>
+              <li><Link to="/products?category=education" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />教育・研修</Link></li>
+              <li><Link to="/products?category=audit" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />監査・分析</Link></li>
+              <li><Link to="/gx-ai-products" className="text-gray-400 hover:text-white transition flex items-center font-medium"><ArrowRight className="h-3 w-3 mr-1" />GX×AI製品特集</Link></li>
             </ul>
           </div>
           
@@ -32,9 +35,29 @@ const Footer: React.FC = () => {
               診断サービス
             </h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/about-gx" className="text-gray-400 hover:text-white transition">サステナビリティについて</Link></li>
-              <li><Link to="/sustainability-check" className="text-gray-400 hover:text-white transition">サステナビリティ診断</Link></li>
-              <li><Link to="/comprehensive-diagnostics" className="text-gray-400 hover:text-white transition">サステナブルDX診断</Link></li>
+              <li><Link to="/about-gx" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />サステナビリティについて</Link></li>
+              <li><Link to="/sustainability-check" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />サステナビリティ診断</Link></li>
+              <li><Link to="/comprehensive-diagnostics" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />サステナブルDX診断</Link></li>
+              <li><Link to="/gx-assessment" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />GX評価ツール</Link></li>
+              <li><Link to="/scope-one" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />スコープ1評価</Link></li>
+              <li><Link to="/scope-two" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />スコープ2評価</Link></li>
+              <li><Link to="/scope-three" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />スコープ3評価</Link></li>
+            </ul>
+          </div>
+          
+          {/* その他のリンク */}
+          <div>
+            <h3 className="font-semibold text-lg mb-4 flex items-center">
+              <Info className="h-5 w-5 mr-2 text-amber-500" />
+              その他
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/ai-technology" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />AI技術</Link></li>
+              <li><Link to="/eco-printing" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />エコ印刷</Link></li>
+              <li><Link to="/eco-logistics" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />エコ物流</Link></li>
+              <li><Link to="/gx-printing" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />GX印刷</Link></li>
+              <li><Link to="/gx-logistics" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" />GX物流</Link></li>
+              <li><Link to="/dashboard" className="text-gray-400 hover:text-white transition flex items-center"><ArrowRight className="h-3 w-3 mr-1" /><BarChart className="h-4 w-4 mr-1" />ダッシュボード</Link></li>
             </ul>
           </div>
           
@@ -79,8 +102,8 @@ const Footer: React.FC = () => {
               &copy; {currentYear} 文唱堂印刷株式会社. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-xs text-gray-400 hover:text-white transition">プライバシーポリシー</a>
-              <a href="#" className="text-xs text-gray-400 hover:text-white transition">利用規約</a>
+              <Link to="/privacy-policy" className="text-xs text-gray-400 hover:text-white transition">プライバシーポリシー</Link>
+              <Link to="/terms" className="text-xs text-gray-400 hover:text-white transition">利用規約</Link>
             </div>
           </div>
         </div>
