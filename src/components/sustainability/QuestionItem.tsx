@@ -24,7 +24,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
   onCheckedChange
 }) => (
   <motion.div 
-    className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-all"
+    className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-all text-left"
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1 }}
@@ -37,7 +37,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
       className="mt-1"
     />
     <div className="flex-1">
-      <Label htmlFor={id} className="text-sm font-medium flex items-center gap-2">
+      <Label htmlFor={id} className="text-sm font-medium flex items-center gap-2 text-left">
         {text}
         <TooltipProvider>
           <Tooltip>

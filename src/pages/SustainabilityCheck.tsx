@@ -145,7 +145,7 @@ const SustainabilityCheck = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col">
       <Header />
       
-      <main className="flex-grow container mx-auto py-8 px-4">
+      <main className="flex-grow container mx-auto py-8 px-4 text-left">
         {/* ページヘッダー */}
         <SustainabilityHeader />
         <ProgressIndicator progress={progress} />

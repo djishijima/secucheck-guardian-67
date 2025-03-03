@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ClipboardCheck, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
@@ -102,7 +103,7 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
   
   return (
     <motion.section 
-      className="mb-10 bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-green-200 transition-all"
+      className="mb-10 bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-green-200 transition-all text-left"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
@@ -142,7 +143,7 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
               onCheckedChange={(checked) => handleQuestionChange(question.id, checked as boolean)}
               className="mt-1"
             />
-            <Label htmlFor={question.id} className="text-sm font-medium">
+            <Label htmlFor={question.id} className="text-sm font-medium text-left">
               {question.text}
             </Label>
           </motion.div>

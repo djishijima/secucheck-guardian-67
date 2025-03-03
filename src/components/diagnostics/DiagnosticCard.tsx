@@ -24,7 +24,7 @@ const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ title, description, fea
         <div className="bg-gradient-to-br from-green-50 to-blue-50 p-3 rounded-lg shadow-sm">
           {icon}
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 text-left">
           <CardTitle>{title}</CardTitle>
           <CardDescription>
             {description}
@@ -32,7 +32,7 @@ const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ title, description, fea
         </div>
       </CardHeader>
       <CardContent>
-        <ul className="list-none pl-0 mb-4 space-y-2 text-gray-700">
+        <ul className="list-none pl-0 mb-4 space-y-2 text-gray-700 text-left">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
