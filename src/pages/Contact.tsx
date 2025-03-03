@@ -88,9 +88,10 @@ const Contact = () => {
             <div className="mt-8 pt-8 border-t">
               <h3 className="text-lg font-semibold mb-4">その他のお問い合わせ方法</h3>
               <div className="space-y-2">
-                <p><strong>電話:</strong> 03-XXXX-XXXX（平日 9:00-18:00）</p>
-                <p><strong>メール:</strong> info@bunshodo-printing.co.jp</p>
-                <p><strong>住所:</strong> 〒XXX-XXXX 東京都〇〇区〇〇町1-2-3</p>
+                <p><strong>電話:</strong> 03-3851-0111（平日 9:00-18:00）</p>
+                <p><strong>メール:</strong> info@bunshodoh.co.jp</p>
+                <p><strong>住所:</strong> 〒101-0025 東京都千代田区神田佐久間町3-37</p>
+                <p><strong>FAX:</strong> 03-3861-1979</p>
               </div>
             </div>
           </div>
