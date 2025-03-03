@@ -37,7 +37,8 @@ const ScopeOneContainer = () => {
     showForm, 
     setShowForm,
     handleFormSubmit, 
-    handleInputChange, 
+    handleInputChange,
+    handleMonthlyDataChange, // This needs to be passed to ScopeOneStepContent
     handleSelectChange 
   } = useFormManager(scopeOneData, setScopeOneData, setActiveStep);
   const {
@@ -112,6 +113,7 @@ const ScopeOneContainer = () => {
             formData={formData}
             onFormSubmit={handleFormSubmit}
             onInputChange={handleInputChange}
+            onMonthlyDataChange={handleMonthlyDataChange} // Added missing prop
             onSelectChange={handleSelectChange}
             onCancel={() => setActiveStep(1)}
             scopeOneData={scopeOneData}
