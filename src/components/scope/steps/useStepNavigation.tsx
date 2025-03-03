@@ -26,11 +26,17 @@ const useStepNavigation = (steps: Step[]) => {
     }
   };
 
+  // ステップの進捗率を計算する（％）
+  const calculateProgress = () => {
+    return ((activeStep + 1) / steps.length) * 100;
+  };
+
   return {
     activeStep,
     setActiveStep,
     goToNextStep,
-    goToPreviousStep
+    goToPreviousStep,
+    calculateProgress
   };
 };
 

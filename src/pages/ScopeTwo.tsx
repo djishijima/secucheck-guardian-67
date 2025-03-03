@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, BarChart3 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import ScopeHeader from '@/components/scope/ScopeHeader';
 import ScopeNavbar from '@/components/scope/ScopeNavbar';
@@ -14,9 +13,10 @@ import ScopeTwoReductionTab from '@/components/scope/ScopeTwoReductionTab';
 import ScopeTwoDataForm from '@/components/scope/ScopeTwoDataForm';
 import { defaultScopeTwoData, ScopeTwoDataType } from '@/data/scopeTwoData';
 import { useLocation } from 'react-router-dom';
+import StepNavigation from '@/components/scope/StepNavigation';
+import useStepNavigation, { Step } from '@/components/scope/steps/useStepNavigation';
 
 const ScopeTwo = () => {
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const { toast } = useToast();
   const [scopeTwoData, setScopeTwoData] = useState<ScopeTwoDataType>(defaultScopeTwoData);
   const [showForm, setShowForm] = useState(false);
@@ -28,10 +28,16 @@ const ScopeTwo = () => {
     targetYear: '2023年度'
   });
   
-  // セクションの配列
-  const sections = ["overview", "details", "reduction"];
-  const sectionTitles = ["概要", "詳細分析", "削減計画"];
-  const currentSection = sections[currentSectionIndex];
+  // ステップの定義
+  const steps: Step[] = [
+    { id: "input", title: "データ入力", description: "自社データの入力" },
+    { id: "overview", title: "データ概要", description: "排出量の全体像を把握" },
+    { id: "details", title: "詳細分析", description: "カテゴリ別・期間別の詳細" },
+    { id: "reduction", title: "削減計画", description: "目標と削減施策の策定" }
+  ];
+  
+  // ステップナビゲーションフックを使用
+  const { activeStep, setActiveStep, goToNextStep, goToPreviousStep } = useStepNavigation(steps);
   
   const downloadReport = () => {
     toast({
@@ -95,6 +101,9 @@ const ScopeTwo = () => {
     });
 
     setShowForm(false);
+    
+    // データ入力後は概要ページに移動
+    setActiveStep(1);
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -112,36 +121,28 @@ const ScopeTwo = () => {
     }));
   };
   
-  // 次のセクションに進む
-  const goToNextSection = () => {
-    if (currentSectionIndex < sections.length - 1) {
-      setCurrentSectionIndex(currentSectionIndex + 1);
-      window.scrollTo(0, 0);
-    }
-  };
-  
-  // 前のセクションに戻る
-  const goToPreviousSection = () => {
-    if (currentSectionIndex > 0) {
-      setCurrentSectionIndex(currentSectionIndex - 1);
-      window.scrollTo(0, 0);
-    }
-  };
-  
-  // セクションの進捗度を表示する
-  const sectionProgress = () => {
-    return `セクション ${currentSectionIndex + 1}/${sections.length}`;
-  };
-  
-  // 現在のセクションコンテンツを取得
-  const renderSectionContent = () => {
-    switch (currentSection) {
+  // 現在のステップコンテンツを取得
+  const renderStepContent = () => {
+    const currentStepId = steps[activeStep].id;
+    
+    switch (currentStepId) {
+      case "input":
+        return (
+          <ScopeTwoDataForm 
+            formData={formData}
+            onFormSubmit={handleFormSubmit}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+            onCancel={() => setActiveStep(1)}
+            scopeTwoData={scopeTwoData}
+          />
+        );
       case "overview":
         return (
           <ScopeTwoOverviewTab 
             scopeTwoData={scopeTwoData} 
             onDownloadReport={downloadReport}
-            onViewDetails={goToNextSection}
+            onViewDetails={() => goToNextStep()}
           />
         );
       case "details":
@@ -169,8 +170,8 @@ const ScopeTwo = () => {
           icon={<BarChart3 className="mr-3 h-8 w-8" />}
         />
         
-        {/* データ入力フォーム */}
-        {!showForm ? (
+        {/* 自社データ入力ボタン */}
+        {activeStep !== 0 && (
           <motion.div 
             className="mb-6"
             initial={{ opacity: 0 }}
@@ -178,66 +179,40 @@ const ScopeTwo = () => {
             transition={{ duration: 0.3 }}
           >
             <Button 
-              onClick={() => setShowForm(true)} 
+              onClick={() => setActiveStep(0)} 
               className="bg-purple-600 hover:bg-purple-700 font-semibold"
             >
               自社データを入力する
             </Button>
           </motion.div>
-        ) : (
-          <ScopeTwoDataForm 
-            formData={formData}
-            onFormSubmit={handleFormSubmit}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
-            onCancel={() => setShowForm(false)}
-            scopeTwoData={scopeTwoData}
-          />
         )}
 
         {/* ナビゲーションリンク */}
         <ScopeNavbar 
           currentPath={location.pathname}
-          onShowForm={() => setShowForm(true)} 
+          onShowForm={() => setActiveStep(0)} 
         />
         
-        {/* セクション進捗バー */}
-        <div className="bg-gray-50 px-4 py-2 rounded-lg mb-6 flex justify-between items-center">
-          <span className="text-sm font-medium text-gray-600">{sectionProgress()}</span>
-          <span className="text-sm font-medium text-purple-600">{sectionTitles[currentSectionIndex]}</span>
-        </div>
+        {/* ステップナビゲーション */}
+        <StepNavigation 
+          steps={steps}
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          goToPreviousStep={goToPreviousStep}
+          goToNextStep={goToNextStep}
+        />
         
-        {/* セクションコンテンツ */}
+        {/* ステップコンテンツ */}
         <motion.div 
-          key={currentSection}
+          key={steps[activeStep].id}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="mb-8"
+          className="mt-6"
         >
-          {renderSectionContent()}
+          {renderStepContent()}
         </motion.div>
-        
-        {/* ナビゲーションボタン */}
-        <div className="flex justify-between mt-8 pt-4 border-t">
-          <Button 
-            onClick={goToPreviousSection}
-            variant="outline"
-            disabled={currentSectionIndex === 0}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" /> 前へ
-          </Button>
-          
-          <Button 
-            onClick={goToNextSection}
-            className="bg-purple-600 hover:bg-purple-700 gap-2"
-            disabled={currentSectionIndex === sections.length - 1}
-          >
-            次へ <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
       </main>
       
       <Footer />
