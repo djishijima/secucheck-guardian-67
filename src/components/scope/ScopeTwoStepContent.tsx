@@ -13,9 +13,14 @@ interface ScopeTwoStepContentProps {
     heat: number;
     steam: number;
     targetYear: string;
+    monthlyData: {
+      month: string;
+      value: number;
+    }[];
   };
   onFormSubmit: (e: React.FormEvent) => void;
   onInputChange: (field: string, value: string) => void;
+  onMonthlyDataChange: (index: number, value: string) => void;
   onSelectChange: (value: string) => void;
   onCancel: () => void;
   scopeTwoData: ScopeTwoDataType;
@@ -27,6 +32,7 @@ const ScopeTwoStepContent: React.FC<ScopeTwoStepContentProps> = ({
   formData,
   onFormSubmit,
   onInputChange,
+  onMonthlyDataChange,
   onSelectChange,
   onCancel,
   scopeTwoData,
@@ -40,6 +46,7 @@ const ScopeTwoStepContent: React.FC<ScopeTwoStepContentProps> = ({
           formData={formData}
           onFormSubmit={onFormSubmit}
           onInputChange={onInputChange}
+          onMonthlyDataChange={onMonthlyDataChange}
           onSelectChange={onSelectChange}
           onCancel={onCancel}
           scopeTwoData={scopeTwoData}

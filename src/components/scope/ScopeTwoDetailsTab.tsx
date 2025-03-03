@@ -61,7 +61,7 @@ const ScopeTwoDetailsTab: React.FC<ScopeTwoDetailsTabProps> = ({ scopeTwoData })
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 <div className="text-lg font-semibold text-gray-800 mb-2">{year.year}</div>
-                <div className="text-3xl font-bold text-purple-700 mb-2">{year.value} <span className="text-lg text-gray-500">{scopeTwoData.unit}</span></div>
+                <div className="text-3xl font-bold text-purple-700 mb-2">{year.value.toFixed(1)} <span className="text-lg text-gray-500">{scopeTwoData.unit}</span></div>
                 {index > 0 && (
                   <div className={`text-sm font-medium ${
                     year.value < scopeTwoData.yearOverYear[index - 1].value ? 'text-green-600' : 'text-red-600'
@@ -81,7 +81,8 @@ const ScopeTwoDetailsTab: React.FC<ScopeTwoDetailsTabProps> = ({ scopeTwoData })
             </div>
             <div className="flex justify-around items-end h-48 mb-4">
               {scopeTwoData.yearOverYear.map((year, index) => {
-                const heightPercentage = (year.value / Math.max(...scopeTwoData.yearOverYear.map(y => y.value))) * 100;
+                const maxValue = Math.max(...scopeTwoData.yearOverYear.map(y => y.value));
+                const heightPercentage = (year.value / maxValue) * 100;
                 return (
                   <motion.div 
                     key={index}

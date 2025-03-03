@@ -16,13 +16,20 @@ import ScopeTwoStepContent from '@/components/scope/ScopeTwoStepContent';
 
 const ScopeTwo = () => {
   const { toast } = useToast();
-  const [scopeTwoData, setScopeTwoData] = useState<ScopeTwoDataType>(defaultScopeTwoData);
+  const [scopeTwoData, setScopeTwoData] = useState<ScopeTwoDataType>({
+    ...defaultScopeTwoData,
+    total: Math.round(defaultScopeTwoData.total * 10) / 10 // Round to 1 decimal place
+  });
   const location = useLocation();
   const [formData, setFormData] = useState({
     electricity: defaultScopeTwoData.categories[0].value,
     heat: defaultScopeTwoData.categories[1].value,
     steam: defaultScopeTwoData.categories[2].value,
-    targetYear: '2023年度'
+    targetYear: '2023年度',
+    monthlyData: defaultScopeTwoData.monthlyTrend.map(item => ({
+      month: item.month,
+      value: item.value
+    }))
   });
   
   // ステップの定義
@@ -77,16 +84,21 @@ const ScopeTwo = () => {
     // Update the data
     setScopeTwoData(prev => ({
       ...prev,
-      total,
+      total: Math.round(total * 10) / 10, // Round to 1 decimal place
       categories,
+      // Use the monthly data from the form
+      monthlyTrend: formData.monthlyData.map(item => ({
+        month: item.month,
+        value: item.value
+      })),
       // Update the current year value in yearOverYear
       yearOverYear: prev.yearOverYear.map(item => 
-        item.year === '2022年度' ? { ...item, value: total } : item
+        item.year === '2022年度' ? { ...item, value: Math.round(total * 10) / 10 } : item
       ),
       // Update corresponding target
       reductionTargets: prev.reductionTargets.map(target => 
         target.year === formData.targetYear 
-          ? { ...target, target: Math.round(total * 0.9) }
+          ? { ...target, target: Math.round(total * 0.9 * 10) / 10 }
           : target
       )
     }));
@@ -107,6 +119,21 @@ const ScopeTwo = () => {
       ...prev,
       [field]: numValue
     }));
+  };
+
+  const handleMonthlyDataChange = (index: number, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    setFormData(prev => {
+      const updatedMonthlyData = [...prev.monthlyData];
+      updatedMonthlyData[index] = {
+        ...updatedMonthlyData[index],
+        value: numValue
+      };
+      return {
+        ...prev,
+        monthlyData: updatedMonthlyData
+      };
+    });
   };
 
   const handleSelectChange = (value: string) => {
@@ -174,6 +201,7 @@ const ScopeTwo = () => {
             formData={formData}
             onFormSubmit={handleFormSubmit}
             onInputChange={handleInputChange}
+            onMonthlyDataChange={handleMonthlyDataChange}
             onSelectChange={handleSelectChange}
             onCancel={() => setActiveStep(1)}
             scopeTwoData={scopeTwoData}
