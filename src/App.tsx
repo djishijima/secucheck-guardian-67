@@ -1,4 +1,3 @@
-
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from '@/pages/Index';
 import Products from '@/pages/Products';
@@ -26,6 +25,7 @@ import NotFound from '@/pages/NotFound';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import './App.css';
+import GraphingTool from './pages/GraphingTool';
 
 function App() {
   return (
@@ -53,6 +53,7 @@ function App() {
         <Route path="/gx-supply-chain-audit" element={<GxSupplyChainAudit />} />
         <Route path="/gx-sustainable-marketing" element={<GxSustainableMarketing />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/graph-tool" element={<GraphingTool />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
