@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import ScopeHeader from '@/components/scope/ScopeHeader';
 import ScopeNavbar from '@/components/scope/ScopeNavbar';
