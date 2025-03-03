@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Globe, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { sdgGoals } from './SdgData';
 
 interface SdgSelectionSectionProps {
@@ -39,22 +40,30 @@ const SdgSelectionSection: React.FC<SdgSelectionSectionProps> = ({
       <p className="text-gray-600 mb-6">あなたの事業に関連するSDGsを選択してください。複数選択可能です。</p>
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
-        {sdgGoals.map((sdg) => (
-          <motion.div
-            key={sdg.id}
-            className={`
-              cursor-pointer rounded-lg overflow-hidden border-2 flex items-center justify-center
-              ${selectedSdgs.includes(sdg.id) ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200'}
-              transition-all hover:shadow-md aspect-square ${sdg.color} text-white font-bold text-lg
-            `}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => toggleSdg(sdg.id)}
-          >
-            {sdg.id}
-            <span className="sr-only">{sdg.name}</span>
-          </motion.div>
-        ))}
+        <TooltipProvider>
+          {sdgGoals.map((sdg) => (
+            <Tooltip key={sdg.id}>
+              <TooltipTrigger asChild>
+                <motion.div
+                  className={`
+                    cursor-pointer rounded-lg overflow-hidden border-2 flex flex-col items-center justify-center
+                    ${selectedSdgs.includes(sdg.id) ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200'}
+                    transition-all hover:shadow-md aspect-square ${sdg.color} text-white font-bold
+                  `}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => toggleSdg(sdg.id)}
+                >
+                  <div className="text-2xl mb-1">{sdg.id}</div>
+                  <div className="text-xs px-1 text-center line-clamp-2">{sdg.name}</div>
+                </motion.div>
+              </TooltipTrigger>
+              <TooltipContent side="top" align="center" className="bg-gray-800 text-white">
+                {sdg.name}
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </TooltipProvider>
       </div>
       
       <div className="flex justify-between">
