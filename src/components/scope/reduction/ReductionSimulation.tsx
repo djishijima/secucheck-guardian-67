@@ -90,7 +90,7 @@ const ReductionSimulation: React.FC<ReductionSimulationProps> = ({ scopeOneData 
           <span className="text-sm text-gray-600">施策実施後</span>
         </div>
       </div>
-      <div className="mt-4 text-center text-sm text-gray-600">
+      <div className="mt-4 text-left text-sm text-gray-600">
         <p>施策を実施することで、CO2排出量を2030年までに大幅に削減できる見込みです</p>
       </div>
     </div>

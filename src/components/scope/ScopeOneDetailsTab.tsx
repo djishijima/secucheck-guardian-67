@@ -69,6 +69,7 @@ const ScopeOneDetailsTab: React.FC<ScopeOneDetailsTabProps> = ({ scopeOneData })
                             ? 'bg-blue-500' 
                             : 'bg-gray-400'
                         } rounded-t-lg transition-all`}
+                        style={{ height: `${heightPercentage}%` }}
                         initial={{ height: 0 }}
                         animate={{ height: `${heightPercentage}%` }}
                         transition={{ duration: 0.7, delay: index * 0.2 }}
@@ -115,7 +116,7 @@ const ScopeOneDetailsTab: React.FC<ScopeOneDetailsTabProps> = ({ scopeOneData })
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
+                  <div className="text-left">
                     <h4 className="text-sm font-medium text-gray-600 mb-2">主な排出源</h4>
                     <ul className="list-disc list-inside text-sm space-y-1 text-gray-700">
                       {category.name === '社有車' && (
@@ -147,7 +148,7 @@ const ScopeOneDetailsTab: React.FC<ScopeOneDetailsTabProps> = ({ scopeOneData })
                     </ul>
                   </div>
                   
-                  <div>
+                  <div className="text-left">
                     <h4 className="text-sm font-medium text-gray-600 mb-2">削減対策例</h4>
                     <ul className="list-disc list-inside text-sm space-y-1 text-gray-700">
                       {category.name === '社有車' && (

@@ -33,7 +33,7 @@ const ScopeTwoReductionTab: React.FC<ScopeTwoReductionTabProps> = ({ scopeTwoDat
           
           {/* 主要削減施策 */}
           <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-4 text-purple-800">主要削減施策</h3>
+            <h3 className="text-lg font-semibold mb-4 text-purple-800 text-left">主要削減施策</h3>
             <ReductionInitiatives />
           </div>
         </CardContent>
@@ -66,9 +66,9 @@ const ScopeTwoReductionTab: React.FC<ScopeTwoReductionTabProps> = ({ scopeTwoDat
                 return (
                   <div key={index} className="flex flex-col items-center">
                     <div className="text-xs text-gray-700 mb-1">{month.value.toFixed(1)}</div>
-                    <div className="relative w-10 flex-grow">
+                    <div className="w-10 relative flex items-end justify-center">
                       <motion.div 
-                        className="absolute bottom-0 w-full bg-gradient-to-t from-purple-600 to-purple-400 rounded-t"
+                        className="w-full bg-gradient-to-t from-purple-600 to-purple-400 rounded-t"
                         style={{ height: `${heightPercentage}%` }}
                         initial={{ height: 0 }}
                         animate={{ height: `${heightPercentage}%` }}
