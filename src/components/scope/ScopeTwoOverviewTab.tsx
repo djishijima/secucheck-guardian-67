@@ -1,10 +1,23 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download, PieChart, ArrowRight } from 'lucide-react';
+import { Download, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
 
 interface ScopeTwoDataType {
   total: number;
@@ -46,6 +59,23 @@ const ScopeTwoOverviewTab: React.FC<ScopeTwoOverviewTabProps> = ({
   onDownloadReport,
   onViewDetails
 }) => {
+  // Convert categories data for PieChart
+  const pieChartData = scopeTwoData.categories.map(category => ({
+    name: category.name,
+    value: category.value,
+    color: category.color.replace('bg-', '#')
+      .replace('purple-500', '8b5cf6')
+      .replace('indigo-500', '6366f1')
+      .replace('sky-500', '0ea5e9')
+      .replace('teal-500', '14b8a6')
+  }));
+  
+  // Convert monthly data for BarChart
+  const barChartData = scopeTwoData.monthlyTrend.map(item => ({
+    name: item.month,
+    排出量: item.value
+  }));
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -104,52 +134,26 @@ const ScopeTwoOverviewTab: React.FC<ScopeTwoOverviewTabProps> = ({
               ))}
             </div>
             
-            <div className="flex justify-center items-center">
-              <div className="relative w-48 h-48 flex items-center justify-center">
-                {/* 円グラフの簡易表現 */}
-                <svg className="w-full h-full" viewBox="0 0 100 100">
-                  {scopeTwoData.categories.map((category, index) => {
-                    const previousPercentages = scopeTwoData.categories
-                      .slice(0, index)
-                      .reduce((acc, cat) => acc + cat.percentage, 0);
-                    const start = previousPercentages * 3.6; // 360度の円を100%で割った値
-                    const end = start + category.percentage * 3.6;
-                    
-                    const startAngle = (start - 90) * (Math.PI / 180);
-                    const endAngle = (end - 90) * (Math.PI / 180);
-                    
-                    const startX = 50 + 40 * Math.cos(startAngle);
-                    const startY = 50 + 40 * Math.sin(startAngle);
-                    const endX = 50 + 40 * Math.cos(endAngle);
-                    const endY = 50 + 40 * Math.sin(endAngle);
-                    
-                    const largeArcFlag = category.percentage > 50 ? 1 : 0;
-                    
-                    const pathData = [
-                      `M 50 50`,
-                      `L ${startX} ${startY}`,
-                      `A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY}`,
-                      `Z`
-                    ].join(' ');
-                    
-                    return (
-                      <path
-                        key={index}
-                        d={pathData}
-                        fill={category.color.replace('bg-', 'fill-').replace('-500', '-400')}
-                        stroke="#fff"
-                        strokeWidth="1"
-                      />
-                    );
-                  })}
-                  <circle cx="50" cy="50" r="25" fill="white" />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <PieChart className="h-6 w-6 text-purple-500 mb-1" />
-                  <span className="text-sm font-medium">エネルギー源別</span>
-                  <span className="text-xs text-gray-500">排出割合</span>
-                </div>
-              </div>
+            <div className="flex justify-center items-center h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {pieChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `${value} ${scopeTwoData.unit}`} />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </CardContent>
@@ -199,42 +203,18 @@ const ScopeTwoOverviewTab: React.FC<ScopeTwoOverviewTabProps> = ({
           <CardTitle className="text-purple-800">月次排出量推移</CardTitle>
           <CardDescription>2022年度</CardDescription>
         </CardHeader>
-        <CardContent className="pt-6 overflow-x-auto">
-          <div className="min-w-[600px] h-64 px-4">
-            <div className="flex justify-between items-end h-48 mb-4">
-              {scopeTwoData.monthlyTrend.map((month, index) => {
-                const heightPercentage = (month.value / Math.max(...scopeTwoData.monthlyTrend.map(m => m.value))) * 100;
-                return (
-                  <motion.div 
-                    key={index}
-                    className="flex flex-col items-center"
-                    initial={{ height: 0 }}
-                    animate={{ height: `${heightPercentage}%` }}
-                    transition={{ duration: 0.5, delay: index * 0.05 }}
-                  >
-                    <div className="relative w-10">
-                      <div className="absolute bottom-0 w-full bg-purple-500 hover:bg-purple-600 transition-all rounded-t"></div>
-                      <motion.div 
-                        className="absolute bottom-0 w-full bg-purple-500 hover:bg-purple-600 transition-all rounded-t"
-                        initial={{ height: 0 }}
-                        animate={{ height: `${heightPercentage}%` }}
-                        transition={{ duration: 0.5, delay: index * 0.05 }}
-                      ></motion.div>
-                      <div className="absolute -top-6 left-0 right-0 text-center text-sm font-medium text-gray-700">
-                        {month.value.toFixed(1)}
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-            <div className="flex justify-between">
-              {scopeTwoData.monthlyTrend.map((month, index) => (
-                <div key={index} className="text-center w-10">
-                  <span className="text-xs text-gray-500">{month.month}</span>
-                </div>
-              ))}
-            </div>
+        <CardContent className="pt-6">
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={barChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip formatter={(value) => `${value} ${scopeTwoData.unit}`} />
+                <Legend />
+                <Bar dataKey="排出量" fill="#8b5cf6" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>

@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface InquiryDialogProps {
-  buttonLabel?: string;
+  buttonLabel?: React.ReactNode;
   buttonClassName?: string;
 }
 
@@ -49,10 +49,11 @@ const InquiryDialog: React.FC<InquiryDialogProps> = ({
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
+          size="sm"
           className={buttonClassName}
         >
           <Mail className="h-4 w-4" />
-          <span>{buttonLabel}</span>
+          {buttonLabel}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
