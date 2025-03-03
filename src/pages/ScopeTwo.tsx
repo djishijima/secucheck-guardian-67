@@ -8,19 +8,15 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import ScopeHeader from '@/components/scope/ScopeHeader';
 import ScopeNavbar from '@/components/scope/ScopeNavbar';
-import ScopeTwoOverviewTab from '@/components/scope/ScopeTwoOverviewTab';
-import ScopeTwoDetailsTab from '@/components/scope/ScopeTwoDetailsTab';
-import ScopeTwoReductionTab from '@/components/scope/ScopeTwoReductionTab';
-import ScopeTwoDataForm from '@/components/scope/ScopeTwoDataForm';
 import { defaultScopeTwoData, ScopeTwoDataType } from '@/data/scopeTwoData';
 import { useLocation } from 'react-router-dom';
 import StepNavigation from '@/components/scope/StepNavigation';
 import useStepNavigation, { Step } from '@/components/scope/steps/useStepNavigation';
+import ScopeTwoStepContent from '@/components/scope/ScopeTwoStepContent';
 
 const ScopeTwo = () => {
   const { toast } = useToast();
   const [scopeTwoData, setScopeTwoData] = useState<ScopeTwoDataType>(defaultScopeTwoData);
-  const [showForm, setShowForm] = useState(false);
   const location = useLocation();
   const [formData, setFormData] = useState({
     electricity: defaultScopeTwoData.categories[0].value,
@@ -100,8 +96,6 @@ const ScopeTwo = () => {
       description: "Scope 2排出量データが更新されました。",
       duration: 3000,
     });
-
-    setShowForm(false);
     
     // データ入力後は概要ページに移動
     setActiveStep(1);
@@ -120,43 +114,6 @@ const ScopeTwo = () => {
       ...prev,
       targetYear: value
     }));
-  };
-  
-  // 現在のステップコンテンツを取得
-  const renderStepContent = () => {
-    const currentStepId = steps[activeStep].id;
-    
-    switch (currentStepId) {
-      case "input":
-        return (
-          <ScopeTwoDataForm 
-            formData={formData}
-            onFormSubmit={handleFormSubmit}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
-            onCancel={() => setActiveStep(1)}
-            scopeTwoData={scopeTwoData}
-          />
-        );
-      case "overview":
-        return (
-          <ScopeTwoOverviewTab 
-            scopeTwoData={scopeTwoData} 
-            onDownloadReport={downloadReport}
-            onViewDetails={() => goToNextStep()}
-          />
-        );
-      case "details":
-        return (
-          <ScopeTwoDetailsTab scopeTwoData={scopeTwoData} />
-        );
-      case "reduction":
-        return (
-          <ScopeTwoReductionTab scopeTwoData={scopeTwoData} />
-        );
-      default:
-        return null;
-    }
   };
   
   return (
@@ -212,7 +169,16 @@ const ScopeTwo = () => {
           transition={{ duration: 0.3 }}
           className="mt-6"
         >
-          {renderStepContent()}
+          <ScopeTwoStepContent
+            activeStepId={steps[activeStep].id}
+            formData={formData}
+            onFormSubmit={handleFormSubmit}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+            onCancel={() => setActiveStep(1)}
+            scopeTwoData={scopeTwoData}
+            onDownloadReport={downloadReport}
+          />
         </motion.div>
       </main>
       
