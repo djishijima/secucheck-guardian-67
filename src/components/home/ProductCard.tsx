@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -17,6 +16,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from 'react-router-dom';
+import { Product } from './productData';
 
 interface ProductCategories {
   function?: string;
@@ -25,18 +25,7 @@ interface ProductCategories {
 }
 
 interface ProductCardProps {
-  product: {
-    id: number;
-    title: string;
-    description: string;
-    price?: number; // Make price optional
-    category?: string;
-    categories?: ProductCategories;
-    tags: string[];
-    icon?: React.ReactNode;
-    image?: string;
-    link: string;
-  };
+  product: Product;
 }
 
 const getProductIcon = (productId: number) => {
