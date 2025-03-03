@@ -9,6 +9,10 @@ interface FormData {
   hvacEquipment: number;
   other: number;
   targetYear: string;
+  monthlyData: {
+    month: string;
+    value: number;
+  }[];
 }
 
 const useFormManager = (
@@ -22,7 +26,11 @@ const useFormManager = (
     stationaryEquipment: defaultScopeOneData.categories[1].value,
     hvacEquipment: defaultScopeOneData.categories[2].value,
     other: defaultScopeOneData.categories[3].value,
-    targetYear: '2023年度'
+    targetYear: '2023年度',
+    monthlyData: defaultScopeOneData.monthlyTrend.map(item => ({
+      month: item.month,
+      value: item.value
+    }))
   });
   
   const [showForm, setShowForm] = useState(false);
@@ -64,11 +72,10 @@ const useFormManager = (
       }
     ];
 
-    // 月次データも更新（データ入力に応じて調整）
-    const scaleFactor = total / scopeOneData.total;
-    const updatedMonthlyTrend = scopeOneData.monthlyTrend.map(item => ({
-      ...item,
-      value: parseFloat((item.value * scaleFactor).toFixed(1))
+    // Use the monthly data from the form directly
+    const updatedMonthlyTrend = formData.monthlyData.map(item => ({
+      month: item.month,
+      value: item.value
     }));
 
     // Update the data
@@ -106,6 +113,21 @@ const useFormManager = (
     }));
   };
 
+  const handleMonthlyDataChange = (index: number, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    setFormData(prev => {
+      const updatedMonthlyData = [...prev.monthlyData];
+      updatedMonthlyData[index] = {
+        ...updatedMonthlyData[index],
+        value: numValue
+      };
+      return {
+        ...prev,
+        monthlyData: updatedMonthlyData
+      };
+    });
+  };
+
   const handleSelectChange = (value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -119,6 +141,7 @@ const useFormManager = (
     setShowForm,
     handleFormSubmit,
     handleInputChange,
+    handleMonthlyDataChange,
     handleSelectChange
   };
 };

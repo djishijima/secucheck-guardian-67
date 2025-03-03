@@ -14,9 +14,14 @@ interface ScopeOneStepContentProps {
     hvacEquipment: number;
     other: number;
     targetYear: string;
+    monthlyData: {
+      month: string;
+      value: number;
+    }[];
   };
   onFormSubmit: (e: React.FormEvent) => void;
   onInputChange: (field: string, value: string) => void;
+  onMonthlyDataChange: (index: number, value: string) => void;
   onSelectChange: (value: string) => void;
   onCancel: () => void;
   scopeOneData: ScopeOneDataType;
@@ -28,38 +33,44 @@ const ScopeOneStepContent: React.FC<ScopeOneStepContentProps> = ({
   formData,
   onFormSubmit,
   onInputChange,
+  onMonthlyDataChange,
   onSelectChange,
   onCancel,
   scopeOneData,
   onDownloadReport
 }) => {
-  // Render the appropriate content based on the active step ID
+  // Render different content based on the active step
   switch (activeStepId) {
-    case "input":
+    case 'input':
       return (
-        <ScopeOneDataForm 
+        <ScopeOneDataForm
           formData={formData}
           onFormSubmit={onFormSubmit}
           onInputChange={onInputChange}
+          onMonthlyDataChange={onMonthlyDataChange}
           onSelectChange={onSelectChange}
           onCancel={onCancel}
           scopeOneData={scopeOneData}
         />
       );
-    case "overview":
+    case 'overview':
       return (
-        <ScopeOneOverviewTab 
-          scopeOneData={scopeOneData} 
-          onDownloadReport={onDownloadReport} 
+        <ScopeOneOverviewTab
+          scopeOneData={scopeOneData}
+          onDownloadReport={onDownloadReport}
         />
       );
-    case "details":
+    case 'details':
       return (
-        <ScopeOneDetailsTab scopeOneData={scopeOneData} />
+        <ScopeOneDetailsTab
+          scopeOneData={scopeOneData}
+        />
       );
-    case "reduction":
+    case 'reduction':
       return (
-        <ScopeOneReductionTab scopeOneData={scopeOneData} />
+        <ScopeOneReductionTab
+          scopeOneData={scopeOneData}
+        />
       );
     default:
       return null;

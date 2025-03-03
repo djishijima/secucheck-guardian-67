@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { ScopeOneDataType } from '@/data/scopeOneData';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 
 interface ScopeOneDataFormProps {
   formData: {
@@ -15,9 +17,14 @@ interface ScopeOneDataFormProps {
     hvacEquipment: number;
     other: number;
     targetYear: string;
+    monthlyData: {
+      month: string;
+      value: number;
+    }[];
   };
   onFormSubmit: (e: React.FormEvent) => void;
   onInputChange: (field: string, value: string) => void;
+  onMonthlyDataChange: (index: number, value: string) => void;
   onSelectChange: (value: string) => void;
   onCancel: () => void;
   scopeOneData: ScopeOneDataType;
@@ -27,6 +34,7 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
   formData,
   onFormSubmit,
   onInputChange,
+  onMonthlyDataChange,
   onSelectChange,
   onCancel,
   scopeOneData
@@ -44,60 +52,93 @@ const ScopeOneDataForm: React.FC<ScopeOneDataFormProps> = ({
         </CardHeader>
         <CardContent className="p-6">
           <form onSubmit={onFormSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="companyVehicles" className="text-gray-700 font-medium">社有車（tCO2e）</Label>
-                  <Input
-                    id="companyVehicles"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.companyVehicles}
-                    onChange={(e) => onInputChange('companyVehicles', e.target.value)}
-                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
-                  />
+            <Tabs defaultValue="categories" className="w-full">
+              <TabsList className="grid grid-cols-2 mb-4">
+                <TabsTrigger value="categories">カテゴリー別排出量</TabsTrigger>
+                <TabsTrigger value="monthly">月次排出量</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="categories" className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="companyVehicles" className="text-gray-700 font-medium">社有車（tCO2e）</Label>
+                      <Input
+                        id="companyVehicles"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formData.companyVehicles}
+                        onChange={(e) => onInputChange('companyVehicles', e.target.value)}
+                        className="border-blue-200 focus-visible:ring-blue-500 mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="stationaryEquipment" className="text-gray-700 font-medium">定置燃焼機器（tCO2e）</Label>
+                      <Input
+                        id="stationaryEquipment"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formData.stationaryEquipment}
+                        onChange={(e) => onInputChange('stationaryEquipment', e.target.value)}
+                        className="border-blue-200 focus-visible:ring-blue-500 mt-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="hvacEquipment" className="text-gray-700 font-medium">空調設備（tCO2e）</Label>
+                      <Input
+                        id="hvacEquipment"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formData.hvacEquipment}
+                        onChange={(e) => onInputChange('hvacEquipment', e.target.value)}
+                        className="border-blue-200 focus-visible:ring-blue-500 mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="other" className="text-gray-700 font-medium">その他（tCO2e）</Label>
+                      <Input
+                        id="other"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formData.other}
+                        onChange={(e) => onInputChange('other', e.target.value)}
+                        className="border-blue-200 focus-visible:ring-blue-500 mt-1"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor="stationaryEquipment" className="text-gray-700 font-medium">定置燃焼機器（tCO2e）</Label>
-                  <Input
-                    id="stationaryEquipment"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.stationaryEquipment}
-                    onChange={(e) => onInputChange('stationaryEquipment', e.target.value)}
-                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
-                  />
+              </TabsContent>
+              
+              <TabsContent value="monthly" className="space-y-4">
+                <p className="text-sm text-gray-600 mb-2">2022年度の月次排出量データを入力してください</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {formData.monthlyData.map((item, index) => (
+                    <div key={index} className="space-y-1">
+                      <Label htmlFor={`month-${index}`} className="text-gray-700 text-sm font-medium">
+                        {item.month}
+                      </Label>
+                      <Input
+                        id={`month-${index}`}
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={item.value}
+                        onChange={(e) => onMonthlyDataChange(index, e.target.value)}
+                        className="border-blue-200 focus-visible:ring-blue-500"
+                      />
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="hvacEquipment" className="text-gray-700 font-medium">空調設備（tCO2e）</Label>
-                  <Input
-                    id="hvacEquipment"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.hvacEquipment}
-                    onChange={(e) => onInputChange('hvacEquipment', e.target.value)}
-                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="other" className="text-gray-700 font-medium">その他（tCO2e）</Label>
-                  <Input
-                    id="other"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.other}
-                    onChange={(e) => onInputChange('other', e.target.value)}
-                    className="border-blue-200 focus-visible:ring-blue-500 mt-1"
-                  />
-                </div>
-              </div>
-            </div>
+              </TabsContent>
+            </Tabs>
+
+            <Separator className="my-4" />
 
             <div className="pt-2">
               <Label htmlFor="targetYear" className="text-gray-700 font-medium">削減目標年度</Label>

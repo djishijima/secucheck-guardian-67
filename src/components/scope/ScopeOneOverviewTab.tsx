@@ -41,7 +41,7 @@ const ScopeOneOverviewTab: React.FC<ScopeOneOverviewTabProps> = ({
       .replace('teal-500', '14b8a6')
   }));
   
-  // Convert monthly data for BarChart
+  // Convert monthly data for BarChart - only using actual entered data
   const barChartData = scopeOneData.monthlyTrend.map(item => ({
     name: item.month,
     排出量: item.value
