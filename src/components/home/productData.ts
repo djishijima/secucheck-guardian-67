@@ -1,5 +1,3 @@
-
-import { IconProps } from 'lucide-react';
 import { Leaf, Cpu, BarChart3, Truck, Languages, Palette, Target, ShieldCheck, GraduationCap } from 'lucide-react';
 
 export interface ProductCategories {

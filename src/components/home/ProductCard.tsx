@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -98,6 +99,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   
   const validLink = getValidProductLink(product.link);
   
+  // Function to handle link navigation and prevent default anchor behavior
+  const handleNavigation = (e: React.MouseEvent, path: string) => {
+    e.preventDefault();
+    // Scroll to top before navigation
+    window.scrollTo(0, 0);
+    // Use programmatic navigation
+    window.location.href = path;
+  };
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -150,16 +160,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center items-center border-t pt-4 gap-2">
-          <Link to={validLink}>
+          <a 
+            href={validLink} 
+            onClick={(e) => handleNavigation(e, validLink)}
+            className="inline-block"
+          >
             <Button size="sm" variant="outline" className="hover:-translate-y-1 transition-transform">
               <ExternalLink className="mr-2 h-4 w-4" /> 詳細
             </Button>
-          </Link>
-          <Link to="/contact">
+          </a>
+          <a 
+            href="/contact" 
+            onClick={(e) => handleNavigation(e, "/contact")}
+            className="inline-block"
+          >
             <Button size="sm" className="hover:-translate-y-1 transition-transform">
               <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
             </Button>
-          </Link>
+          </a>
         </CardFooter>
       </Card>
     </motion.div>
