@@ -10,7 +10,7 @@ const GxAssessmentHeader: React.FC = () => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6 }}
   >
-    <div className="bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl p-8 text-white shadow-xl">
+    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 text-white shadow-xl">
       <div className="max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

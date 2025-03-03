@@ -13,10 +13,10 @@ const HeaderLogo: React.FC = () => {
       className="flex items-center"
     >
       <Link to="/" className="flex items-center">
-        <Printer className="h-8 w-8 text-purple-600 mr-2" />
+        <Printer className="h-8 w-8 text-indigo-600 mr-2" />
         <div className="text-lg font-semibold">
-          <span className="text-purple-700">文唱堂印刷</span>
-          <span className="text-sm text-gray-500 block md:inline md:ml-2">GX x AI Marketplace</span>
+          <span className="text-indigo-700">文唱堂印刷</span>
+          <span className="text-sm text-gray-600 block md:inline md:ml-2">GX x AI Marketplace</span>
         </div>
       </Link>
     </motion.div>
