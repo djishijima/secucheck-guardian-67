@@ -52,24 +52,24 @@ const Contact = () => {
           <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <Label htmlFor="name" className="block mb-2">お名前 <span className="text-red-500">*</span></Label>
+                <Label htmlFor="name" className="block mb-2 text-left">お名前 <span className="text-red-500">*</span></Label>
                 <Input id="name" {...register('name')} />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
               </div>
               
               <div>
-                <Label htmlFor="email" className="block mb-2">メールアドレス <span className="text-red-500">*</span></Label>
+                <Label htmlFor="email" className="block mb-2 text-left">メールアドレス <span className="text-red-500">*</span></Label>
                 <Input id="email" type="email" {...register('email')} />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
               </div>
               
               <div>
-                <Label htmlFor="company" className="block mb-2">会社名</Label>
+                <Label htmlFor="company" className="block mb-2 text-left">会社名</Label>
                 <Input id="company" {...register('company')} />
               </div>
               
               <div>
-                <Label htmlFor="message" className="block mb-2">お問い合わせ内容 <span className="text-red-500">*</span></Label>
+                <Label htmlFor="message" className="block mb-2 text-left">お問い合わせ内容 <span className="text-red-500">*</span></Label>
                 <Textarea id="message" rows={5} {...register('message')} />
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </div>
