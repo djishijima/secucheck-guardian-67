@@ -1,6 +1,6 @@
 
+import { IconProps } from 'lucide-react';
 import { Leaf, Cpu, BarChart3, Truck, Languages, Palette, Target, ShieldCheck, GraduationCap } from 'lucide-react';
-import React from 'react';
 
 export interface ProductCategories {
   function?: string;
@@ -15,10 +15,26 @@ export interface Product {
   price?: number;
   categories?: ProductCategories;
   tags: string[];
-  icon?: React.ReactNode;
+  iconName?: string; // Store icon name instead of the React component
   image?: string;
   link: string;
 }
+
+// Helper function to get icon by name when needed
+export const getIconByName = (iconName: string) => {
+  switch (iconName) {
+    case 'Leaf': return Leaf;
+    case 'Cpu': return Cpu;
+    case 'BarChart3': return BarChart3;
+    case 'Truck': return Truck;
+    case 'Languages': return Languages;
+    case 'Palette': return Palette;
+    case 'Target': return Target;
+    case 'ShieldCheck': return ShieldCheck;
+    case 'GraduationCap': return GraduationCap;
+    default: return Leaf;
+  }
+};
 
 export const existingProducts: Product[] = [
   {
@@ -32,7 +48,7 @@ export const existingProducts: Product[] = [
       challenge: "ESG対応支援"
     },
     tags: ["環境配慮", "SDGs", "CO2削減"],
-    icon: <Leaf className="h-12 w-12 text-green-600" />,
+    iconName: "Leaf",
     link: "/eco-printing"
   },
   {
@@ -46,7 +62,7 @@ export const existingProducts: Product[] = [
       challenge: "カーボンフットプリント削減"
     },
     tags: ["GX", "環境配慮", "オンデマンド"],
-    icon: <BarChart3 className="h-12 w-12 text-blue-600" />,
+    iconName: "BarChart3",
     link: "/gx-printing"
   },
   {
@@ -60,7 +76,7 @@ export const existingProducts: Product[] = [
       challenge: "サステナブルブランディング"
     },
     tags: ["AI", "翻訳", "グローバル"],
-    icon: <Languages className="h-12 w-12 text-purple-600" />,
+    iconName: "Languages",
     link: "#"
   },
   {
@@ -74,7 +90,7 @@ export const existingProducts: Product[] = [
       challenge: "カーボンフットプリント削減"
     },
     tags: ["GX", "物流", "カーボンニュートラル"],
-    icon: <Truck className="h-12 w-12 text-teal-600" />,
+    iconName: "Truck",
     link: "/gx-logistics"
   }
 ];
@@ -91,7 +107,7 @@ export const gxAiProducts: Product[] = [
       challenge: "サステナブルブランディング"
     },
     tags: ["GX", "AI", "LCA"],
-    icon: <Palette className="h-12 w-12 text-green-600" />,
+    iconName: "Palette",
     link: "/gx-eco-design"
   },
   {
@@ -105,7 +121,7 @@ export const gxAiProducts: Product[] = [
       challenge: "カーボンフットプリント削減"
     },
     tags: ["GX", "AI", "カーボンニュートラル"],
-    icon: <Cpu className="h-12 w-12 text-blue-600" />,
+    iconName: "Cpu",
     link: "/gx-energy-management"
   },
   {
@@ -119,7 +135,7 @@ export const gxAiProducts: Product[] = [
       challenge: "サステナブルブランディング"
     },
     tags: ["GX", "AI", "ESG"],
-    icon: <Target className="h-12 w-12 text-purple-600" />,
+    iconName: "Target",
     link: "/gx-sustainable-marketing"
   },
   {
@@ -133,7 +149,7 @@ export const gxAiProducts: Product[] = [
       challenge: "ESG対応支援"
     },
     tags: ["GX", "AI", "サプライチェーン"],
-    icon: <ShieldCheck className="h-12 w-12 text-teal-600" />,
+    iconName: "ShieldCheck",
     link: "/gx-supply-chain-audit"
   },
   {
@@ -147,7 +163,7 @@ export const gxAiProducts: Product[] = [
       challenge: "ESG対応支援"
     },
     tags: ["GX", "AI", "人材育成"],
-    icon: <GraduationCap className="h-12 w-12 text-amber-600" />,
+    iconName: "GraduationCap",
     link: "/gx-education-platform"
   }
 ];

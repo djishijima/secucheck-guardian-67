@@ -16,7 +16,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from 'react-router-dom';
-import { Product } from './productData';
+import { Product, getIconByName } from './productData';
 
 interface ProductCategories {
   function?: string;
@@ -53,6 +53,19 @@ const getProductIcon = (productId: number) => {
   }
 };
 
+const renderProductIcon = (product: Product) => {
+  // First try to use the new iconName approach
+  if (product.iconName) {
+    const IconComponent = getIconByName(product.iconName);
+    const colorClass = product.id % 3 === 0 ? "text-blue-600" : 
+                     product.id % 3 === 1 ? "text-green-600" : "text-purple-600";
+    return <IconComponent className={`w-16 h-16 ${colorClass}`} />;
+  }
+  
+  // Fallback to the old method
+  return getProductIcon(product.id);
+};
+
 const getCategoryBadgeStyle = (categoryType: string, value: string) => {
   if (categoryType === 'function') {
     return 'bg-blue-100 text-blue-800';
@@ -81,7 +94,7 @@ const getValidProductLink = (link: string): string => {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const hasImageOrIcon = product.image || product.icon;
+  const hasImageOrIcon = product.image || product.iconName;
   
   const validLink = getValidProductLink(product.link);
   
@@ -98,7 +111,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {product.image ? (
             <img src={product.image} alt={product.title} className="max-h-full max-w-full object-contain" />
           ) : (
-            product.icon || getProductIcon(product.id)
+            renderProductIcon(product)
           )}
         </div>
         <CardHeader className="pb-2">
