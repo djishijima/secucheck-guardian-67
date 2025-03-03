@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from "react-router-dom";
-import { List, FolderCheck, ShoppingCart, BarChart, Leaf } from 'lucide-react';
+import { List, FolderCheck, BarChart, Leaf } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface MobileMenuProps {
@@ -147,9 +147,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen }) => {
         </div>
         
         <div className="pt-4 flex flex-col space-y-3">
-          <Button variant="outline" size="sm" className="justify-center">
-            <ShoppingCart className="h-4 w-4" />
-          </Button>
           <Link to="/dashboard" className="w-full">
             <Button 
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 flex items-center w-full justify-center" 
