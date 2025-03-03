@@ -18,10 +18,15 @@ interface ScopeTwoDataFormProps {
       month: string;
       value: number;
     }[];
+    yearlyTrendData: {
+      year: string;
+      value: number;
+    }[];
   };
   onFormSubmit: (e: React.FormEvent) => void;
   onInputChange: (field: string, value: string) => void;
-  onMonthlyDataChange: (index: number, value: string) => void; // Added this prop
+  onMonthlyDataChange: (index: number, value: string) => void;
+  onYearlyTrendDataChange: (index: number, value: string) => void;
   onSelectChange: (value: string) => void;
   onCancel: () => void;
   scopeTwoData: ScopeTwoDataType;
@@ -31,7 +36,8 @@ const ScopeTwoDataForm: React.FC<ScopeTwoDataFormProps> = ({
   formData,
   onFormSubmit,
   onInputChange,
-  onMonthlyDataChange, // Added this prop
+  onMonthlyDataChange,
+  onYearlyTrendDataChange,
   onSelectChange,
   onCancel,
   scopeTwoData
@@ -47,9 +53,10 @@ const ScopeTwoDataForm: React.FC<ScopeTwoDataFormProps> = ({
       <h3 className="text-xl font-semibold text-purple-800 mb-4">自社データの入力</h3>
       <form onSubmit={onFormSubmit} className="space-y-4">
         <Tabs defaultValue="categories" className="w-full">
-          <TabsList className="grid grid-cols-2 mb-4">
+          <TabsList className="grid grid-cols-3 mb-4">
             <TabsTrigger value="categories">カテゴリー別排出量</TabsTrigger>
             <TabsTrigger value="monthly">月次排出量</TabsTrigger>
+            <TabsTrigger value="yearly">年次排出量推移</TabsTrigger>
           </TabsList>
           
           <TabsContent value="categories" className="space-y-6">
@@ -127,6 +134,28 @@ const ScopeTwoDataForm: React.FC<ScopeTwoDataFormProps> = ({
                     min="0"
                     value={item.value}
                     onChange={(e) => onMonthlyDataChange(index, e.target.value)}
+                    className="border-purple-200 focus-visible:ring-purple-500"
+                  />
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="yearly" className="space-y-4">
+            <p className="text-sm text-gray-600 mb-2">年次排出量推移データを入力してください</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {formData.yearlyTrendData.map((item, index) => (
+                <div key={index} className="space-y-1">
+                  <Label htmlFor={`year-${index}`} className="text-gray-700 text-sm font-medium">
+                    {item.year}
+                  </Label>
+                  <Input
+                    id={`year-${index}`}
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={item.value}
+                    onChange={(e) => onYearlyTrendDataChange(index, e.target.value)}
                     className="border-purple-200 focus-visible:ring-purple-500"
                   />
                 </div>

@@ -15,7 +15,6 @@ import useStepNavigation, { Step } from '@/components/scope/steps/useStepNavigat
 import ScopeTwoStepContent from '@/components/scope/ScopeTwoStepContent';
 import SavedResultsPanel from './saved-results/SavedResultsPanel';
 import SavedResultsControls from './saved-results/SavedResultsControls';
-import useFormManager from './form/useFormManager';
 import useSavedResults from './saved-results/useSavedResults';
 import { useReportActions } from './report/ReportActions';
 import useScopeTwoFormManager from './form/useScopeTwoFormManager';
@@ -46,6 +45,7 @@ const ScopeTwoContainer = () => {
     handleFormSubmit, 
     handleInputChange,
     handleMonthlyDataChange,
+    handleYearlyTrendDataChange,
     handleSelectChange 
   } = useScopeTwoFormManager(scopeTwoData, setScopeTwoData, setActiveStep, toast);
   
@@ -135,6 +135,7 @@ const ScopeTwoContainer = () => {
             onFormSubmit={handleFormSubmit}
             onInputChange={handleInputChange}
             onMonthlyDataChange={handleMonthlyDataChange}
+            onYearlyTrendDataChange={handleYearlyTrendDataChange}
             onSelectChange={handleSelectChange}
             onCancel={() => setActiveStep(1)}
             scopeTwoData={scopeTwoData}

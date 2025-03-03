@@ -12,6 +12,10 @@ interface ScopeTwoFormData {
     month: string;
     value: number;
   }[];
+  yearlyTrendData: {
+    year: string;
+    value: number;
+  }[];
 }
 
 const useScopeTwoFormManager = (
@@ -28,6 +32,10 @@ const useScopeTwoFormManager = (
     targetYear: '2023年度',
     monthlyData: scopeTwoData.monthlyTrend.map(item => ({
       month: item.month,
+      value: item.value
+    })),
+    yearlyTrendData: scopeTwoData.yearOverYear.map(item => ({
+      year: item.year,
       value: item.value
     }))
   });
@@ -73,10 +81,11 @@ const useScopeTwoFormManager = (
         month: item.month,
         value: item.value
       })),
-      // Update the current year value in yearOverYear
-      yearOverYear: prev.yearOverYear.map(item => 
-        item.year === '2022年度' ? { ...item, value: Math.round(total * 10) / 10 } : item
-      ),
+      // Update the yearly trend data from the form
+      yearOverYear: formData.yearlyTrendData.map(item => ({
+        year: item.year,
+        value: item.value
+      })),
       // Update corresponding target
       reductionTargets: prev.reductionTargets.map(target => 
         target.year === formData.targetYear 
@@ -120,6 +129,22 @@ const useScopeTwoFormManager = (
     });
   };
 
+  // Handle yearly trend data changes
+  const handleYearlyTrendDataChange = (index: number, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    setFormData(prev => {
+      const updatedYearlyTrendData = [...prev.yearlyTrendData];
+      updatedYearlyTrendData[index] = {
+        ...updatedYearlyTrendData[index],
+        value: numValue
+      };
+      return {
+        ...prev,
+        yearlyTrendData: updatedYearlyTrendData
+      };
+    });
+  };
+
   // Handle select changes
   const handleSelectChange = (value: string) => {
     setFormData(prev => ({
@@ -133,6 +158,7 @@ const useScopeTwoFormManager = (
     handleFormSubmit,
     handleInputChange,
     handleMonthlyDataChange,
+    handleYearlyTrendDataChange,
     handleSelectChange
   };
 };
