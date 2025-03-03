@@ -44,6 +44,13 @@ const ScopeTwoStepContent: React.FC<ScopeTwoStepContentProps> = ({
   scopeTwoData,
   onDownloadReport
 }) => {
+  // Function to navigate to the details tab
+  const handleViewDetails = () => {
+    // This would typically be handled by the parent component's navigation logic
+    // For now, we'll implement it as a no-op function
+    console.log("View details clicked");
+  };
+
   // Render the appropriate content based on the active step ID
   switch (activeStepId) {
     case "input":
@@ -64,7 +71,7 @@ const ScopeTwoStepContent: React.FC<ScopeTwoStepContentProps> = ({
         <ScopeTwoOverviewTab 
           scopeTwoData={scopeTwoData} 
           onDownloadReport={onDownloadReport}
-          onViewDetails={() => {}} // This prop is passed in ScopeTwo.tsx but can be empty here
+          onViewDetails={handleViewDetails}
         />
       );
     case "details":
