@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const AIHero = () => {
   return (
     <section className="mb-16">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 shadow-lg text-white">
+      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-8 md:p-12 shadow-lg text-white">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

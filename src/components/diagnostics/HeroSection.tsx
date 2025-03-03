@@ -9,7 +9,7 @@ const HeroSection: React.FC = () => (
     transition={{ duration: 0.5 }}
     className="text-center mb-12"
   >
-    <div className="inline-block p-2 px-4 bg-green-100 rounded-full text-green-800 font-medium mb-4">
+    <div className="inline-block p-2 px-4 bg-emerald-100 rounded-full text-emerald-800 font-medium mb-4">
       持続可能な未来へのビジネス変革
     </div>
     <h1 className="text-4xl font-bold text-gray-900 mb-4">サステナブルDX診断サービス</h1>

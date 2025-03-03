@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const GXHero = () => {
   return (
     <section className="mb-16">
-      <div className="bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl p-8 md:p-12 shadow-lg text-white">
+      <div className="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-8 md:p-12 shadow-lg text-white">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -20,7 +20,7 @@ const GXHero = () => {
             <p className="text-lg md:text-xl opacity-90 mb-8">
               文唱堂印刷は、持続可能な社会の実現に向けて、印刷業界におけるグリーントランスフォーメーションを推進しています。
             </p>
-            <Button size="lg" className="bg-white text-green-700 hover:bg-gray-100">
+            <Button size="lg" className="bg-white text-emerald-700 hover:bg-gray-100">
               GX製品を見る <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </motion.div>

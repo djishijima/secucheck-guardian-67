@@ -7,7 +7,7 @@ import { Leaf, Sparkles } from 'lucide-react';
 const CTASection = () => {
   return (
     <section>
-      <div className="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl p-8 text-center">
+      <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-8 text-center">
         <h2 className="text-2xl font-bold mb-4">今すぐ始めましょう</h2>
         <p className="max-w-2xl mx-auto mb-6 text-gray-700">
           文唱堂印刷のGX x AIプロダクトで、ビジネスと環境の両立を実現。無料相談で、最適なソリューションをご提案します。
@@ -19,12 +19,12 @@ const CTASection = () => {
           <Link to="/sustainability-check">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 
                 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all 
                 duration-200 flex items-center gap-2"
             >
               <div className="flex items-center">
-                <Sparkles className="h-5 w-5 mr-1 text-yellow-300" /> 
+                <Sparkles className="h-5 w-5 mr-1 text-amber-300" /> 
                 <Leaf className="h-5 w-5 mr-1" /> 
                 <span>サステナビリティ診断を試す</span>
               </div>
