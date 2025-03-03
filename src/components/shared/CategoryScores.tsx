@@ -13,7 +13,7 @@ const CategoryScores: React.FC<CategoryScoresProps> = ({ categoryScores }) => {
       {Object.entries(categoryScores).map(([category, score]) => (
         <Card key={category} className="border-gray-200 hover:border-green-200 transition-all">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base break-words">{category}</CardTitle>
+            <CardTitle className="text-base">{category}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center mb-1">

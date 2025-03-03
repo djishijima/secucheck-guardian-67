@@ -4,7 +4,7 @@ import { Brain } from 'lucide-react';
 
 const AiGxSynergy = () => {
   return (
-    <section className="mb-16 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 sm:p-8 fluid-section">
+    <section className="mb-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold mb-6 text-center flex items-center justify-center">
           <Brain className="mr-2 h-6 w-6 text-blue-600" />
@@ -15,8 +15,8 @@ const AiGxSynergy = () => {
           環境に配慮しながら、ビジネス効率を高める革新的なソリューションを提供しています。
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-none sm:shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm">
             <h3 className="font-semibold text-xl mb-3 text-blue-700">AIによる資源最適化</h3>
             <p className="text-gray-700 mb-4">
               AI分析により、印刷プロセスでの資源使用量を最小化。必要な量だけのインクと紙を使用し、
@@ -37,7 +37,7 @@ const AiGxSynergy = () => {
               </li>
             </ul>
           </div>
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-none sm:shadow-sm">
+          <div className="bg-white p-6 rounded-lg shadow-sm">
             <h3 className="font-semibold text-xl mb-3 text-green-700">カーボンフットプリント計算</h3>
             <p className="text-gray-700 mb-4">
               AIが印刷物ごとのカーボンフットプリントを正確に計算し、環境影響を可視化。

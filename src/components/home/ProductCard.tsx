@@ -17,7 +17,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from 'react-router-dom';
-import { Product, getIconByName } from './productData';
 
 interface ProductCategories {
   function?: string;
@@ -26,7 +25,18 @@ interface ProductCategories {
 }
 
 interface ProductCardProps {
-  product: Product;
+  product: {
+    id: number;
+    title: string;
+    description: string;
+    price?: number; // Make price optional
+    category?: string;
+    categories?: ProductCategories;
+    tags: string[];
+    icon?: React.ReactNode;
+    image?: string;
+    link: string;
+  };
 }
 
 const getProductIcon = (productId: number) => {
@@ -52,19 +62,6 @@ const getProductIcon = (productId: number) => {
     default:
       return <Leaf className="w-16 h-16 text-gray-600" />;
   }
-};
-
-const renderProductIcon = (product: Product) => {
-  // First try to use the new iconName approach
-  if (product.iconName) {
-    const IconComponent = getIconByName(product.iconName);
-    const colorClass = product.id % 3 === 0 ? "text-blue-600" : 
-                     product.id % 3 === 1 ? "text-green-600" : "text-purple-600";
-    return <IconComponent className={`w-16 h-16 ${colorClass}`} />;
-  }
-  
-  // Fallback to the old method
-  return getProductIcon(product.id);
 };
 
 const getCategoryBadgeStyle = (categoryType: string, value: string) => {
@@ -95,18 +92,9 @@ const getValidProductLink = (link: string): string => {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const hasImageOrIcon = product.image || product.iconName;
+  const hasImageOrIcon = product.image || product.icon;
   
   const validLink = getValidProductLink(product.link);
-  
-  // Function to handle link navigation and prevent default anchor behavior
-  const handleNavigation = (e: React.MouseEvent, path: string) => {
-    e.preventDefault();
-    // Scroll to top before navigation
-    window.scrollTo(0, 0);
-    // Use programmatic navigation
-    window.location.href = path;
-  };
   
   return (
     <motion.div
@@ -121,7 +109,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {product.image ? (
             <img src={product.image} alt={product.title} className="max-h-full max-w-full object-contain" />
           ) : (
-            renderProductIcon(product)
+            product.icon || getProductIcon(product.id)
           )}
         </div>
         <CardHeader className="pb-2">
@@ -134,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {Object.entries(product.categories).map(([type, value]) => (
                 <Badge 
                   key={`${type}-${value}`} 
-                  className={`text-xs ${getCategoryBadgeStyle(type, value)} whitespace-normal break-words`}
+                  className={`text-xs ${getCategoryBadgeStyle(type, value)}`}
                 >
                   {value}
                 </Badge>
@@ -160,24 +148,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center items-center border-t pt-4 gap-2">
-          <a 
-            href={validLink} 
-            onClick={(e) => handleNavigation(e, validLink)}
-            className="inline-block"
-          >
+          <Link to={validLink}>
             <Button size="sm" variant="outline" className="hover:-translate-y-1 transition-transform">
               <ExternalLink className="mr-2 h-4 w-4" /> 詳細
             </Button>
-          </a>
-          <a 
-            href="/contact" 
-            onClick={(e) => handleNavigation(e, "/contact")}
-            className="inline-block"
-          >
+          </Link>
+          <Link to="/contact">
             <Button size="sm" className="hover:-translate-y-1 transition-transform">
               <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
             </Button>
-          </a>
+          </Link>
         </CardFooter>
       </Card>
     </motion.div>

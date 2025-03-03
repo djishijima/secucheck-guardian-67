@@ -13,13 +13,13 @@ const CTASection = () => {
           文唱堂印刷のGX x AIプロダクトで、ビジネスと環境の両立を実現。無料相談で、最適なソリューションをご提案します。
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+          <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700">
             お問い合わせ
           </Button>
           <Link to="/sustainability-check">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 
                 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all 
                 duration-200 flex items-center gap-2"
             >
