@@ -122,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {Object.entries(product.categories).map(([type, value]) => (
                 <Badge 
                   key={`${type}-${value}`} 
-                  className={`text-xs ${getCategoryBadgeStyle(type, value)}`}
+                  className={`text-xs ${getCategoryBadgeStyle(type, value)} whitespace-normal break-words`}
                 >
                   {value}
                 </Badge>
