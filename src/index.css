@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -123,7 +124,7 @@
 /* ヒーローセクションと背景グラデーションの調整 */
 @media (max-width: 640px) {
   .bg-gradient-to-r {
-    background: linear-gradient(to right, #4a89dc, #5e9cea) !important;
+    background: linear-gradient(to right, #6e59a5, #7e69ab) !important;
     --tw-gradient-stops: none !important;
   }
   
@@ -173,20 +174,20 @@
   .bg-gradient-to-r.from-emerald-600,
   .bg-gradient-to-r.from-indigo-600,
   .bg-gradient-to-r.from-blue-600 {
-    background: linear-gradient(to right, #4a89dc, #5e9cea) !important;
+    background: linear-gradient(to right, #6e59a5, #7e69ab) !important;
   }
   
   .text-purple-700,
   .text-emerald-700,
   .text-emerald-800,
   .text-indigo-700 {
-    @apply text-blue-700;
+    @apply text-purple-700;
   }
   
   .border-purple-100,
   .border-emerald-100,
   .border-indigo-100 {
-    @apply border-blue-100;
+    @apply border-purple-100;
   }
 }
 

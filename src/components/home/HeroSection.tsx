@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="mb-16" id="hero">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-12 shadow-lg">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 md:p-12 shadow-lg">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -29,12 +29,12 @@ const HeroSection = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/contact">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-purple-700 hover:bg-gray-100">
                   お問い合わせ <MessageSquare className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/products">
-                <Button size="lg" className="bg-blue-500 text-white hover:bg-blue-600">
+                <Button size="lg" className="bg-purple-500 text-white hover:bg-purple-600">
                   全製品・サービスを見る
                 </Button>
               </Link>

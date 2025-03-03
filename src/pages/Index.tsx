@@ -47,12 +47,12 @@ const Index = () => {
         </section>
         
         {/* サステナブルDX診断のプロモーション */}
-        <section className="my-16 bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-xl border border-indigo-100 shadow-sm">
+        <section className="my-16 bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-xl border border-purple-100 shadow-sm">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-2/3 mb-6 md:mb-0">
               <div className="flex items-center mb-2">
-                <ChartBar className="h-6 w-6 text-indigo-600 mr-2" />
-                <h2 className="text-2xl font-bold text-indigo-800">サステナブルDX診断サービス</h2>
+                <ChartBar className="h-6 w-6 text-purple-600 mr-2" />
+                <h2 className="text-2xl font-bold text-purple-800">サステナブルDX診断サービス</h2>
               </div>
               <p className="text-gray-700 mb-4">
                 サステナビリティとDXの両面から企業の現状を総合的に診断。GX対応度、データ活用、セキュリティなど
@@ -64,7 +64,7 @@ const Index = () => {
             </div>
             <div>
               <Link to="/comprehensive-diagnostics">
-                <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 shadow-md">
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md">
                   診断サービスを見る <FileText className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
