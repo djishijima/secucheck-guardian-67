@@ -16,8 +16,8 @@ const ComprehensiveDiagnostics = () => {
   // 診断結果からのリダイレクトの場合、スクロールして表示
   useEffect(() => {
     if (location.state?.fromGxAssessment) {
-      // タブをセット
-      setActiveTab("comprehensive");
+      // タブをセット（GX対応度診断に戻す）
+      setActiveTab("existing-gx");
       
       // 少し時間を置いてからスクロール（コンポーネントのレンダリング完了後）
       setTimeout(() => {
