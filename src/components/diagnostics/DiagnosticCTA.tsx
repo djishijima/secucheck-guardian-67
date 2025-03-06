@@ -17,12 +17,9 @@ const DiagnosticCTA: React.FC = () => (
       <Tooltip>
         <TooltipTrigger asChild>
           <Link to="/sustainability-check">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 gap-2 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 text-white font-medium"
-            >
+            <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 gap-2">
               無料の自己診断ツールを試してみる
-              <ArrowRight className="h-4 w-4 animate-pulse" />
+              <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </TooltipTrigger>
