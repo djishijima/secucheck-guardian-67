@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { TrendingUp, BarChart as BarChartIcon } from 'lucide-react';
 
 interface DataPoint {
   label: string;
@@ -36,12 +37,19 @@ const GraphDisplay: React.FC<GraphDisplayProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <Card className="border-green-200 shadow-sm">
-        <CardHeader className="bg-gradient-to-r from-green-50 to-teal-50 border-b border-green-100">
-          <CardTitle className="text-green-800">{title}</CardTitle>
+      <Card className="border border-green-200 shadow-md overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-green-50 to-teal-50 border-b border-green-100 py-4">
+          <div className="flex items-center">
+            {type === 'bar' ? (
+              <BarChartIcon className="h-5 w-5 text-green-700 mr-2" />
+            ) : (
+              <TrendingUp className="h-5 w-5 text-green-700 mr-2" />
+            )}
+            <CardTitle className="text-green-800">{title}</CardTitle>
+          </div>
           {description && <p className="text-sm text-gray-600 mt-1">{description}</p>}
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-4 bg-white">
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               {type === 'bar' ? (
@@ -63,14 +71,14 @@ const GraphDisplay: React.FC<GraphDisplayProps> = ({
                     contentStyle={{ 
                       backgroundColor: 'white', 
                       border: '1px solid #f0f0f0',
-                      borderRadius: '4px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                     }}
                   />
                   <Bar 
                     dataKey="value" 
                     fill={color} 
-                    radius={[4, 4, 0, 0]} 
+                    radius={[6, 6, 0, 0]} 
                     animationDuration={1500}
                   />
                 </BarChart>
@@ -93,16 +101,17 @@ const GraphDisplay: React.FC<GraphDisplayProps> = ({
                     contentStyle={{ 
                       backgroundColor: 'white', 
                       border: '1px solid #f0f0f0',
-                      borderRadius: '4px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                     }}
                   />
                   <Line 
                     type="monotone" 
                     dataKey="value" 
                     stroke={color} 
-                    strokeWidth={2}
-                    activeDot={{ r: 6 }}
+                    strokeWidth={3}
+                    activeDot={{ r: 8, strokeWidth: 1, stroke: 'white' }}
+                    dot={{ r: 4, strokeWidth: 1, stroke: 'white' }}
                     animationDuration={1500}
                   />
                 </LineChart>

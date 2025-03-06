@@ -15,7 +15,7 @@ const EcoPrinting = () => {
       title="環境印刷サービス"
       subtitle="持続可能な未来のための環境配慮型印刷ソリューション"
       description="再生紙、植物性インク、省エネルギー技術を組み合わせた当社の環境印刷サービスは、品質を妥協することなく、カーボンフットプリントを大幅に削減します。FSC認証取得済みの素材と最新の環境技術で、あなたのブランドの持続可能性を高めます。"
-      imageUrl=""
+      imageUrl="/images/eco-printing.jpg"
       benefits={[
         "従来の印刷方法と比較して最大60%のCO2排出量削減",
         "FSC認証済み再生紙と非毒性植物性インクを使用",
@@ -28,32 +28,32 @@ const EcoPrinting = () => {
         {
           title: "再生素材",
           description: "100%再生紙またはFSC認証済み持続可能な森林由来の素材を使用し、新しい木材の使用を削減します。",
-          icon: <RecycleIcon className="h-10 w-10" />
+          icon: <RecycleIcon className="h-10 w-10 text-green-600" />
         },
         {
           title: "バイオインク",
           description: "石油由来の従来のインクに代わり、大豆や野菜由来の環境に優しいインクを使用します。",
-          icon: <PaintBucket className="h-10 w-10" />
+          icon: <PaintBucket className="h-10 w-10 text-amber-600" />
         },
         {
           title: "カーボンニュートラル",
           description: "印刷プロセス全体のカーボンフットプリントを計算し、森林再生プロジェクトを通じてオフセットします。",
-          icon: <Leaf className="h-10 w-10" />
+          icon: <Leaf className="h-10 w-10 text-emerald-600" />
         },
         {
           title: "水使用量削減",
           description: "従来の方法と比較して水使用量を大幅に削減する革新的な印刷技術を採用しています。",
-          icon: <TreePine className="h-10 w-10" />
+          icon: <TreePine className="h-10 w-10 text-blue-600" />
         },
         {
           title: "環境認証",
           description: "国際的に認められた環境認証を取得しており、製品の持続可能性を保証します。",
-          icon: <FileCheck className="h-10 w-10" />
+          icon: <FileCheck className="h-10 w-10 text-teal-600" />
         },
         {
           title: "専門コンサルティング",
           description: "持続可能性の専門家があなたのプロジェクトに最適な環境ソリューションをアドバイスします。",
-          icon: <MessageSquare className="h-10 w-10" />
+          icon: <MessageSquare className="h-10 w-10 text-indigo-600" />
         }
       ]}
       ctaText="環境印刷を始める"
