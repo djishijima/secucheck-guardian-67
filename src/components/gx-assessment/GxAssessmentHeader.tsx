@@ -17,15 +17,15 @@ const GxAssessmentHeader: React.FC = () => (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 flex items-center">
-            <Leaf className="mr-3 h-8 w-8" />
-            GX対応度診断ツール
-          </h1>
+          <div className="flex items-center mb-4">
+            <Leaf className="h-8 w-8 text-green-300 mr-3" />
+            <h1 className="text-3xl md:text-4xl font-bold">GX対応度診断ツール</h1>
+          </div>
           <p className="text-lg opacity-90 mb-4">
             貴社のグリーントランスフォーメーション（GX）への取り組み状況を診断し、改善点を明確化します。
             各項目に対する取り組み状況をチェックすることで、現在のGX対応レベルと今後の優先課題を特定します。
           </p>
-          <div className="flex items-center gap-2 text-white/90 mt-6">
+          <div className="flex items-center gap-2 text-white/90 mt-6 bg-green-700/30 p-3 rounded-lg inline-block">
             <BarChart3 className="h-5 w-5" />
             <span className="text-sm font-medium">5分程度で簡易診断が完了します</span>
           </div>

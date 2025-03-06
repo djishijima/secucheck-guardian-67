@@ -17,10 +17,10 @@ const SustainabilityHeader: React.FC = () => (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 flex items-center">
-            <Leaf className="mr-3 h-8 w-8" />
-            サステナビリティ自己診断ツール
-          </h1>
+          <div className="flex items-center mb-4">
+            <Leaf className="h-8 w-8 text-green-300 mr-3" />
+            <h1 className="text-3xl md:text-4xl font-bold">サステナビリティ自己診断ツール</h1>
+          </div>
           <p className="text-lg opacity-90 mb-4">
             貴社のSDGs取り組み状況やサステナビリティへの対応レベルを診断し、サステナビリティレポート作成の準備をサポートします。
             簡単な質問に答えるだけで、現状の評価と改善ポイントをAIが分析します。

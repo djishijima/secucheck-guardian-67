@@ -66,13 +66,13 @@ const getProductIcon = (productId: number) => {
 
 const getCategoryBadgeStyle = (categoryType: string, value: string) => {
   if (categoryType === 'function') {
-    return 'bg-blue-100 text-blue-800';
+    return 'bg-blue-100 text-blue-800 border border-blue-200';
   } else if (categoryType === 'technology') {
-    return 'bg-purple-100 text-purple-800';
+    return 'bg-purple-100 text-purple-800 border border-purple-200';
   } else if (categoryType === 'challenge') {
-    return 'bg-green-100 text-green-800';
+    return 'bg-green-100 text-green-800 border border-green-200';
   }
-  return 'bg-gray-100 text-gray-800';
+  return 'bg-gray-100 text-gray-800 border border-gray-200';
 };
 
 const getValidProductLink = (link: string): string => {
@@ -105,7 +105,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       className="h-full"
     >
       <Card className="h-full flex flex-col overflow-hidden border-gray-200 hover:border-green-300 hover:shadow-lg transition-all duration-300">
-        <div className="w-full h-40 overflow-hidden flex items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
+        <div className="w-full h-40 overflow-hidden flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 group-hover:bg-gray-100 transition-colors">
           {product.image ? (
             <img src={product.image} alt={product.title} className="max-h-full max-w-full object-contain" />
           ) : (
@@ -122,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {Object.entries(product.categories).map(([type, value]) => (
                 <Badge 
                   key={`${type}-${value}`} 
-                  className={`text-xs ${getCategoryBadgeStyle(type, value)}`}
+                  className={`text-xs rounded-full ${getCategoryBadgeStyle(type, value)}`}
                 >
                   {value}
                 </Badge>
@@ -132,10 +132,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           
           <div className="flex gap-1 mt-2 flex-wrap">
             {product.tags.map((tag, index) => (
-              <Badge key={index} variant="secondary" className={`text-xs ${
-                tag === 'GX' ? 'bg-green-100 text-green-800' : 
-                tag === 'AI' ? 'bg-blue-100 text-blue-800' : 
-                'bg-gray-100 text-gray-800'
+              <Badge key={index} variant="secondary" className={`text-xs rounded-full ${
+                tag === 'GX' ? 'bg-green-100 text-green-800 border border-green-200' : 
+                tag === 'AI' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 
+                'bg-gray-100 text-gray-800 border border-gray-200'
               }`}>
                 {tag}
               </Badge>
@@ -154,7 +154,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </Button>
           </Link>
           <Link to="/contact">
-            <Button size="sm" className="hover:-translate-y-1 transition-transform">
+            <Button size="sm" className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:-translate-y-1 transition-transform">
               <MessageSquare className="mr-2 h-4 w-4" /> お問合せ
             </Button>
           </Link>
