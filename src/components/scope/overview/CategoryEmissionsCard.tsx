@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import { motion } from 'framer-motion';
 
 interface CategoryItem {
   name: string;
@@ -37,16 +38,27 @@ const CategoryEmissionsCard: React.FC<CategoryEmissionsCardProps> = ({ categorie
   }));
   
   return (
-    <Card className="border-purple-100 hover:border-purple-300 transition-all shadow-sm hover:shadow-md">
-      <CardHeader className="bg-purple-50 border-b border-purple-100">
-        <CardTitle className="text-purple-800">エネルギー源別排出量</CardTitle>
+    <Card className="border-purple-100 hover:border-purple-300 transition-all shadow-sm hover:shadow-md card-hover">
+      <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 border-b border-purple-100">
+        <CardTitle className="text-gradient-purple">エネルギー源別排出量</CardTitle>
         <CardDescription>購入したエネルギー別の内訳</CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-4">
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             {categories.map((category, index) => (
-              <div key={index} className="space-y-2">
+              <motion.div 
+                key={index} 
+                className="space-y-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
                 <div className="flex justify-between">
                   <span className="font-medium text-gray-700">{category.name}</span>
                   <div className="text-right">
@@ -56,11 +68,16 @@ const CategoryEmissionsCard: React.FC<CategoryEmissionsCardProps> = ({ categorie
                   </div>
                 </div>
                 <Progress value={category.percentage} className={`h-2 ${category.color}`} />
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
           
-          <div className="flex justify-center items-center h-64">
+          <motion.div 
+            className="flex justify-center items-center h-64"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -80,7 +97,7 @@ const CategoryEmissionsCard: React.FC<CategoryEmissionsCardProps> = ({ categorie
                 <Tooltip formatter={(value) => `${value} ${unit}`} />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
         </div>
       </CardContent>
     </Card>

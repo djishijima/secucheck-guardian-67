@@ -5,14 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 const PowerProcurementCard: React.FC = () => {
   return (
-    <Card className="border-purple-100 hover:border-purple-300 transition-all shadow-sm hover:shadow-md">
-      <CardHeader className="bg-purple-50 border-b border-purple-100">
-        <CardTitle className="text-purple-800">電力調達分析</CardTitle>
+    <Card className="border-purple-100 hover:border-purple-300 transition-all shadow-sm hover:shadow-md card-hover">
+      <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 border-b border-purple-100">
+        <CardTitle className="text-gradient-purple">電力調達分析</CardTitle>
         <CardDescription>電源構成と再エネ比率</CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <h3 className="text-lg font-medium text-gray-800 mb-4">現在の電源構成</h3>
             <div className="space-y-3">
               <div className="space-y-1">
@@ -20,9 +24,9 @@ const PowerProcurementCard: React.FC = () => {
                   <span className="text-gray-600">石炭火力</span>
                   <span className="font-medium">32%</span>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden shadow-inner">
                   <motion.div 
-                    className="h-full bg-gray-700"
+                    className="h-full bg-gradient-to-r from-gray-600 to-gray-700"
                     initial={{ width: 0 }}
                     animate={{ width: '32%' }}
                     transition={{ duration: 0.8 }}
@@ -35,9 +39,9 @@ const PowerProcurementCard: React.FC = () => {
                   <span className="text-gray-600">LNG火力</span>
                   <span className="font-medium">38%</span>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden shadow-inner">
                   <motion.div 
-                    className="h-full bg-yellow-500"
+                    className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500"
                     initial={{ width: 0 }}
                     animate={{ width: '38%' }}
                     transition={{ duration: 0.8, delay: 0.1 }}
@@ -50,9 +54,9 @@ const PowerProcurementCard: React.FC = () => {
                   <span className="text-gray-600">原子力</span>
                   <span className="font-medium">6%</span>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden shadow-inner">
                   <motion.div 
-                    className="h-full bg-purple-400"
+                    className="h-full bg-gradient-to-r from-purple-300 to-purple-400"
                     initial={{ width: 0 }}
                     animate={{ width: '6%' }}
                     transition={{ duration: 0.8, delay: 0.2 }}
@@ -65,9 +69,9 @@ const PowerProcurementCard: React.FC = () => {
                   <span className="text-gray-600">水力</span>
                   <span className="font-medium">9%</span>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden shadow-inner">
                   <motion.div 
-                    className="h-full bg-blue-400"
+                    className="h-full bg-gradient-to-r from-blue-300 to-blue-400"
                     initial={{ width: 0 }}
                     animate={{ width: '9%' }}
                     transition={{ duration: 0.8, delay: 0.3 }}
@@ -80,9 +84,9 @@ const PowerProcurementCard: React.FC = () => {
                   <span className="text-gray-600">太陽光・風力</span>
                   <span className="font-medium">12%</span>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden shadow-inner">
                   <motion.div 
-                    className="h-full bg-green-500"
+                    className="h-full bg-gradient-to-r from-green-400 to-green-500"
                     initial={{ width: 0 }}
                     animate={{ width: '12%' }}
                     transition={{ duration: 0.8, delay: 0.4 }}
@@ -95,9 +99,9 @@ const PowerProcurementCard: React.FC = () => {
                   <span className="text-gray-600">その他</span>
                   <span className="font-medium">3%</span>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden shadow-inner">
                   <motion.div 
-                    className="h-full bg-gray-400"
+                    className="h-full bg-gradient-to-r from-gray-300 to-gray-400"
                     initial={{ width: 0 }}
                     animate={{ width: '3%' }}
                     transition={{ duration: 0.8, delay: 0.5 }}
@@ -105,18 +109,22 @@ const PowerProcurementCard: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
           
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <h3 className="text-lg font-medium text-gray-800 mb-4">再生可能エネルギー比率</h3>
-            <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200 shadow-inner">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-700 font-medium">現在の再エネ比率</span>
-                <span className="text-xl font-bold text-purple-700">21%</span>
+                <span className="text-xl font-bold text-gradient-purple">21%</span>
               </div>
-              <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-4">
+              <div className="w-full bg-white h-3 rounded-full overflow-hidden shadow-inner mb-4">
                 <motion.div 
-                  className="h-full bg-green-500"
+                  className="h-full bg-gradient-to-r from-green-400 to-green-500"
                   initial={{ width: 0 }}
                   animate={{ width: '21%' }}
                   transition={{ duration: 1 }}
@@ -125,10 +133,10 @@ const PowerProcurementCard: React.FC = () => {
               
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-700 font-medium">2030年目標</span>
-                <span className="text-xl font-bold text-green-600">60%</span>
+                <span className="text-xl font-bold text-gradient-green">60%</span>
               </div>
-              <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-4">
-                <div className="h-full bg-gray-400 w-[60%]"></div>
+              <div className="w-full bg-white h-3 rounded-full overflow-hidden shadow-inner mb-4">
+                <div className="h-full bg-gray-200 w-[60%]"></div>
               </div>
               
               <div className="text-sm text-gray-600 mt-4">
@@ -137,31 +145,31 @@ const PowerProcurementCard: React.FC = () => {
               </div>
             </div>
             
-            <div className="mt-6 p-4 border rounded-lg">
+            <div className="mt-6 p-4 border rounded-lg bg-white shadow-sm hover:shadow transition-shadow">
               <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
                 <span className="text-yellow-500">⚡</span>
                 電力調達の選択肢
               </h4>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-2">
-                  <div className="w-1 h-1 rounded-full bg-gray-400 mt-1.5"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5"></div>
                   <span>再エネ電力メニューへの切り替え</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1 h-1 rounded-full bg-gray-400 mt-1.5"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5"></div>
                   <span>オンサイト太陽光発電の導入</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1 h-1 rounded-full bg-gray-400 mt-1.5"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5"></div>
                   <span>コーポレートPPA（電力購入契約）</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1 h-1 rounded-full bg-gray-400 mt-1.5"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5"></div>
                   <span>非化石証書・J-クレジットの購入</span>
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
         </div>
       </CardContent>
     </Card>

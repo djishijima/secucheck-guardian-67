@@ -17,8 +17,8 @@ interface LocationEmissionsCardProps {
 const LocationEmissionsCard: React.FC<LocationEmissionsCardProps> = ({ locations, unit }) => {
   return (
     <Card className="border-purple-100 hover:border-purple-300 transition-all shadow-sm hover:shadow-md">
-      <CardHeader className="bg-purple-50 border-b border-purple-100">
-        <CardTitle className="text-purple-800">拠点別排出量</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 border-b border-purple-100">
+        <CardTitle className="text-gradient-purple">拠点別排出量</CardTitle>
         <CardDescription>施設・拠点ごとの排出量</CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
@@ -39,9 +39,9 @@ const LocationEmissionsCard: React.FC<LocationEmissionsCardProps> = ({ locations
                   <span className="text-gray-400 text-sm ml-2">({location.percentage}%)</span>
                 </div>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden shadow-inner">
                 <motion.div 
-                  className="h-full bg-indigo-500"
+                  className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
                   initial={{ width: 0 }}
                   animate={{ width: `${location.percentage}%` }}
                   transition={{ duration: 0.8, delay: 0.3 + (index * 0.1) }}
