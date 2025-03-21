@@ -16,7 +16,7 @@ const HeaderLogo: React.FC = () => {
         <Printer className="h-8 w-8 text-indigo-600 mr-2" />
         <div className="text-lg font-semibold">
           <span className="text-indigo-700">文唱堂印刷</span>
-          <span className="text-sm text-gray-500 block md:inline md:ml-2">サステナブルDX</span>
+          <span className="text-sm text-gray-500 block md:inline md:ml-2">サステナブルDX・GX</span>
         </div>
       </Link>
     </motion.div>
