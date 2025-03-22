@@ -27,7 +27,7 @@ const DiagnosticCTA: React.FC = () => (
         無料の自己診断ツールで、貴社のSDGs取り組み状況を可視化。専門家による具体的な改善提案と共に、サステナビリティレポート作成のための基礎データを取得できます。
       </p>
       
-      <div className="flex justify-center gap-4 items-center mb-6">
+      <div className="flex flex-wrap justify-center gap-4 items-center mb-6">
         <div className="flex items-center text-sm text-green-700">
           <Clock className="h-4 w-4 mr-1" />
           <span>約5分で完了</span>

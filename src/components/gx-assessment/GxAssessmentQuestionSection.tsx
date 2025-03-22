@@ -84,15 +84,16 @@ const GxAssessmentQuestionSection: React.FC<GxAssessmentQuestionSectionProps> = 
     const answeredCount = Object.keys(answers).length;
     const answerRate = Math.round((answeredCount / totalQuestions) * 100);
     
+    // 回答率が低くても進めるように修正（警告は表示）
     if (answerRate < 30) {
       toast({
-        title: "回答率が低いです",
-        description: `現在の回答率は${answerRate}%です。より正確な診断のため、できるだけ多くの質問に回答してください。`,
-        variant: "destructive"
+        title: "回答率が低いですが、続行します",
+        description: `現在の回答率は${answerRate}%です。より正確な診断のため、できるだけ多くの質問に回答することをお勧めします。`,
+        variant: "default"
       });
-      return;
     }
     
+    // 診断完了へ進む
     onComplete();
   };
   
