@@ -1,3 +1,4 @@
+
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from '@/pages/Index';
 import Products from '@/pages/Products';
@@ -22,6 +23,7 @@ import GxSupplyChainAudit from '@/pages/GxSupplyChainAudit';
 import GxSustainableMarketing from '@/pages/GxSustainableMarketing';
 import Dashboard from '@/pages/Dashboard';
 import NotFound from '@/pages/NotFound';
+import DiagnosticLanding from '@/pages/DiagnosticLanding';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import './App.css';
@@ -40,6 +42,7 @@ function App() {
         <Route path="/scope-three" element={<ScopeThree />} />
         <Route path="/comprehensive-diagnostics" element={<ComprehensiveDiagnostics />} />
         <Route path="/sustainability-check" element={<SustainabilityCheck />} />
+        <Route path="/diagnostic-landing" element={<DiagnosticLanding />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/ai-technology" element={<AITechnology />} />
         <Route path="/eco-printing" element={<EcoPrinting />} />

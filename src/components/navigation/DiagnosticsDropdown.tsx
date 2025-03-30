@@ -30,6 +30,9 @@ const DiagnosticsDropdown: React.FC<DiagnosticsDropdownProps> = ({
       </span>
       
       <DropdownContent isOpen={isOpen} className="w-64" onMouseLeave={onMouseLeave}>
+        <Link to="/diagnostic-landing" className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 hover:text-green-800 transition-colors duration-200 font-medium bg-green-50">
+          統合診断サービス【新】
+        </Link>
         <Link to="/about-gx" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200">
           サステナビリティについて
         </Link>

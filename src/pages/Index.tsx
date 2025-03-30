@@ -6,7 +6,7 @@ import HeroSection from '@/components/home/HeroSection';
 import ProductListSection from '@/components/home/ProductListSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import CTASection from '@/components/home/CTASection';
-import { Leaf, ArrowRight, ChartBar, FileText } from 'lucide-react';
+import { Leaf, ArrowRight, ChartBar, FileText, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +19,41 @@ const Index = () => {
         <HeroSection />
         <ProductListSection />
         <FeaturesSection />
+        
+        {/* 統合診断サービスプロモーション */}
+        <section className="my-16 bg-gradient-to-r from-blue-50 to-green-50 p-8 rounded-xl border border-blue-100 shadow-md">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="md:w-2/3 mb-6 md:mb-0 pr-4">
+              <div className="flex items-center mb-3">
+                <Lightbulb className="h-7 w-7 text-yellow-500 mr-2" />
+                <h2 className="text-2xl font-bold text-gray-800">あなたの企業のサステナビリティを徹底診断！</h2>
+              </div>
+              <p className="text-gray-700 mb-4 text-lg">
+                サステナビリティ診断、サステナブルDX診断、GX評価、スコープ1～3評価を無料で実施。
+                今すぐメール登録して、改善ポイントと戦略をチェック！
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <div className="bg-white bg-opacity-60 rounded-full px-3 py-1 text-sm flex items-center">
+                  <span className="text-green-600 mr-1">✓</span> 無料診断
+                </div>
+                <div className="bg-white bg-opacity-60 rounded-full px-3 py-1 text-sm flex items-center">
+                  <span className="text-green-600 mr-1">✓</span> 3営業日で結果
+                </div>
+                <div className="bg-white bg-opacity-60 rounded-full px-3 py-1 text-sm flex items-center">
+                  <span className="text-green-600 mr-1">✓</span> 改善提案付き
+                </div>
+              </div>
+            </div>
+            <div>
+              <Link to="/diagnostic-landing">
+                <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-lg text-white gap-2 px-6 py-6 h-auto text-lg">
+                  無料診断を受ける
+                  <ArrowRight className="h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
         
         {/* サステナビリティ診断のプロモーション */}
         <section className="my-16 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100 shadow-sm">
