@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import GxProgressIndicator from './GxProgressIndicator';
@@ -8,6 +8,7 @@ import GxAssessmentQuestionSection from './GxAssessmentQuestionSection';
 import GxAssessmentResults from './GxAssessmentResults';
 import { calculateCategoryScores, calculateOverallScore, generateResultsObject } from './GxResultUtils';
 import { gxQuestionData } from './GxQuestionData';
+import { getDiagnosticUserData } from '@/utils/diagnosticUtils';
 
 const GxAssessmentContainer = () => {
   const [progress, setProgress] = useState<number>(10);
@@ -23,6 +24,31 @@ const GxAssessmentContainer = () => {
   const [assessmentResults, setAssessmentResults] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Load user data from localStorage on component mount
+  useEffect(() => {
+    const userData = getDiagnosticUserData();
+    if (userData) {
+      // Pre-fill company name from the initial form
+      setCompanyInfo(prev => ({
+        ...prev,
+        name: userData.companyName || ''
+      }));
+      
+      // If we have user data, show a welcome toast
+      toast({
+        title: `${userData.userName}様、ようこそ`,
+        description: "GX対応度診断を始めましょう",
+      });
+    } else {
+      // If no user data, redirect to diagnostic landing
+      navigate('/diagnostic-landing');
+      toast({
+        title: "診断を始めるには情報が必要です",
+        description: "診断ランディングページから情報を入力してください",
+      });
+    }
+  }, [toast, navigate]);
 
   const handleCompanyInfoSubmit = (info: any) => {
     setCompanyInfo(info);

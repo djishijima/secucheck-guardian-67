@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { defaultScopeOneData } from '@/data/scopeOneData';
@@ -16,10 +17,41 @@ import useFormManager from './form/useFormManager';
 import useSavedResults from './saved-results/useSavedResults';
 import useStepNavigation from './steps/useStepNavigation';
 import { useReportActions } from './report/ReportActions';
+import { useToast } from "@/components/ui/use-toast";
+import { getDiagnosticUserData } from '@/utils/diagnosticUtils';
 
 const ScopeOneContainer = () => {
   const [scopeOneData, setScopeOneData] = useState(defaultScopeOneData);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // Check for user data on component mount
+  useEffect(() => {
+    const userData = getDiagnosticUserData();
+    if (userData) {
+      // Welcome the user
+      toast({
+        title: `${userData.userName}様、ようこそ`,
+        description: "Scope 1排出量診断を始めましょう",
+      });
+      
+      // Set company name if we have form data
+      if (userData.companyName) {
+        setScopeOneData(prev => ({
+          ...prev,
+          companyName: userData.companyName
+        }));
+      }
+    } else {
+      // If no user data, redirect to diagnostic landing
+      navigate('/diagnostic-landing');
+      toast({
+        title: "診断を始めるには情報が必要です",
+        description: "診断ランディングページから情報を入力してください",
+      });
+    }
+  }, [navigate, toast]);
   
   // Define steps for the Scope 1 emissions data page
   const steps = [
@@ -38,7 +70,7 @@ const ScopeOneContainer = () => {
     setShowForm,
     handleFormSubmit, 
     handleInputChange,
-    handleMonthlyDataChange, // This needs to be passed to ScopeOneStepContent
+    handleMonthlyDataChange,
     handleSelectChange 
   } = useFormManager(scopeOneData, setScopeOneData, setActiveStep);
   const {
@@ -113,7 +145,7 @@ const ScopeOneContainer = () => {
             formData={formData}
             onFormSubmit={handleFormSubmit}
             onInputChange={handleInputChange}
-            onMonthlyDataChange={handleMonthlyDataChange} // Added missing prop
+            onMonthlyDataChange={handleMonthlyDataChange}
             onSelectChange={handleSelectChange}
             onCancel={() => setActiveStep(1)}
             scopeOneData={scopeOneData}

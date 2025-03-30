@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
@@ -18,14 +19,43 @@ import SavedResultsControls from './saved-results/SavedResultsControls';
 import useSavedResults from './saved-results/useSavedResults';
 import { useReportActions } from './report/ReportActions';
 import useScopeTwoFormManager from './form/useScopeTwoFormManager';
+import { getDiagnosticUserData } from '@/utils/diagnosticUtils';
 
 const ScopeTwoContainer = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [scopeTwoData, setScopeTwoData] = useState<ScopeTwoDataType>({
     ...defaultScopeTwoData,
     total: Math.round(defaultScopeTwoData.total * 10) / 10 // Round to 1 decimal place
   });
   const location = useLocation();
+  
+  // Check for user data on component mount
+  useEffect(() => {
+    const userData = getDiagnosticUserData();
+    if (userData) {
+      // Welcome the user
+      toast({
+        title: `${userData.userName}様、ようこそ`,
+        description: "Scope 2排出量診断を始めましょう",
+      });
+      
+      // Set company name if we have form data
+      if (userData.companyName) {
+        setScopeTwoData(prev => ({
+          ...prev,
+          companyName: userData.companyName
+        }));
+      }
+    } else {
+      // If no user data, redirect to diagnostic landing
+      navigate('/diagnostic-landing');
+      toast({
+        title: "診断を始めるには情報が必要です",
+        description: "診断ランディングページから情報を入力してください",
+      });
+    }
+  }, [navigate, toast]);
   
   // ステップの定義
   const steps: Step[] = [

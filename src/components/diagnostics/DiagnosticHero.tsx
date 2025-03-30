@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle } from 'lucide-react';
-import LeadCaptureForm from './LeadCaptureForm';
+import { CheckCircle } from 'lucide-react';
+import InitialUserForm from './InitialUserForm';
 
 const DiagnosticHero = () => {
   return (
@@ -24,7 +24,7 @@ const DiagnosticHero = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           サステナビリティ診断、サステナブルDX診断、GX評価、スコープ1～3評価を無料で実施。
-          今すぐメール登録して、改善ポイントと戦略をチェック！
+          今すぐ登録して、改善ポイントと戦略をチェック！
         </motion.p>
         
         <motion.div 
@@ -47,9 +47,8 @@ const DiagnosticHero = () => {
             ))}
           </ul>
           
-          <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">無料診断を今すぐ受ける</h3>
-            <LeadCaptureForm />
+          <div className="w-full max-w-md">
+            <InitialUserForm />
           </div>
         </motion.div>
         
@@ -59,7 +58,7 @@ const DiagnosticHero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-sm text-gray-600"
         >
-          <p>※ご登録いただいたメールアドレスに診断結果をお送りします</p>
+          <p>※ご入力いただいた情報は診断サービス向上のために利用します</p>
           <p>※個人情報は厳重に管理し、診断サービス以外の目的では使用いたしません</p>
         </motion.div>
       </div>
