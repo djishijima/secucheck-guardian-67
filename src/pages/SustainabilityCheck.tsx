@@ -17,7 +17,7 @@ const SustainabilityCheck = () => {
   const [step, setStep] = useState('basic-info');
   const [companyName, setCompanyName] = useState('');
   const [industry, setIndustry] = useState('');
-  const [selectedSdgs, setSelectedSdgs] = useState<string[]>([]);
+  const [selectedSdgs, setSelectedSdgs] = useState<number[]>([]);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
   const navigate = useNavigate();
