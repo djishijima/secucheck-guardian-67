@@ -6,6 +6,7 @@ import ResultsHeader from '@/components/shared/ResultsHeader';
 import OverallScoreCard from '@/components/shared/OverallScoreCard';
 import CategoryScores from '@/components/shared/CategoryScores';
 import RecommendationsCard from '@/components/shared/RecommendationsCard';
+import GxResultDetailChart from './GxResultDetailChart';
 import { usePrintHandler, saveResultsToLocalStorage } from '@/components/shared/ResultsUtils';
 
 interface GxAssessmentResultsProps {
@@ -67,7 +68,10 @@ const GxAssessmentResults: React.FC<GxAssessmentResultsProps> = ({
           company={results.company} 
         />
         
-        <CategoryScores categoryScores={results.categoryScores} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CategoryScores categoryScores={results.categoryScores} />
+          <GxResultDetailChart categoryScores={results.categoryScores} />
+        </div>
         
         <RecommendationsCard 
           recommendations={results.recommendations}
