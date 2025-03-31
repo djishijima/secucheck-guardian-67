@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -25,7 +24,7 @@ const SustainabilityCheck = () => {
   const [selectedSdgs, setSelectedSdgs] = useState<number[]>([]);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showResults, setShowResults] = useState(false); // 診断結果表示の切り替え
+  const [showResults, setShowResults] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -83,7 +82,6 @@ const SustainabilityCheck = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // 診断データを保存
       const diagnosticData = {
         companyName,
         industry,
@@ -94,7 +92,6 @@ const SustainabilityCheck = () => {
       
       console.log('Diagnostic data submitted:', diagnosticData);
       
-      // ローカルストレージに保存
       const saved = saveDiagnosticRequest('sustainability', diagnosticData);
       
       if (saved) {
@@ -120,14 +117,12 @@ const SustainabilityCheck = () => {
     }
   };
   
-  // 詳細診断ページへの移動
   const handleDetailedDiagnostics = () => {
     navigate("/comprehensive-diagnostics", { 
       state: { fromSustainabilityCheck: true } 
     });
   };
   
-  // コンサルタントへの相談
   const handleConsultantContact = () => {
     navigate("/contact");
   };
@@ -186,7 +181,6 @@ const SustainabilityCheck = () => {
     </motion.section>
   );
   
-  // 診断結果の生成（実際のデータに基づく）
   const results = generateResultsObject(answers, selectedSdgs);
   
   return (
@@ -242,6 +236,7 @@ const SustainabilityCheck = () => {
               industry={industry}
               selectedSdgs={selectedSdgs}
               results={results}
+              answers={answers}
               onDetailedDiagnostics={handleDetailedDiagnostics}
               onConsultantContact={handleConsultantContact}
             />
