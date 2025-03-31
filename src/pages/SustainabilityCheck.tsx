@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -14,7 +13,6 @@ import { toast as sonnerToast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const SustainabilityCheck = () => {
   const [progress, setProgress] = useState(10);
@@ -27,20 +25,15 @@ const SustainabilityCheck = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  // Check for user data on component mount
   useEffect(() => {
     const userData = getDiagnosticUserData();
     if (userData) {
-      // Use company name from initial form
       setCompanyName(userData.companyName || '');
-      
-      // Welcome the user
       toast({
         title: `${userData.userName}様、ようこそ`,
         description: "サステナビリティ診断を始めましょう",
       });
     } else {
-      // If no user data, redirect to diagnostic landing
       navigate('/diagnostic-landing');
       toast({
         title: "診断を始めるには情報が必要です",
@@ -63,10 +56,8 @@ const SustainabilityCheck = () => {
   
   const handleAnswersChange = (newAnswers: Record<string, boolean>) => {
     setAnswers(newAnswers);
-    
-    // 回答数によって進捗状況を更新
     const answeredCount = Object.keys(newAnswers).length;
-    const totalQuestions = 30; // Assuming we have 30 questions
+    const totalQuestions = 30;
     const newProgress = Math.min(30 + Math.floor((answeredCount / totalQuestions) * 70), 95);
     setProgress(newProgress);
   };
@@ -81,11 +72,8 @@ const SustainabilityCheck = () => {
     setIsSubmitting(true);
     
     try {
-      // In a real app, this would send the data to a server
-      // Here we'll just simulate an API call with a timeout
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Log the diagnostic data
       console.log('Diagnostic data submitted:', {
         companyName,
         industry,
@@ -93,13 +81,11 @@ const SustainabilityCheck = () => {
         answers
       });
       
-      // Show success message with sonner toast (which is more prominent)
       sonnerToast.success('診断リクエストを受け付けました', {
         description: '診断結果は3営業日以内にメールでお送りします',
         duration: 5000,
       });
       
-      // Navigate back to home page after submission
       setTimeout(() => {
         navigate('/');
       }, 3000);
