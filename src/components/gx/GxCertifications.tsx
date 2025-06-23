@@ -20,10 +20,6 @@ const GxCertifications = () => {
               </li>
               <li className="flex items-start">
                 <span className="text-green-500 mr-2">✓</span>
-                FSC認証（森林管理協議会）
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-500 mr-2">✓</span>
                 カーボンニュートラル認証
               </li>
               <li className="flex items-start">
